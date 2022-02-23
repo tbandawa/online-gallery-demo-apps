@@ -85,7 +85,7 @@ fun GalleryItem(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "$count",
+                        text = "$count images",
                         style = TextStyle(
                             color = Color.White,
                             fontWeight = FontWeight.Light,
