@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
+import me.tbandawa.android.gallerydemo.ui.components.GalleryToolBar
 import me.tbandawa.android.gallerydemo.ui.components.MessageBox
 import me.tbandawa.android.gallerydemo.ui.theme.GalleryDemoTheme
 
@@ -44,6 +45,7 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     GalleryDemoTheme {
         Column {
+            GalleryToolBar(title = "Gallery") {}
             MessageBox(
                 title = "Image Gallery",
                 message = "Upload images to gallery and let others view them"
