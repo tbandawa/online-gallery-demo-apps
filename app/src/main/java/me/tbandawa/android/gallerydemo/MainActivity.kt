@@ -10,9 +10,12 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
 import me.tbandawa.android.gallerydemo.ui.components.MessageBox
 import me.tbandawa.android.gallerydemo.ui.theme.GalleryDemoTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +43,16 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     GalleryDemoTheme {
-        MessageBox(
-            title = "Image Gallery",
-            message = "Upload images to gallery and let others view them"
-        )
+        Column {
+            MessageBox(
+                title = "Image Gallery",
+                message = "Upload images to gallery and let others view them"
+            )
+            GalleryItem(
+                painter = painterResource(id = R.drawable.free_1),
+                title = "Gallery Title Goes Here",
+                count = 10
+            )
+        }
     }
 }
