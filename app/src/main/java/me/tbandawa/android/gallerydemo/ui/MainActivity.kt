@@ -1,4 +1,4 @@
-package me.tbandawa.android.gallerydemo
+package me.tbandawa.android.gallerydemo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
