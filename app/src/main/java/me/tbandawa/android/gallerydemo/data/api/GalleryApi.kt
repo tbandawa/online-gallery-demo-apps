@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface GalleryApi {
 
     @GET("gallery")
-    suspend fun fetchGallery() : Response<Gallery>
+    suspend fun fetchGallery() : Response<List<Gallery>>
 
 }
