@@ -50,7 +50,7 @@ class GalleryApiTest {
         val response = service.fetchGalleries()
         val request = mockWebServer.takeRequest()
 
-        MatcherAssert.assertThat(request.path, CoreMatchers.`is`("api/gallery"))
+        MatcherAssert.assertThat(request.path, CoreMatchers.`is`("/api/gallery"))
 
         MatcherAssert.assertThat(response, IsNull.notNullValue())
 
