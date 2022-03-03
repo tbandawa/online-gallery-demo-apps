@@ -20,4 +20,11 @@ class GalleryRepositoryImpl @Inject constructor(
         })
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun fetchGallery(id: Long): Flow<NetworkResult<Gallery>> = flow {
+        emit(NetworkResult.Loading)
+        emit(safeApiCall {
+            galleryApi.fetchGallery(id)
+        })
+    }.flowOn(Dispatchers.IO)
+
 }
