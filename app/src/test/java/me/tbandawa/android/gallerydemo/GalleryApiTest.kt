@@ -46,7 +46,7 @@ class GalleryApiTest {
     @Test
     fun `test fetch all galleries`() = runBlocking {
 
-        enqueueResponse("galleries.json")
+        enqueueResponse(fileName = "galleries.json")
         val response = service.fetchGalleries()
         val request = mockWebServer.takeRequest()
 
@@ -57,6 +57,40 @@ class GalleryApiTest {
         MatcherAssert.assertThat(response.code(), CoreMatchers.`is`(200))
 
         MatcherAssert.assertThat(response.body()?.size, CoreMatchers.`is`(3))
+
+    }
+
+    @Test
+    fun `test fetch all gallery`() = runBlocking {
+
+        enqueueResponse(fileName = "gallery.json")
+        val response = service.fetchGallery(1)
+        val request = mockWebServer.takeRequest()
+
+        MatcherAssert.assertThat(request.path, CoreMatchers.`is`("/api/gallery/1"))
+
+        MatcherAssert.assertThat(response, IsNull.notNullValue())
+
+        MatcherAssert.assertThat(response.code(), CoreMatchers.`is`(200))
+
+        MatcherAssert.assertThat(response.body()?.title, CoreMatchers.`is`("title 3"))
+
+    }
+
+    @Test
+    fun `test error 404`() = runBlocking {
+
+        enqueueResponse(fileName = "404.json", code = 404)
+        val response = service.fetchGallery(99)
+        val request = mockWebServer.takeRequest()
+
+        MatcherAssert.assertThat(request.path, CoreMatchers.`is`("/api/gallery/99"))
+
+        MatcherAssert.assertThat(response, IsNull.notNullValue())
+
+        MatcherAssert.assertThat(response.code(), CoreMatchers.`is`(404))
+
+        MatcherAssert.assertThat(response.body(), IsNull.nullValue())
 
     }
 
