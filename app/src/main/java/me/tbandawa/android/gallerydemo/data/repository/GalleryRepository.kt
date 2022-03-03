@@ -6,6 +6,8 @@ import me.tbandawa.android.gallerydemo.data.model.NetworkResult
 
 interface GalleryRepository {
 
-    suspend fun fetchGallery(): Flow<NetworkResult<List<Gallery>>>
+    suspend fun fetchGalleries(): Flow<NetworkResult<List<Gallery>>>
+
+    suspend fun fetchGallery(id: Long): Flow<NetworkResult<Gallery>>
 
 }

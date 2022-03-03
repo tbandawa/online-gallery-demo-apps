@@ -7,10 +7,10 @@ import retrofit2.http.Path
 
 interface GalleryApi {
 
-    @GET("gallery")
-    suspend fun fetchGallery() : Response<List<Gallery>>
+    @GET("api/gallery")
+    suspend fun fetchGalleries() : Response<List<Gallery>>
 
-    @GET("/{id}/")
-    suspend fun fetchResources(@Path("id") id: Long) : Response<Gallery>
+    @GET("api/gallery/{id}")
+    suspend fun fetchGallery(@Path("id") id: Long) : Response<Gallery>
 
 }
