@@ -45,7 +45,7 @@ class GalleryApiTest {
     }
 
     @Test
-    fun `test fetch all galleries`() = runBlocking {
+    fun `test fetch galleries`() = runBlocking {
 
         enqueueResponse(fileName = "galleries.json")
         val response = service.fetchGalleries()
@@ -62,7 +62,7 @@ class GalleryApiTest {
     }
 
     @Test
-    fun `test fetch all gallery`() = runBlocking {
+    fun `test fetch gallery`() = runBlocking {
 
         enqueueResponse(fileName = "gallery.json")
         val response = service.fetchGallery(1)
