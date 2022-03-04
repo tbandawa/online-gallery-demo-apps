@@ -3,6 +3,7 @@ package me.tbandawa.android.gallerydemo
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.runBlocking
 import me.tbandawa.android.gallerydemo.data.api.GalleryApi
+import me.tbandawa.android.gallerydemo.data.model.Gallery
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.buffer
@@ -73,7 +74,12 @@ class GalleryApiTest {
 
         MatcherAssert.assertThat(response.code(), CoreMatchers.`is`(200))
 
+        MatcherAssert.assertThat(response.body(), CoreMatchers.isA(Gallery::class.java))
+        MatcherAssert.assertThat(response.body()?.id, CoreMatchers.`is`(53))
         MatcherAssert.assertThat(response.body()?.title, CoreMatchers.`is`("title 3"))
+        MatcherAssert.assertThat(response.body()?.description, CoreMatchers.`is`("description 3"))
+        MatcherAssert.assertThat(response.body()?.images?.size, CoreMatchers.`is`(3))
+        MatcherAssert.assertThat(response.body()?.created, CoreMatchers.`is`("2022-03-01T19:07:51.661+0000"))
 
     }
 
