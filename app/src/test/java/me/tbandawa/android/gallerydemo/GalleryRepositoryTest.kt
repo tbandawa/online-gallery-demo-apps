@@ -11,6 +11,7 @@ import me.tbandawa.android.gallerydemo.data.repository.GalleryRepository
 import me.tbandawa.android.gallerydemo.data.repository.GalleryRepositoryImpl
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Before
@@ -20,7 +21,6 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import retrofit2.Response
-
 
 class GalleryRepositoryTest {
 
@@ -85,10 +85,8 @@ class GalleryRepositoryTest {
         var gson = Gson()
         var jsonString = gson.toJson(errorResponse)
 
-        val responseBody: ResponseBody = ResponseBody.create(
-            "application/json".toMediaTypeOrNull(),
-            jsonString
-        )
+        val responseBody: ResponseBody = jsonString
+            .toResponseBody("application/json".toMediaTypeOrNull())
 
         Mockito.`when`(galleryApi.fetchGallery(anyLong()))
             .thenReturn(Response.error(404, responseBody))
