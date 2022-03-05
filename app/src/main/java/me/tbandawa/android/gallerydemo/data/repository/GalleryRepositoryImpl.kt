@@ -13,14 +13,14 @@ class GalleryRepositoryImpl @Inject constructor(
     private val galleryApi: GalleryApi
 ): ApiCallHelper(), GalleryRepository {
 
-    override suspend fun fetchGalleries(): Flow<NetworkResult<List<Gallery>>> = flow {
+    override suspend fun fetchGalleries() = flow {
         emit(NetworkResult.Loading)
         emit(safeApiCall {
             galleryApi.fetchGalleries()
         })
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun fetchGallery(id: Long): Flow<NetworkResult<Gallery>> = flow {
+    override suspend fun fetchGallery(id: Long) = flow {
         emit(NetworkResult.Loading)
         emit(safeApiCall {
             galleryApi.fetchGallery(id)
