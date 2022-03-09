@@ -1,11 +1,9 @@
 package me.tbandawa.android.gallerydemo.data.repository
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import me.tbandawa.android.gallerydemo.data.api.GalleryApi
-import me.tbandawa.android.gallerydemo.data.model.Gallery
 import me.tbandawa.android.gallerydemo.data.model.NetworkResult
 import javax.inject.Inject
 
