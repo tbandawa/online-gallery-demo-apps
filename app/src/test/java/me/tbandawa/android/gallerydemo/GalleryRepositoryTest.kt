@@ -107,6 +107,4 @@ class GalleryRepositoryTest {
         return Gson().fromJson(fileContent, object : TypeToken<T>() {}.type)
     }
 
-
-
 }
