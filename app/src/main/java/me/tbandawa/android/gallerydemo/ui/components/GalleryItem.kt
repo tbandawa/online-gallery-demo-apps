@@ -8,15 +8,18 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import me.tbandawa.android.gallerydemo.R
 
 @Composable
 fun GalleryItem(
@@ -26,7 +29,8 @@ fun GalleryItem(
 ) {
     Card(
         modifier = Modifier
-            .size(130.dp)
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
             .padding(5.dp),
         shape = RoundedCornerShape(3.dp),
         elevation = 1.dp,
@@ -44,58 +48,89 @@ fun GalleryItem(
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
+                    .fillMaxWidth()
+                    .height(130.dp)
                     .constrainAs(galleryImage) {
                         start.linkTo(parent.start)
                         top.linkTo(parent.top)
                         end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                    }
+                    },
+                contentScale = ContentScale.Crop
             )
 
             Box(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .constrainAs(infoBox) {
+                        top.linkTo(galleryImage.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                     }
-                    .fillMaxWidth(1f)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color(0x05000000),
-                                Color(0xff000000)
-                            )
-                        )
-                    )
             ) {
-                Column(
+                Row(
                     modifier = Modifier
                         .padding(5.dp)
+                        .fillMaxWidth()
                 ) {
-                    Text(
-                        text = title,
-
-                        style = TextStyle(
-                            color = Color.White,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 14.sp
-                        ),
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_avatar),
+                        contentDescription = null,
+                        modifier = Modifier.size(45.dp),
+                        contentScale = ContentScale.Fit
                     )
-                    Text(
-                        text = "$count images",
-                        style = TextStyle(
-                            color = Color.White,
-                            fontWeight = FontWeight.Light,
-                            fontSize = 12.sp
-                        )
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 5.dp, top = 5.dp)
+                    ) {
+                        Box(Modifier.weight(3f)) {
+                            Column() {
+                                Text(
+                                    text = title,
+                                    style = TextStyle(
+                                        color = Color(0xff024040),
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 14.sp
+                                    ),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = "$count images",
+                                    style = TextStyle(
+                                        color = Color(0xff024040),
+                                        fontWeight = FontWeight.Light,
+                                        fontSize = 12.sp
+                                    )
+                                )
+                            }
+                        }
+                        Box(modifier = Modifier) {
+                            Text(
+                                text = "Tue 5 Nov",
+                                style = TextStyle(
+                                    color = Color(0xff024040),
+                                    fontWeight = FontWeight.Light,
+                                    fontSize = 12.sp
+                                )
+                            )
+                        }
+                    }
                 }
             }
 
         }
 
     }
+}
+
+@Preview
+@Composable
+fun GalleryItemPreview() {
+    GalleryItem(
+        painter =  painterResource(id = R.drawable.free_1),
+        title = "Sample Gallery",
+        count = 5
+    )
 }

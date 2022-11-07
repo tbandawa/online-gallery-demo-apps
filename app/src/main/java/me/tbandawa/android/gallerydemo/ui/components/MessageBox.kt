@@ -38,7 +38,7 @@ fun MessageBox(title: String, message: String) {
         Card(
             modifier = Modifier
                 .fillMaxWidth(1f)
-                .padding(start = 5.dp, top = 10.dp, end = 5.dp, bottom = 5.dp),
+                .padding(start = 5.dp, top = 32.dp, end = 5.dp, bottom = 5.dp),
             shape = RoundedCornerShape(3.dp),
             elevation = 1.dp,
         ) {
