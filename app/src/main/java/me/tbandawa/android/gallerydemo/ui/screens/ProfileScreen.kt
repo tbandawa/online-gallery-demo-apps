@@ -2,17 +2,13 @@ package me.tbandawa.android.gallerydemo.ui.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,11 +18,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.tbandawa.android.gallerydemo.R
+import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
 import me.tbandawa.android.gallerydemo.ui.components.ProfileToolBar
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -51,7 +47,7 @@ fun ProfileScreen() {
             frontLayerBackgroundColor = Color(0xffCEE6E6),
             backLayerBackgroundColor = Color.White,
             appBar =  {
-                ProfileToolBar{}
+                ProfileToolBar("Profile"){}
             },
             backLayerContent = {
                 Column(
@@ -211,6 +207,24 @@ fun ProfileScreen() {
                                 fontSize = 18.sp
                             )
                         )
+                    }
+
+                    val galleries = listOf("Gallery Item 1", "Gallery Item 2", "Gallery Item 3", "Gallery Item 4", "Gallery Item 5")
+
+                    LazyColumn(
+                        contentPadding = PaddingValues(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(galleries) { gallery ->
+                            GalleryItem(
+                                painter = painterResource(id = R.drawable.free_1),
+                                title = "Cyberpunk is Not Dead",
+                                description = "Cyber-chic is trending, and we’re plugged in to the possibilities. Add some futuristic flair and dystopian vibes to your upcoming projects with this sci-fi inspired collection.",
+                                user = "Tendai Bandawa",
+                                date = "5 Nov 2022",
+                                count = 1
+                            )
+                        }
                     }
                 }
             }

@@ -20,6 +20,7 @@ import me.tbandawa.android.gallerydemo.R
 import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
 import me.tbandawa.android.gallerydemo.ui.components.GalleryToolBar
 import me.tbandawa.android.gallerydemo.ui.components.MessageBox
+import me.tbandawa.android.gallerydemo.ui.screens.EditProfileScreen
 import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
 import me.tbandawa.android.gallerydemo.ui.screens.ProfileScreen
 import me.tbandawa.android.gallerydemo.ui.theme.GalleryDemoTheme
@@ -29,20 +30,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            //GalleryDemoTheme {
+            GalleryDemoTheme {
+                //EditProfileScreen()
+                //GalleryScreen()
                 ProfileScreen()
-            //}
-        }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    GalleryDemoTheme {
-        Column {
-            GalleryToolBar {}
+            }
         }
     }
 }

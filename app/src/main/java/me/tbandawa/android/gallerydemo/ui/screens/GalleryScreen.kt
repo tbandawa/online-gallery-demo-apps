@@ -103,17 +103,16 @@ fun GalleryScreen(){
                     message = "Upload images to gallery and let others view them"
                 )
 
-                val items = listOf(
-                    "Gallery Item 1", "Gallery Item 2", "Gallery Item 3", "Gallery Item 4", "Gallery Item 5",
-                    "Gallery Item 6", "Gallery Item 7", "Gallery Item 8", "Gallery Item 9", "Gallery Item 10",
-                    "Gallery Item 11", "Gallery Item 12", "Gallery Item 13", "Gallery Item 14", "Gallery Item 15"
-                )
+                val items = listOf("Gallery Item 1", "Gallery Item 2", "Gallery Item 3", "Gallery Item 4", "Gallery Item 5")
 
                 Spacer(modifier = Modifier.height(20.dp))
                 items.forEach { item ->
                     GalleryItem(
                         painter = painterResource(id = R.drawable.free_1),
-                        title = item,
+                        title = "Cyberpunk is Not Dead",
+                        description = "Cyber-chic is trending, and we’re plugged in to the possibilities. Add some futuristic flair and dystopian vibes to your upcoming projects with this sci-fi inspired collection.",
+                        user = "Tendai Bandawa",
+                        date = "5 Nov 2022",
                         count = 1
                     )
                 }

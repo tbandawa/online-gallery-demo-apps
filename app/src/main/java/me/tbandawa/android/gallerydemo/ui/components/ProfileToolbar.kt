@@ -19,6 +19,7 @@ import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
 
 @Composable
 fun ProfileToolBar(
+    title: String,
     navigateUp: () -> Unit
 ) {
 
@@ -67,7 +68,7 @@ fun ProfileToolBar(
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
                             maxLines = 1,
-                            text = "Profile",
+                            text = title,
                             style = TextStyle(
                                 color = Color(0xff024040),
                                 fontWeight = FontWeight.ExtraBold,
@@ -85,5 +86,5 @@ fun ProfileToolBar(
 @Preview
 @Composable
 fun ProfileToolbarPreview() {
-    ProfileToolBar {}
+    ProfileToolBar(title = "Title") {}
 }
