@@ -38,7 +38,7 @@ fun GalleryScreen(){
         ) {
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
                     .padding(start = 16.dp, top = 5.dp, end = 16.dp, bottom = 5.dp)
             ) {
 

@@ -21,6 +21,7 @@ import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
 import me.tbandawa.android.gallerydemo.ui.components.GalleryToolBar
 import me.tbandawa.android.gallerydemo.ui.components.MessageBox
 import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
+import me.tbandawa.android.gallerydemo.ui.screens.ProfileScreen
 import me.tbandawa.android.gallerydemo.ui.theme.GalleryDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,9 +29,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GalleryDemoTheme {
-                GalleryScreen()
-            }
+            //GalleryDemoTheme {
+                ProfileScreen()
+            //}
         }
     }
 }
