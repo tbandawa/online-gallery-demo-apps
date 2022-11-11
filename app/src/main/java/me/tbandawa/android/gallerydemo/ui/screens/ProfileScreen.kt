@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import me.tbandawa.android.gallerydemo.R
 import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
-import me.tbandawa.android.gallerydemo.ui.components.ProfileToolBar
+import me.tbandawa.android.gallerydemo.ui.components.ProfileToolbar
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -47,7 +47,7 @@ fun ProfileScreen() {
             frontLayerBackgroundColor = Color(0xffCEE6E6),
             backLayerBackgroundColor = Color.White,
             appBar =  {
-                ProfileToolBar("Profile"){}
+                ProfileToolbar("Profile"){}
             },
             backLayerContent = {
                 Column(

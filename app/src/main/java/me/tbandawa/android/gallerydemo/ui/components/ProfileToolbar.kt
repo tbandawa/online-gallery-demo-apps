@@ -1,5 +1,6 @@
 package me.tbandawa.android.gallerydemo.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -14,18 +15,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import me.tbandawa.android.gallerydemo.R
-import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
 
 @Composable
-fun ProfileToolBar(
+fun ProfileToolbar(
     title: String,
     navigateUp: () -> Unit
 ) {
-
-    val appBarHorizontalPadding = 4.dp
-    val titleIconModifier = Modifier.fillMaxHeight()
-        .width(72.dp - appBarHorizontalPadding)
 
     TopAppBar(
         backgroundColor = Color.Transparent,
@@ -33,50 +30,75 @@ fun ProfileToolBar(
         modifier= Modifier.fillMaxWidth()) {
 
         //TopAppBar Content
-        Box(Modifier.height(32.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .height(32.dp)
+        ) {
 
-            //Navigation Icon
-            Row(titleIconModifier, verticalAlignment = Alignment.CenterVertically) {
-                CompositionLocalProvider(
-                    LocalContentAlpha provides ContentAlpha.high,
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+            ) {
+
+                val (navigationIcon, titleText, settingsIcon) = createRefs()
+
+                //Navigation Icon
+                IconButton(
+                    onClick = {
+                        navigateUp.invoke()
+                    },
+                    enabled = true,
+                    modifier = Modifier
+                        .constrainAs(navigationIcon) {
+                            start.linkTo(parent.start)
+                        }
                 ) {
-                    IconButton(
-                        onClick = {
-                            navigateUp.invoke()
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                }
+
+                //Title
+                Text(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
+                        .constrainAs(titleText) {
+                            start.linkTo(navigationIcon.end)
+                            end.linkTo(settingsIcon.start)
                         },
-                        enabled = true,
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = "Back",
-                            modifier = Modifier
-                                .size(25.dp)
-                        )
-                    }
-                }
-            }
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    text = title,
+                    style = TextStyle(
+                        color = Color(0xff024040),
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 22.sp
+                    )
+                )
 
-            //Title
-            Row(Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically) {
-
-                ProvideTextStyle(value = MaterialTheme.typography.h6) {
-                    CompositionLocalProvider(
-                        LocalContentAlpha provides ContentAlpha.high,
-                    ){
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            text = title,
-                            style = TextStyle(
-                                color = Color(0xff024040),
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 26.sp
-                            )
-                        )
-                    }
+                //Settings Icon
+                IconButton(
+                    onClick = {
+                        navigateUp.invoke()
+                    },
+                    enabled = true,
+                    modifier = Modifier
+                        .constrainAs(settingsIcon) {
+                            end.linkTo(parent.end)
+                        }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
                 }
+
             }
         }
     }
@@ -86,5 +108,5 @@ fun ProfileToolBar(
 @Preview
 @Composable
 fun ProfileToolbarPreview() {
-    ProfileToolBar(title = "Title") {}
+    ProfileToolbar(title = "Profile") {}
 }

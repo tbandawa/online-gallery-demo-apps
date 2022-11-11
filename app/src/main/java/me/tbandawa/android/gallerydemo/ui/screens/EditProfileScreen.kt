@@ -30,10 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import me.tbandawa.android.gallerydemo.R
-import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
-import me.tbandawa.android.gallerydemo.ui.components.ProfileToolBar
+import me.tbandawa.android.gallerydemo.ui.components.ProfileToolbar
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun EditProfileScreen() {
     Surface(
@@ -42,7 +40,7 @@ fun EditProfileScreen() {
     ) {
 
         Scaffold(
-            topBar = { ProfileToolBar("Edit Profile"){} }
+            topBar = { ProfileToolbar("Edit Profile"){} }
         ) {
 
             ConstraintLayout(
