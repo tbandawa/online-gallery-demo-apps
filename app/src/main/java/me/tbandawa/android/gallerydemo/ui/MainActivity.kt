@@ -20,6 +20,10 @@ import me.tbandawa.android.gallerydemo.R
 import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
 import me.tbandawa.android.gallerydemo.ui.components.GalleryToolBar
 import me.tbandawa.android.gallerydemo.ui.components.MessageBox
+import me.tbandawa.android.gallerydemo.ui.screens.EditProfileScreen
+import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
+import me.tbandawa.android.gallerydemo.ui.screens.ProfileScreen
+import me.tbandawa.android.gallerydemo.ui.screens.SettingsScreen
 import me.tbandawa.android.gallerydemo.ui.theme.GalleryDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,59 +32,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GalleryDemoTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-
-                    Scaffold(
-                        topBar = { GalleryToolBar(title = "Gallery"){} }
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp)
-                        ) {
-                            MessageBox(
-                                title = "Image Gallery",
-                                message = "Upload images to gallery and let others view them"
-                            )
-
-                            val items = listOf(
-                                "Gallery Item 1", "Gallery Item 2", "Gallery Item 3", "Gallery Item 4", "Gallery Item 5",
-                                "Gallery Item 6", "Gallery Item 7", "Gallery Item 8", "Gallery Item 9", "Gallery Item 10",
-                                "Gallery Item 11", "Gallery Item 12", "Gallery Item 13", "Gallery Item 14", "Gallery Item 15"
-                            )
-
-                            LazyVerticalGrid(
-                                cells = GridCells.Fixed(3),
-                                contentPadding = PaddingValues(0.dp),
-                                modifier = Modifier.padding(top = 10.dp)
-                            ) {
-                                items(items.size) { itemIndex ->
-                                    GalleryItem(
-                                        painter = painterResource(id = R.drawable.free_1),
-                                        title = items[itemIndex],
-                                        count = itemIndex + 1
-                                    )
-                                }
-                            }
-
-                        }
-                    }
-
-                }
+                //EditProfileScreen()
+                //GalleryScreen()
+                //ProfileScreen()
+                SettingsScreen()
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    GalleryDemoTheme {
-        Column {
-            GalleryToolBar(title = "Gallery") {}
         }
     }
 }

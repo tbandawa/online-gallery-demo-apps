@@ -12,19 +12,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.tbandawa.android.gallerydemo.R
+import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
 
 @Composable
 fun GalleryToolBar(
-    title: String,
-    navigateToUpload: () -> Unit
+    navigateToNotifications: () -> Unit
 ) {
 
     TopAppBar(
         title = {
             Text(
-                text = title,
+                text = "",
                 style = TextStyle(
                     color = Color(0xff024040),
                     fontWeight = FontWeight.Bold,
@@ -37,11 +38,11 @@ fun GalleryToolBar(
         actions = {
             IconButton(
                 onClick = {
-                    navigateToUpload.invoke()
+                    navigateToNotifications.invoke()
                 }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_upload),
+                    painter = painterResource(id = R.drawable.ic_notification),
                     contentDescription = null,
                     modifier = Modifier
                         .size(25.dp),
@@ -51,4 +52,10 @@ fun GalleryToolBar(
         }
     )
 
+}
+
+@Preview
+@Composable
+fun GalleryScreenPreview() {
+    GalleryToolBar {}
 }
