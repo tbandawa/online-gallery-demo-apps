@@ -23,6 +23,7 @@ import me.tbandawa.android.gallerydemo.ui.components.MessageBox
 import me.tbandawa.android.gallerydemo.ui.screens.EditProfileScreen
 import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
 import me.tbandawa.android.gallerydemo.ui.screens.ProfileScreen
+import me.tbandawa.android.gallerydemo.ui.screens.SettingsScreen
 import me.tbandawa.android.gallerydemo.ui.theme.GalleryDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -33,7 +34,8 @@ class MainActivity : ComponentActivity() {
             GalleryDemoTheme {
                 //EditProfileScreen()
                 //GalleryScreen()
-                ProfileScreen()
+                //ProfileScreen()
+                SettingsScreen()
             }
         }
     }

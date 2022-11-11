@@ -49,7 +49,7 @@ fun EditProfileScreen() {
                     .padding(it)
             ) {
 
-                val (inputLayout, controlLayout) = createRefs()
+                val (inputLayout, saveButton) = createRefs()
 
                 Column(
                     modifier = Modifier
@@ -218,7 +218,7 @@ fun EditProfileScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
-                        .constrainAs(controlLayout) {
+                        .constrainAs(saveButton) {
                             bottom.linkTo(parent.bottom)
                         },
                     colors = ButtonDefaults.buttonColors(
