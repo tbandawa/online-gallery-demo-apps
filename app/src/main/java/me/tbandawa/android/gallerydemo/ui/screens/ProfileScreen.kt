@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,18 +15,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.R
 import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
 import me.tbandawa.android.gallerydemo.ui.components.ProfileToolbar
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    navController: NavController
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -47,7 +49,7 @@ fun ProfileScreen() {
             frontLayerBackgroundColor = Color(0xffCEE6E6),
             backLayerBackgroundColor = Color.White,
             appBar =  {
-                ProfileToolbar("Profile"){}
+                ProfileToolbar("Profile", navController)
             },
             backLayerContent = {
                 Column(
@@ -91,37 +93,6 @@ fun ProfileScreen() {
                         modifier = Modifier
                             .align(alignment = CenterHorizontally)
                     )
-
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Button(
-                        modifier = Modifier
-                            .height(35.dp)
-                            .align(alignment = CenterHorizontally),
-                        onClick = {
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xff024040)
-                        ),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Image(
-                            painterResource(id = R.drawable.ic_edit),
-                            contentDescription ="Edit",
-                            modifier = Modifier
-                                .padding(end = 5.dp)
-                                .size(20.dp)
-                        )
-                        Text(
-                            text = "Edit Profile",
-                            style = TextStyle(
-                                color = Color.White,
-                                fontWeight = FontWeight.Light,
-                                fontStyle = FontStyle.Italic,
-                                fontSize = 14.sp
-                            )
-                        )
-                    }
 
                     Spacer(modifier = Modifier.height(25.dp))
                     Row(
@@ -235,5 +206,5 @@ fun ProfileScreen() {
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(navController = rememberNavController())
 }
