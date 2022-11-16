@@ -1,11 +1,8 @@
 package me.tbandawa.android.gallerydemo.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -16,12 +13,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.R
 
 @Composable
-fun SettingsToolbar(
+fun NavigationToolbar(
     title: String,
-    navigateUp: () -> Unit
+    navController: NavController
 ) {
 
     TopAppBar(
@@ -46,7 +45,7 @@ fun SettingsToolbar(
                 //Navigation Icon
                 IconButton(
                     onClick = {
-                        navigateUp.invoke()
+                        navController.navigateUp()
                     },
                     enabled = true,
                     modifier = Modifier
@@ -88,6 +87,6 @@ fun SettingsToolbar(
 
 @Preview
 @Composable
-fun SettingsToolbarPreview() {
-    SettingsToolbar(title = "Settings") {}
+fun NavigationToolbarPreview() {
+    NavigationToolbar(title = "Settings", navController = rememberNavController())
 }

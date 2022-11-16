@@ -14,12 +14,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.R
 import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
 
 @Composable
 fun GalleryToolBar(
-    navigateToNotifications: () -> Unit
+    navController: NavController
 ) {
 
     TopAppBar(
@@ -38,7 +40,7 @@ fun GalleryToolBar(
         actions = {
             IconButton(
                 onClick = {
-                    navigateToNotifications.invoke()
+                    navController.navigate(Screen.Notifications.route)
                 }
             ) {
                 Icon(
@@ -57,5 +59,5 @@ fun GalleryToolBar(
 @Preview
 @Composable
 fun GalleryScreenPreview() {
-    GalleryToolBar {}
+    GalleryToolBar(navController = rememberNavController())
 }

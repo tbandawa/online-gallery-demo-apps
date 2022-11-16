@@ -5,29 +5,28 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.R
 import me.tbandawa.android.gallerydemo.ui.components.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingsScreen(){
+fun SettingsScreen(
+    navController: NavController
+){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -37,7 +36,7 @@ fun SettingsScreen(){
         val notificationCheckedState = remember{ mutableStateOf(false)}
 
         Scaffold(
-            topBar = { SettingsToolbar(title = "Settings"){} }
+            topBar = { NavigationToolbar(title = "Settings", navController) }
         ) {
 
             ConstraintLayout(
@@ -94,7 +93,7 @@ fun SettingsScreen(){
                             .padding(3.dp)
                             .height(35.dp)
                             .clickable {
-
+                                navController.navigate(Screen.EditProfile.route)
                             },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -279,5 +278,5 @@ fun SettingsScreen(){
 @Preview
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen()
+    SettingsScreen(navController = rememberNavController())
 }

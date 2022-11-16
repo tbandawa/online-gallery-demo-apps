@@ -19,13 +19,18 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.R
 import me.tbandawa.android.gallerydemo.ui.components.GalleryItem
 import me.tbandawa.android.gallerydemo.ui.components.GalleryToolBar
 import me.tbandawa.android.gallerydemo.ui.components.MessageBox
+import me.tbandawa.android.gallerydemo.ui.components.Screen
 
 @Composable
-fun GalleryScreen(){
+fun GalleryScreen(
+    navController: NavController
+){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -34,7 +39,7 @@ fun GalleryScreen(){
         val scrollState = rememberScrollState()
 
         Scaffold(
-            topBar = { GalleryToolBar{} }
+            topBar = { GalleryToolBar(navController) }
         ) {
             Column(
                 modifier = Modifier
@@ -52,6 +57,9 @@ fun GalleryScreen(){
                         .size(85.dp)
                         .clip(CircleShape)
                         .border(2.dp, Color.Gray, CircleShape)
+                        .clickable {
+                            navController.navigate(Screen.Profile.route)
+                        }
                 )
 
                 Spacer(modifier = Modifier.height(15.dp))
@@ -126,5 +134,5 @@ fun GalleryScreen(){
 @Preview
 @Composable
 fun GalleryScreenPreview() {
-    GalleryScreen()
+    GalleryScreen(navController = rememberNavController())
 }
