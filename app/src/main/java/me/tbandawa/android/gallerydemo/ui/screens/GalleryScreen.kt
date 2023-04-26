@@ -87,7 +87,7 @@ fun GalleryScreen(
                     onValueChange = {
                         searchText = it
                     },
-                    placeholder = { Text(text = "Enter your e-mail") },
+                    placeholder = { Text(text = "Search Galleries") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)
