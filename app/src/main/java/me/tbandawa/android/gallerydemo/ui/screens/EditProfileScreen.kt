@@ -62,6 +62,7 @@ fun EditProfileScreen(
 
                     var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
                     var textLastName by remember { mutableStateOf(TextFieldValue("")) }
+                    var textUserName by remember { mutableStateOf(TextFieldValue("")) }
                     var textEmail by remember { mutableStateOf(TextFieldValue("")) }
                     var textPassword by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -139,6 +140,31 @@ fun EditProfileScreen(
                             textLastName = it
                         },
                         placeholder = { Text(text = "Last Name") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                            .background(
+                                color = Color(0xffF0F5F1),
+                                shape = RoundedCornerShape(60.dp)
+                            ),
+                        shape = RoundedCornerShape(60.dp),
+                        colors = TextFieldDefaults.textFieldColors(
+                            textColor = Color(0xff024040),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            disabledIndicatorColor = Color.Transparent,
+                            placeholderColor = Color(0x90024040),
+                            leadingIconColor = Color(0xff024040)
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(25.dp))
+                    TextField(
+                        value = textUserName,
+                        onValueChange = {
+                            textUserName = it
+                        },
+                        placeholder = { Text(text = "User Name") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp)
