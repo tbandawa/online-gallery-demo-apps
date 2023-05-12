@@ -1,4 +1,4 @@
-package me.tbandawa.android.gallerydemo.ui.screens
+package me.tbandawa.android.gallerydemo.ui.screens.gallery
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*

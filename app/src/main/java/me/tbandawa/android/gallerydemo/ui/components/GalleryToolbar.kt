@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.R
-import me.tbandawa.android.gallerydemo.ui.screens.GalleryScreen
 
 @Composable
 fun GalleryToolBar(

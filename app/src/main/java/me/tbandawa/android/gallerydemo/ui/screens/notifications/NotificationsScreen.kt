@@ -1,4 +1,4 @@
-package me.tbandawa.android.gallerydemo.ui.screens
+package me.tbandawa.android.gallerydemo.ui.screens.notifications
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
