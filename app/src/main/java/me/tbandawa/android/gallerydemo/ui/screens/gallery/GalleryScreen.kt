@@ -1,5 +1,6 @@
 package me.tbandawa.android.gallerydemo.ui.screens.gallery
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -27,6 +28,7 @@ import me.tbandawa.android.gallerydemo.ui.components.GalleryToolBar
 import me.tbandawa.android.gallerydemo.ui.components.MessageBox
 import me.tbandawa.android.gallerydemo.ui.components.Screen
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GalleryScreen(
     navController: NavController
