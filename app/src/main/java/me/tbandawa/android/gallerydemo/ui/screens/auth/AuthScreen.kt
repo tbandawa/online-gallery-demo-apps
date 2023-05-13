@@ -1,6 +1,7 @@
 package me.tbandawa.android.gallerydemo.ui.screens.auth
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -13,7 +14,8 @@ fun AuthScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
+        color = MaterialTheme.colors.background,
+        shape = RoundedCornerShape(25)
     ) {
 
     }
