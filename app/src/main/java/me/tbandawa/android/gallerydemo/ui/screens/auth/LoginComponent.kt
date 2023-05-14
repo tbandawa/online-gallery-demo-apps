@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
@@ -34,18 +33,19 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun LoginComponent() {
-    Surface(modifier = Modifier
-            .padding(top = 25.dp, bottom = 25.dp, start = 25.dp, end = 25.dp)
+    Surface(
+        modifier = Modifier
+            .padding(bottom = 25.dp, start = 15.dp, end = 15.dp)
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
                 .fillMaxSize()
         ) {
 
             var textUserName by remember { mutableStateOf(TextFieldValue("")) }
             var textPassword by remember { mutableStateOf(TextFieldValue("")) }
 
+            Spacer(modifier = Modifier.height(25.dp))
             Text(
                 text = "Log in to your account",
                 style = TextStyle(
