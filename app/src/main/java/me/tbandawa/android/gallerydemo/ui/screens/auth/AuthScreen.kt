@@ -30,10 +30,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.R
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(
+    navController: NavController,
+    exitApp: () -> Unit
+) {
     Surface(
         modifier = Modifier
             .padding(top = 25.dp, bottom = 25.dp, start = 25.dp, end = 25.dp),
@@ -84,7 +89,7 @@ fun AuthScreen() {
                                     .clickable(
                                         enabled = true,
                                         onClick = {
-
+                                            exitApp.invoke()
                                         }
                                     )
                             )
@@ -99,8 +104,8 @@ fun AuthScreen() {
 
             }) {
                 when (selectedTab) {
-                    Tab.LOGIN -> LoginComponent()
-                    Tab.REGISTER -> RegisterComponent()
+                    Tab.LOGIN -> LoginComponent(navController)
+                    Tab.REGISTER -> RegisterComponent(navController)
                 }
             }
         }
@@ -147,5 +152,5 @@ fun AuthTab(
 @Preview
 @Composable
 fun AuthScreenPreview() {
-    AuthScreen()
+    AuthScreen(navController = rememberNavController(), exitApp = {})
 }

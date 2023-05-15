@@ -32,12 +32,16 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController()
 
+            val exitApp: () -> Unit = {
+                this.finish()
+            }
+
             GalleryDemoTheme {
 
                 NavHost(navController, startDestination = Screen.Auth.route) {
 
                     composable(route = Screen.Auth.route) {
-                        AuthScreen()
+                        AuthScreen(navController, exitApp)
                     }
 
                     composable(route = Screen.Gallery.route) {

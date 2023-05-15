@@ -30,9 +30,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.gallerydemo.ui.components.Screen
 
 @Composable
-fun LoginComponent() {
+fun LoginComponent(
+    navController: NavController
+) {
     Surface(
         modifier = Modifier
             .padding(bottom = 25.dp, start = 15.dp, end = 15.dp)
@@ -110,7 +115,14 @@ fun LoginComponent() {
 
             Spacer(modifier = Modifier.height(25.dp))
             Button(
-                onClick = { },
+                onClick = {
+                    navController.navigate(Screen.Gallery.route){
+                        launchSingleTop = true
+                        popUpTo(Screen.Auth.route) {
+                            inclusive = true
+                        }
+                    }
+                },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -136,5 +148,5 @@ fun LoginComponent() {
 @Preview
 @Composable
 fun LoginComponentPreview() {
-    LoginComponent()
+    LoginComponent(navController = rememberNavController())
 }
