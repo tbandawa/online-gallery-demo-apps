@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Theme.App.Starting" parent="Theme.GalleryDemo">
-        <item name="windowSplashScreenAnimatedIcon">@drawable/gallery_icon</item>
-        <item name="windowSplashScreenBackground">#1C2427</item>
-        <item name="postSplashScreenTheme">@style/Theme.GalleryDemo</item>
-    </style>
-</resources>
