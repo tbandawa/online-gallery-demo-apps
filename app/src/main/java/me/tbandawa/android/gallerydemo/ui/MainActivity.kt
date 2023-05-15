@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.ui.components.Screen
+import me.tbandawa.android.gallerydemo.ui.screens.auth.AuthScreen
 import me.tbandawa.android.gallerydemo.ui.screens.gallery.GalleryScreen
 import me.tbandawa.android.gallerydemo.ui.screens.notifications.NotificationsScreen
 import me.tbandawa.android.gallerydemo.ui.screens.profile.EditProfileScreen
@@ -24,7 +25,11 @@ class MainActivity : ComponentActivity() {
 
             GalleryDemoTheme {
 
-                NavHost(navController, startDestination = Screen.Gallery.route) {
+                NavHost(navController, startDestination = Screen.Auth.route) {
+
+                    composable(route = Screen.Auth.route) {
+                        AuthScreen()
+                    }
 
                     composable(route = Screen.Gallery.route) {
                         GalleryScreen(navController)
