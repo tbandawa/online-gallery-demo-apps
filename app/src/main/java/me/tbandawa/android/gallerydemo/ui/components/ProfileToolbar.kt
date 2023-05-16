@@ -69,8 +69,8 @@ fun ProfileToolbar(
                     modifier = Modifier
                         .width(IntrinsicSize.Max)
                         .constrainAs(titleText) {
-                            start.linkTo(navigationIcon.end)
-                            end.linkTo(settingsIcon.start)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
                         },
                     textAlign = TextAlign.Center,
                     maxLines = 1,
@@ -81,25 +81,6 @@ fun ProfileToolbar(
                         fontSize = 22.sp
                     )
                 )
-
-                //Settings Icon
-                IconButton(
-                    onClick = {
-                        navController.navigate(Screen.Settings.route)
-                    },
-                    enabled = true,
-                    modifier = Modifier
-                        .constrainAs(settingsIcon) {
-                            end.linkTo(parent.end)
-                        }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_settings),
-                        contentDescription = "Back",
-                        modifier = Modifier
-                            .size(20.dp)
-                    )
-                }
 
             }
         }

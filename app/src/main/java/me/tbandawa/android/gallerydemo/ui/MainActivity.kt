@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.gallerydemo.ui.components.Screen
 import me.tbandawa.android.gallerydemo.ui.screens.auth.AuthScreen
 import me.tbandawa.android.gallerydemo.ui.screens.gallery.GalleryScreen
-import me.tbandawa.android.gallerydemo.ui.screens.notifications.NotificationsScreen
 import me.tbandawa.android.gallerydemo.ui.screens.profile.EditProfileScreen
 import me.tbandawa.android.gallerydemo.ui.screens.profile.ProfileScreen
 import me.tbandawa.android.gallerydemo.ui.screens.profile.SettingsScreen
@@ -58,10 +57,6 @@ class MainActivity : ComponentActivity() {
 
                     composable(route = Screen.Settings.route) {
                         SettingsScreen(navController)
-                    }
-
-                    composable(route = Screen.Notifications.route) {
-                        NotificationsScreen(navController)
                     }
 
                 }

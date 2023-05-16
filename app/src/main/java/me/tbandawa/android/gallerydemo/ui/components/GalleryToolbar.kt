@@ -39,11 +39,11 @@ fun GalleryToolBar(
         actions = {
             IconButton(
                 onClick = {
-                    navController.navigate(Screen.Notifications.route)
+                    navController.navigate(Screen.Settings.route)
                 }
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_notification),
+                    painter = painterResource(id = R.drawable.ic_settings),
                     contentDescription = null,
                     modifier = Modifier
                         .size(25.dp),
