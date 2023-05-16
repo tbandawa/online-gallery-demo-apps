@@ -117,65 +117,6 @@ fun SettingsScreen(
 
                     }
 
-                    // Notification setting
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp, bottom = 4.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.ic_notification),
-                                contentDescription = "notification",
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .size(20.dp)
-                            )
-                            Text(
-                                text = "Notifications",
-                                style = TextStyle(
-                                    color = Color(0xff024040),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp
-                                ),
-                                modifier = Modifier.padding(start = 5.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(1.dp).fillMaxWidth().background(Color(0xff024040)))
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(3.dp)
-                            .height(35.dp)
-                            .clickable {
-
-                            },
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Notifications",
-                            style = TextStyle(
-                                color = Color(0xff024040),
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp
-                            ),
-                            modifier = Modifier
-                                .weight(1f)
-                        )
-                        Switch(
-                            checked = notificationCheckedState.value,
-                            onCheckedChange = {
-                                notificationCheckedState.value = it
-                            }
-                        )
-                    }
-
                     // Theme setting
                     Column(
                         modifier = Modifier
