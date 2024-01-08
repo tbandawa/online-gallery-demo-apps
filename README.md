@@ -1,1 +1,0 @@
-# android-gallery-demo
