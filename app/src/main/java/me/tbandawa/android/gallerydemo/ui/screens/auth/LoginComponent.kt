@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -47,6 +49,7 @@ fun LoginComponent(
                 .fillMaxSize()
         ) {
 
+            var isLoading by remember { mutableStateOf(false) }
             var textUserName by remember { mutableStateOf(TextFieldValue("")) }
             var textPassword by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -116,31 +119,40 @@ fun LoginComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    navController.navigate(Screen.Gallery.route){
+                    /*navController.navigate(Screen.Gallery.route){
                         launchSingleTop = true
                         popUpTo(Screen.Auth.route) {
                             inclusive = true
                         }
-                    }
+                    }*/
+                          isLoading = !isLoading
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp),
+                    .padding(bottom = 25.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color(0xff024040)
                 )
             ){
-                Text(
-                    text = "Log in",
-                    style = TextStyle(
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(21.dp),
                         color = Color.White,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 18.sp
+                        strokeWidth = 2.dp)
+                } else {
+                    Text(
+                        text = "Log in",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp
+                        )
                     )
-                )
-            }
+                }
 
+            }
         }
     }
 }

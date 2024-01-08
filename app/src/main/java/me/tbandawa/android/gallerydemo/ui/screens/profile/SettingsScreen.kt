@@ -33,7 +33,6 @@ fun SettingsScreen(
     ) {
 
         val scrollState = rememberScrollState()
-        val notificationCheckedState = remember{ mutableStateOf(false)}
 
         Scaffold(
             topBar = { NavigationToolbar(title = "Settings", navController) }

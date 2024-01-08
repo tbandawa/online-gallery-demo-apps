@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -105,4 +106,13 @@ fun MessageBox(title: String, message: String) {
         }
 
     }
+}
+
+@Preview
+@Composable
+fun MessageBoxPreview() {
+    MessageBox(
+        title = "Image Gallery",
+        message = "Upload images to gallery and let others view them"
+    )
 }
