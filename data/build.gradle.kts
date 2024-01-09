@@ -32,6 +32,12 @@ kotlin {
         commonMain.dependencies {
             //put your multiplatform dependencies here
         }
+        androidMain.dependencies {
+
+        }
+        iosMain.dependencies {
+
+        }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -39,7 +45,7 @@ kotlin {
 }
 
 android {
-    namespace = "me.tbandawa.android.online_gallery_demo"
+    namespace = "me.tbandawa.android.online.gallery.data"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

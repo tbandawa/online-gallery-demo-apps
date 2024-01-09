@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    namespace = "me.tbandawa.android.online_gallery_demo.android"
+    namespace = "me.tbandawa.android.online.gallery"
     compileSdk = 34
     defaultConfig {
-        applicationId = "me.tbandawa.android.online_gallery_demo.android"
+        applicationId = "me.tbandawa.android.online.gallery"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

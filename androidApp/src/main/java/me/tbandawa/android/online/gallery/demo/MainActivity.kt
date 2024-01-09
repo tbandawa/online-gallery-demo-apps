@@ -1,4 +1,4 @@
-package me.tbandawa.android.online_gallery_demo.android
+package me.tbandawa.android.online.gallery.demo
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
