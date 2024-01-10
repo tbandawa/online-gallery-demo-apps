@@ -53,7 +53,7 @@ fun RegisterComponent(
             var textEmail by remember { mutableStateOf(TextFieldValue("")) }
             var textPassword by remember { mutableStateOf(TextFieldValue("")) }
 
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(55.dp))
             Text(
                 text = "Create account",
                 style = TextStyle(
@@ -67,6 +67,7 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textFirstName,
+                singleLine = true,
                 onValueChange = {
                     textFirstName = it
                 },
@@ -92,6 +93,7 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textLastName,
+                singleLine = true,
                 onValueChange = {
                     textLastName = it
                 },
@@ -117,6 +119,7 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textUserName,
+                singleLine = true,
                 onValueChange = {
                     textUserName = it
                 },
@@ -142,6 +145,7 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textEmail,
+                singleLine = true,
                 onValueChange = {
                     textEmail = it
                 },
@@ -167,6 +171,7 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textPassword,
+                singleLine = true,
                 onValueChange = {
                     textPassword = it
                 },

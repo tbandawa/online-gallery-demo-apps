@@ -1,4 +1,4 @@
-package me.tbandawa.android.online.gallery.demo
+package me.tbandawa.android.online.gallery.demo.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape

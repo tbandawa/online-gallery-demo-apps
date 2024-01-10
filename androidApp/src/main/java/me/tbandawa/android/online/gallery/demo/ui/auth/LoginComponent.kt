@@ -52,7 +52,7 @@ fun LoginComponent(
             var textUserName by remember { mutableStateOf(TextFieldValue("")) }
             var textPassword by remember { mutableStateOf(TextFieldValue("")) }
 
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(55.dp))
             Text(
                 text = "Log in to your account",
                 style = TextStyle(
@@ -66,6 +66,7 @@ fun LoginComponent(
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textUserName,
+                singleLine = true,
                 onValueChange = {
                     textUserName = it
                 },
@@ -91,6 +92,7 @@ fun LoginComponent(
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textPassword,
+                singleLine = true,
                 onValueChange = {
                     textPassword = it
                 },

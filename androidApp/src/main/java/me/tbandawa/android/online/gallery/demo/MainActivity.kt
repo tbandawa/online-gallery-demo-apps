@@ -4,22 +4,33 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import me.tbandawa.android.online_gallery_demo.Greeting
+import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.online.gallery.demo.ui.auth.AuthScreen
+import me.tbandawa.android.online.gallery.demo.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val navController = rememberNavController()
+
+            val exitApp: () -> Unit = {
+                this.finish()
+            }
+
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GreetingView(Greeting().greet())
+                    AuthScreen(navController, exitApp)
                 }
             }
         }
@@ -35,6 +46,6 @@ fun GreetingView(text: String) {
 @Composable
 fun DefaultPreview() {
     MyApplicationTheme {
-        GreetingView("Hello, Android!")
+        AuthScreen(navController = rememberNavController(), exitApp = {})
     }
 }
