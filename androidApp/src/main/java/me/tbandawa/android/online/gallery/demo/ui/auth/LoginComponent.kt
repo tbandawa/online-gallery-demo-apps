@@ -67,6 +67,7 @@ fun LoginComponent(
             TextField(
                 value = textUserName,
                 singleLine = true,
+                enabled = !isLoading,
                 onValueChange = {
                     textUserName = it
                 },
@@ -93,6 +94,7 @@ fun LoginComponent(
             TextField(
                 value = textPassword,
                 singleLine = true,
+                enabled = !isLoading,
                 onValueChange = {
                     textPassword = it
                 },
@@ -126,7 +128,7 @@ fun LoginComponent(
                             inclusive = true
                         }
                     }*/
-                          isLoading = !isLoading
+                    isLoading = !isLoading
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
@@ -152,7 +154,6 @@ fun LoginComponent(
                         )
                     )
                 }
-
             }
         }
     }

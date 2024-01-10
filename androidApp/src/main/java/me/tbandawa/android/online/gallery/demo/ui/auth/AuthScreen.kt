@@ -41,6 +41,7 @@ fun AuthScreen(
 ) {
     Surface(
         modifier = Modifier
+            .background(Color.Gray)
             .padding(top = 25.dp, bottom = 25.dp, start = 25.dp, end = 25.dp),
         shape = RoundedCornerShape(5)
     ) {
@@ -145,7 +146,7 @@ fun AuthTab(
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(5.dp)
+                .height(0.dp)
                 .background(if (selected) Color(0xff024040) else Color.Transparent)
         )
     }

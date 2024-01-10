@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -47,6 +49,7 @@ fun RegisterComponent(
                 .fillMaxSize()
         ) {
 
+            var isLoading by remember { mutableStateOf(false) }
             var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
             var textLastName by remember { mutableStateOf(TextFieldValue("")) }
             var textUserName by remember { mutableStateOf(TextFieldValue("")) }
@@ -68,6 +71,7 @@ fun RegisterComponent(
             TextField(
                 value = textFirstName,
                 singleLine = true,
+                enabled = !isLoading,
                 onValueChange = {
                     textFirstName = it
                 },
@@ -94,6 +98,7 @@ fun RegisterComponent(
             TextField(
                 value = textLastName,
                 singleLine = true,
+                enabled = !isLoading,
                 onValueChange = {
                     textLastName = it
                 },
@@ -120,6 +125,7 @@ fun RegisterComponent(
             TextField(
                 value = textUserName,
                 singleLine = true,
+                enabled = !isLoading,
                 onValueChange = {
                     textUserName = it
                 },
@@ -146,6 +152,7 @@ fun RegisterComponent(
             TextField(
                 value = textEmail,
                 singleLine = true,
+                enabled = !isLoading,
                 onValueChange = {
                     textEmail = it
                 },
@@ -172,6 +179,7 @@ fun RegisterComponent(
             TextField(
                 value = textPassword,
                 singleLine = true,
+                enabled = !isLoading,
                 onValueChange = {
                     textPassword = it
                 },
@@ -199,12 +207,13 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    navController.navigate(Screen.Gallery.route) {
+                    /*navController.navigate(Screen.Gallery.route) {
                         launchSingleTop = true
                         popUpTo(Screen.Auth.route) {
                             inclusive = true
                         }
-                    }
+                    }*/
+                    isLoading = !isLoading
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
@@ -214,16 +223,23 @@ fun RegisterComponent(
                     containerColor = Color(0xff024040)
                 )
             ){
-                Text(
-                    text = "Register",
-                    style = TextStyle(
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(21.dp),
                         color = Color.White,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 18.sp
+                        strokeWidth = 2.dp)
+                } else {
+                    Text(
+                        text = "Register",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp
+                        )
                     )
-                )
+                }
             }
-
         }
     }
 }
