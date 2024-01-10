@@ -13,8 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.demo.ui.auth.AuthScreen
+import me.tbandawa.android.online.gallery.demo.ui.home.HomeScreen
 import me.tbandawa.android.online.gallery.demo.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,17 +32,24 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController()
-
-            val exitApp: () -> Unit = {
-                this.finish()
-            }
+            val exitApp: () -> Unit = { this.finish() }
 
             MyApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AuthScreen(navController, exitApp)
+                    NavHost(
+                        navController = navController,
+                        startDestination = "auth"
+                    ) {
+                        composable(route = "auth") {
+                            AuthScreen(navController, exitApp)
+                        }
+                        composable(route = "home") {
+                            HomeScreen()
+                        }
+                    }
                 }
             }
         }

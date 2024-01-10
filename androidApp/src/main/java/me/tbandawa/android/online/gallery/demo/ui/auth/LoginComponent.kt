@@ -122,13 +122,13 @@ fun LoginComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    /*navController.navigate(Screen.Gallery.route){
+                    navController.navigate("home"){
                         launchSingleTop = true
-                        popUpTo(Screen.Auth.route) {
+                        popUpTo("auth") {
                             inclusive = true
                         }
-                    }*/
-                    isLoading = !isLoading
+                    }
+                    //isLoading = !isLoading
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
