@@ -13,6 +13,7 @@ koin = "3.2.0"
 viewModel = "2.5.1"
 constraint = "1.0.1"
 navigation = "2.5.0-alpha02"
+splash = "1.0.0-beta02"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -20,6 +21,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "viewModel" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraint" }
 androidx-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
