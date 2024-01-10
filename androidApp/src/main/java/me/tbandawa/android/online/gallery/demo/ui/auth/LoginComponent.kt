@@ -10,9 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.Add
+import androidx.compose.material.icons.sharp.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -24,16 +29,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.online.gallery.R
 
 @Composable
 fun LoginComponent(
@@ -49,6 +57,7 @@ fun LoginComponent(
         ) {
 
             var isLoading by remember { mutableStateOf(false) }
+            var showPassword by remember { mutableStateOf(false) }
             var textUserName by remember { mutableStateOf(TextFieldValue("")) }
             var textPassword by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -116,7 +125,28 @@ fun LoginComponent(
                     disabledLeadingIconColor = Color(0xff024040)
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                visualTransformation = PasswordVisualTransformation()
+                visualTransformation = if (showPassword) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+                trailingIcon = {
+                    if (showPassword) {
+                        IconButton(onClick = { showPassword = false }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_visibility_on),
+                                contentDescription = "Show Password"
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = { showPassword = true }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_visibility_off),
+                                contentDescription = "Hide Password"
+                            )
+                        }
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(25.dp))
