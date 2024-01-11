@@ -37,6 +37,10 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.logging)
+            implementation(libs.sql.delight.runtime)
+            implementation(libs.kotlin.date.time)
+            implementation(libs.gson)
+            api(libs.koin.core)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
@@ -59,5 +63,11 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 24
+    }
+}
+
+sqldelight {
+    database("AppDatabase") {
+        packageName = "me.tbandawa.android.online.gallery.data.cache"
     }
 }

@@ -1,0 +1,22 @@
+CREATE TABLE UserData (
+    id INTEGER NOT NULL,
+    token TEXT NOT NULL,
+    firstname TEXT NOT NULL,
+    lastname TEXT NOT NULL,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    thumbnailUrl TEXT NOT NULL,
+    imageUrl TEXT NOT NULL
+);
+
+insertUser:
+INSERT INTO UserData(id, token, firstname, lastname, username, email, thumbnailUrl, thumbnailUrl, imageUrl)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getUser:
+SELECT UserData.*
+FROM UserData
+WHERE id = ?;
+
+removeUser:
+DELETE FROM UserData;

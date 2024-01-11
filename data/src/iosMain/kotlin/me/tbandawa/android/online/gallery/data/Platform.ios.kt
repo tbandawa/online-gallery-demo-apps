@@ -1,4 +1,4 @@
-package me.tbandawa.android.online_gallery_demo
+package me.tbandawa.android.online.gallery.data
 
 import platform.UIKit.UIDevice
 

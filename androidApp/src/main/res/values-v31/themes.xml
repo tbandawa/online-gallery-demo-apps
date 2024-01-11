@@ -10,5 +10,6 @@
         <!-- Status bar and Nav bar configs -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>
