@@ -52,6 +52,7 @@ fun RegisterComponent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = Color.Gray)
         ) {
 
             var isLoading by remember { mutableStateOf(false) }

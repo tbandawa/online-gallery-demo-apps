@@ -41,13 +41,14 @@ fun AuthScreen(
 ) {
     Surface(
         modifier = Modifier
-            .background(Color.Gray)
+            .background(Color.White)
             .padding(top = 25.dp, bottom = 25.dp, start = 25.dp, end = 25.dp),
         shape = RoundedCornerShape(5)
     ) {
         Surface {
             var selectedTab by remember { mutableStateOf(Tab.LOGIN) }
             Scaffold(
+                containerColor = Color.Gray,
                 topBar = {
                     Column {
                         ConstraintLayout(

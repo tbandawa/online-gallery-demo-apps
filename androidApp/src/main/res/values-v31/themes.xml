@@ -8,7 +8,7 @@
         <item name="android:windowSplashScreenBrandingImage">@drawable/gallery_brand</item>
 
         <!-- Status bar and Nav bar configs -->
-        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/white</item>
     </style>
 </resources>

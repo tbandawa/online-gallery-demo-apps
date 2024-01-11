@@ -1,7 +1,6 @@
-package me.tbandawa.android.online.gallery.demo.ui.home
+package me.tbandawa.android.online.gallery.demo.ui.screens
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,7 +30,9 @@ fun HomeScreen() {
                 )
             }
         },
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = {
+            BottomNavigationBar(navController)
+        }
     )
 }
 
@@ -44,34 +45,16 @@ fun MainNavigation(
         startDestination = "galleries"
     ) {
         composable(route = "galleries") {
-            Text(
-                text = "Galleries",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
-                )
-            )
+            GalleriesScreen(navController = navController)
         }
         composable(route = "create") {
-            Text(
-                text = "Create",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
-                )
-            )
+            CreateScreen()
         }
         composable(route = "profile") {
-            Text(
-                text = "Profile",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
-                )
-            )
+            ProfileScreen()
+        }
+        composable(route = "search") {
+            SearchScreen(navController = navController)
         }
         composable(route = "gallery/{id}") { backStackEntry ->
             val galleryId = backStackEntry.arguments?.getLong("id")

@@ -17,8 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.demo.ui.auth.AuthScreen
-import me.tbandawa.android.online.gallery.demo.ui.home.HomeScreen
-import me.tbandawa.android.online.gallery.demo.ui.theme.MyApplicationTheme
+import me.tbandawa.android.online.gallery.demo.ui.screens.HomeScreen
+import me.tbandawa.android.online.gallery.demo.ui.theme.OnlineGalleryDemoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val exitApp: () -> Unit = { this.finish() }
 
-            MyApplicationTheme {
+            OnlineGalleryDemoTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -64,7 +64,7 @@ fun GreetingView(text: String) {
 @Preview
 @Composable
 fun DefaultPreview() {
-    MyApplicationTheme {
+    OnlineGalleryDemoTheme {
         AuthScreen(navController = rememberNavController(), exitApp = {})
     }
 }

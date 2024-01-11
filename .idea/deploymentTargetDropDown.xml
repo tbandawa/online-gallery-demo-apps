@@ -11,7 +11,10 @@
       <entry key="HomeScreenPreview">
         <State />
       </entry>
-      <entry key="LoginComponentPreview">
+      <entry key="SearchScreenPreview">
+        <State />
+      </entry>
+      <entry key="ToolBarsPreview">
         <State />
       </entry>
       <entry key="androidApp">
