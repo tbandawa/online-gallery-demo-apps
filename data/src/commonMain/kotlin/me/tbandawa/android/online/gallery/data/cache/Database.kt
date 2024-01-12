@@ -1,9 +1,6 @@
 package me.tbandawa.android.online.gallery.data.cache
 
 import com.squareup.sqldelight.db.SqlDriver
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
 import me.tbandawa.android.online.gallery.data.domain.models.User
 
