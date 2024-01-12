@@ -1,8 +1,5 @@
-package me.tbandawa.android.online.gallery.data.remote.responses
+package me.tbandawa.android.online.gallery.data.domain.models
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class User(
     val token: String,
     val id: Long,
