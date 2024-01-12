@@ -15,8 +15,7 @@ VALUES(?, ?, ?, ?, ?, ?, ?, ?);
 
 getUser:
 SELECT UserData.*
-FROM UserData
-WHERE id = ?;
+FROM UserData;
 
 removeUser:
 DELETE FROM UserData;

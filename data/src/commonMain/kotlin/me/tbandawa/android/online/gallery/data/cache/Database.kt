@@ -26,8 +26,8 @@ internal class Database(sqlDriver: SqlDriver) {
         }
     }
 
-    internal fun getUser(id: Long): User? {
-        val userData = dbQuery.getUser(id).executeAsOneOrNull()
+    internal fun getUser(): User? {
+        val userData = dbQuery.getUser().executeAsOneOrNull()
         return userData?.let { mapUser(it) }
     }
 
