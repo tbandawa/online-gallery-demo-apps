@@ -31,6 +31,10 @@ internal class Database(sqlDriver: SqlDriver) {
         return userData?.let { mapUser(it) }
     }
 
+    internal fun clearUser() {
+        dbQuery.transaction { dbQuery.removeUser() }
+    }
+
     private fun mapUser(
         userData: UserData
     ): User {
