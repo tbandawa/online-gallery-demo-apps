@@ -6,6 +6,6 @@ import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 
 interface GalleryRepository {
-    fun getUser(id: Long): User?
+    fun getUser(): User?
     suspend fun signInUser(signInRequest: SignInRequest): Flow<ResourceState<User>>
 }
