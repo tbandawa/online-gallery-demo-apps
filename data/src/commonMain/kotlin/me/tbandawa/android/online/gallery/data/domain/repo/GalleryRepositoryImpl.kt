@@ -21,6 +21,9 @@ class GalleryRepositoryImpl(
 ): GalleryRepository, BaseApiCall() {
 
     private val database = Database(sqlDriver)
+    override fun getUser(id: Long): User? {
+        return database.getUser(id)
+    }
 
     override suspend fun signInUser(signInRequest: SignInRequest): Flow<ResourceState<User>> = flow {
         emit(ResourceState.Loading)
@@ -28,6 +31,7 @@ class GalleryRepositoryImpl(
             userMapper.mapToModel(galleryApi.signInUser(signInRequest))
         }.also { results ->
             if (results is ResourceState.Success) {
+                database.clearUser()
                 database.saveUser(results.data)
             }
         })
