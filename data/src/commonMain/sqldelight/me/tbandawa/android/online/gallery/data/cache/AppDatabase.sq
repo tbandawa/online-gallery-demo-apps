@@ -10,8 +10,8 @@ CREATE TABLE UserData (
 );
 
 insertUser:
-INSERT INTO UserData(id, token, firstname, lastname, username, email, thumbnailUrl, thumbnailUrl, imageUrl)
-VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO UserData(id, token, firstname, lastname, username, email, thumbnailUrl, imageUrl)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?);
 
 getUser:
 SELECT UserData.*
