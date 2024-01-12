@@ -10,17 +10,19 @@ internal class Database(sqlDriver: SqlDriver) {
     private val dbQuery = database.appDatabaseQueries
 
     internal fun saveUser(
-        id: Int,
-        token: String,
-        firstname: String,
-        lastname: String,
-        username: String,
-        email: String,
-        thumbnailUrl: String,
-        imageUrl: String
+        user: User
     ) {
         dbQuery.transaction {
-            dbQuery.insertUser(id.toLong(), token, firstname, lastname, username, email, thumbnailUrl, imageUrl)
+            dbQuery.insertUser(
+                user.id,
+                user.token,
+                user.firstname,
+                user.lastname,
+                user.username,
+                user.email,
+                user.profilePhoto.thumbnail ?: "",
+                user.profilePhoto.image ?: ""
+            )
         }
     }
 

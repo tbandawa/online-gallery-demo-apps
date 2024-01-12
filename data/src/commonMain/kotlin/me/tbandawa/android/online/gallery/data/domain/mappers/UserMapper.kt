@@ -1,4 +1,4 @@
-package me.tbandawa.android.online.gallery.data.domain.mapper
+package me.tbandawa.android.online.gallery.data.domain.mappers
 
 import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
 import me.tbandawa.android.online.gallery.data.domain.models.User
