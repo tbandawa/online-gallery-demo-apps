@@ -1,5 +1,6 @@
 package me.tbandawa.android.online.gallery.data.di
 
+import me.tbandawa.android.online.gallery.data.domain.mappers.ErrorMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.GalleriesMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.GalleryMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.ImageMapper
@@ -13,6 +14,10 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.bind
 import org.koin.dsl.module
+
+val errorMapperModule = module {
+    single { ErrorMapper() }
+}
 
 val imagesMapperModule = module {
     single { ProfilePhotoMapper() }
@@ -36,7 +41,7 @@ val apiModule = module {
 }
 
 val repositoryModule = module {
-    single { GalleryRepositoryImpl(get(), get(), get()) } bind GalleryRepository::class
+    single { GalleryRepositoryImpl(get(), get(), get(), get()) } bind GalleryRepository::class
 }
 
 val viewModelModule = module {
@@ -46,6 +51,7 @@ val viewModelModule = module {
 fun initKoin(appDeclaration: KoinAppDeclaration) = startKoin {
     appDeclaration()
     modules(
+        errorMapperModule,
         platformModule,
         imagesMapperModule,
         userMapperModule,

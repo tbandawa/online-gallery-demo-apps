@@ -54,8 +54,6 @@ fun MessageBox(
         MessageType.INFO -> Color(0xff3d85c6)
     }
 
-    var visible by remember { mutableStateOf(visibility) }
-
     AnimatedVisibility(
         visible = visibility,
         exit = shrinkVertically(animationSpec = tween(500))
@@ -64,7 +62,7 @@ fun MessageBox(
         Card(
             modifier = Modifier
                 .fillMaxWidth(1f)
-                .padding(start = 5.dp, top = 16.dp, end = 5.dp, bottom = 16.dp),
+                .padding(start = 5.dp, top = 16.dp, end = 5.dp, bottom = 0.dp),
             shape = RoundedCornerShape(3.dp),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 1.dp

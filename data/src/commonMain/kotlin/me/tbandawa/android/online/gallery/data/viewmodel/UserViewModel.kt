@@ -24,4 +24,8 @@ class UserViewModel(
             }
         }
     }
+
+    fun resetState() {
+        _userResource.value = ResourceState.Empty
+    }
 }

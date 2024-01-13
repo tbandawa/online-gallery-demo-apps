@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val navController = rememberNavController()
-            val exitApp: () -> Unit = { this.finish() }
 
             OnlineGalleryDemoTheme {
                 Surface(
@@ -44,7 +43,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = "auth"
                     ) {
                         composable(route = "auth") {
-                            AuthScreen(navController, exitApp)
+                            AuthScreen(navController)
                         }
                         composable(route = "home") {
                             HomeScreen()
@@ -65,6 +64,6 @@ fun GreetingView(text: String) {
 @Composable
 fun DefaultPreview() {
     OnlineGalleryDemoTheme {
-        AuthScreen(navController = rememberNavController(), exitApp = {})
+        AuthScreen(navController = rememberNavController())
     }
 }

@@ -4,10 +4,11 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.utils.io.errors.*
 import kotlinx.datetime.Clock
+import me.tbandawa.android.online.gallery.data.domain.mappers.ErrorMapper
 import me.tbandawa.android.online.gallery.data.remote.responses.ErrorResponse
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 
-abstract class BaseApiCall {
+abstract class BaseApiCall(private val errorMapper: ErrorMapper) {
 
     suspend fun <T> handleApiCall(
         apiCall: suspend () -> T
@@ -16,11 +17,17 @@ abstract class BaseApiCall {
             val response = apiCall()
             ResourceState.Success(response)
         } catch (exception: ResponseException) {
-            ResourceState.Error(exception.response.body<ErrorResponse>())
+            ResourceState.Error(
+                errorMapper.mapToModel(exception.response.body<ErrorResponse>())
+            )
         } catch (e: IOException) {
-            ResourceState.Error(ErrorResponse(Clock.System.now().toString(),500, "Unknown Error", listOf(e.message.toString())))
+            ResourceState.Error(
+                errorMapper.mapToModel(ErrorResponse(Clock.System.now().toString(),500, "Unknown Error", listOf(e.message.toString())))
+            )
         } catch (e: Exception) {
-            ResourceState.Error(ErrorResponse(Clock.System.now().toString(),500, "Unknown Error", listOf(e.message.toString())))
+            ResourceState.Error(
+                errorMapper.mapToModel(ErrorResponse(Clock.System.now().toString(),500, "Unknown Error", listOf(e.message.toString())))
+            )
         }
     }
 }

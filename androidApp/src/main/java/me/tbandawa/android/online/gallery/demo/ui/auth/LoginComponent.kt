@@ -40,14 +40,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.R
-import me.tbandawa.android.online.gallery.data.domain.models.User
-import me.tbandawa.android.online.gallery.data.remote.responses.ErrorResponse
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.UserViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageBox
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageType
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 @Composable
 fun LoginComponent(
@@ -57,36 +54,11 @@ fun LoginComponent(
     val userViewModel: UserViewModel = koinViewModel()
     val userState by userViewModel.userResource.collectAsState()
 
-    var err: Error?
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
     var textUserName by remember { mutableStateOf(TextFieldValue("")) }
     var textPassword by remember { mutableStateOf(TextFieldValue("")) }
-
-    when(userState) {
-        is ResourceState.Loading -> {
-            isLoading = true
-            isError = false
-        }
-        is ResourceState.Success -> {
-            navController.navigate("home"){
-                launchSingleTop = true
-                popUpTo("auth") {
-                    inclusive = true
-                }
-            }
-        }
-        is ResourceState.Error -> {
-            val error = (userState as ResourceState.Error<User>).data
-            isLoading = false
-            isError = true
-        }
-        is ResourceState.Empty -> {
-            isLoading = false
-            isError = false
-        }
-    }
 
     Surface(
         modifier = Modifier
@@ -108,13 +80,37 @@ fun LoginComponent(
                 modifier = Modifier.padding(start = 2.dp, end = 2.dp)
             )
 
-            MessageBox(
-                type = MessageType.ERROR,
-                title = "Image Gallery",
-                message = "Upload images to gallery and let others view them",
-                isError
-            ) {
-                isError = false
+            when(userState) {
+                is ResourceState.Loading -> {
+                    isLoading = true
+                    isError = false
+                }
+                is ResourceState.Success -> {
+                    navController.navigate("home"){
+                        launchSingleTop = true
+                        popUpTo("auth") {
+                            inclusive = true
+                        }
+                    }
+                }
+                is ResourceState.Error -> {
+                    val error = (userState as ResourceState.Error<*>).data!!
+                    isLoading = false
+                    isError = true
+
+                    MessageBox(
+                        type = MessageType.ERROR,
+                        title = error.error!!,
+                        message = error.messages.toString(),
+                        visibility = isError
+                    ) {
+                        userViewModel.resetState()
+                    }
+                }
+                is ResourceState.Empty -> {
+                    isLoading = false
+                    isError = false
+                }
             }
 
             Spacer(modifier = Modifier.height(25.dp))
