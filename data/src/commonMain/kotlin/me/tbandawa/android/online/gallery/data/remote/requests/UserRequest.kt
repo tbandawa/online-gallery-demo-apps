@@ -1,5 +1,8 @@
 package me.tbandawa.android.online.gallery.data.remote.requests
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserRequest(
     val firstname: String,
     val lastname: String,

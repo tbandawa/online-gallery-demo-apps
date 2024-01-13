@@ -47,5 +47,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.splashscreen)
+    implementation(libs.koin.compose)
+    implementation(libs.timber.debug)
     debugImplementation(libs.compose.ui.tooling)
 }

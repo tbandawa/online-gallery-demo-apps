@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ErrorResponse(
-    val timeStamp: String,
-    val status: Long,
-    val error: String,
-    val messages: List<String>
+    val timeStamp: String?,
+    val status: Long?,
+    val error: String?,
+    val messages: List<String>?
 )

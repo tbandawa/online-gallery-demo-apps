@@ -1,12 +1,10 @@
 package me.tbandawa.android.online.gallery.data.domain.mappers
 
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
-import me.tbandawa.android.online.gallery.data.domain.models.Image
 import me.tbandawa.android.online.gallery.data.remote.responses.GalleryResponse
-import me.tbandawa.android.online.gallery.data.remote.responses.ImageResponse
 
 class GalleryMapper(
-    private val imageMapper: ResponseMapper<ImageResponse, Image>
+    private val imageMapper: ImageMapper
 ): ResponseMapper<GalleryResponse, Gallery> {
 
     override fun mapToModel(entity: GalleryResponse): Gallery {

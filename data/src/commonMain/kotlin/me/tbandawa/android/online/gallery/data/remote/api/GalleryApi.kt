@@ -22,7 +22,7 @@ import me.tbandawa.android.online.gallery.data.remote.responses.UserResponse
 class GalleryApi {
 
     companion object {
-        const val BASE_URL = "http://192.168.0.77:8080/spring-image-upload/api"
+        const val BASE_URL = "http://192.168.0.77:8080/spring-image-upload/api/auth"
     }
 
     private val httpClient = HttpClient {

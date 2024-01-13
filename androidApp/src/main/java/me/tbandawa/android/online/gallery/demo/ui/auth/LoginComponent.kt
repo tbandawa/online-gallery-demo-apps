@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.sharp.Add
-import androidx.compose.material.icons.sharp.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,11 +40,46 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.R
+import me.tbandawa.android.online.gallery.data.domain.models.User
+import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
+import me.tbandawa.android.online.gallery.data.viewmodel.UserViewModel
+import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun LoginComponent(
     navController: NavController
 ) {
+
+    val userViewModel: UserViewModel = koinViewModel()
+    val userState by userViewModel.userResource.collectAsState()
+
+    var isLoading by remember { mutableStateOf(false) }
+    var showPassword by remember { mutableStateOf(false) }
+    var textUserName by remember { mutableStateOf(TextFieldValue("")) }
+    var textPassword by remember { mutableStateOf(TextFieldValue("")) }
+
+    when(userState) {
+        is ResourceState.Loading -> {
+            isLoading = true
+        }
+        is ResourceState.Success -> {
+            navController.navigate("home"){
+                launchSingleTop = true
+                popUpTo("auth") {
+                    inclusive = true
+                }
+            }
+        }
+        is ResourceState.Error -> {
+            Timber.d("error -> ${(userState as ResourceState.Error<User>).data}")
+            isLoading = false
+        }
+        is ResourceState.Empty -> {
+            isLoading = false
+        }
+    }
+
     Surface(
         modifier = Modifier
             .padding(bottom = 25.dp, start = 15.dp, end = 15.dp)
@@ -56,12 +89,6 @@ fun LoginComponent(
                 .fillMaxSize()
                 .background(color = Color.Gray)
         ) {
-
-            var isLoading by remember { mutableStateOf(false) }
-            var showPassword by remember { mutableStateOf(false) }
-            var textUserName by remember { mutableStateOf(TextFieldValue("")) }
-            var textPassword by remember { mutableStateOf(TextFieldValue("")) }
-
             Spacer(modifier = Modifier.height(55.dp))
             Text(
                 text = "Log in to your account",
@@ -153,13 +180,7 @@ fun LoginComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    navController.navigate("home"){
-                        launchSingleTop = true
-                        popUpTo("auth") {
-                            inclusive = true
-                        }
-                    }
-                    //isLoading = !isLoading
+                    userViewModel.signInUser(username = textUserName.text, password = textPassword.text)
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier

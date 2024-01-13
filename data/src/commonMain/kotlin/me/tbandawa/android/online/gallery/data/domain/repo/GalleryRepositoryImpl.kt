@@ -6,18 +6,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import me.tbandawa.android.online.gallery.data.cache.Database
-import me.tbandawa.android.online.gallery.data.domain.mappers.ResponseMapper
+import me.tbandawa.android.online.gallery.data.domain.mappers.UserMapper
 import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.remote.api.BaseApiCall
 import me.tbandawa.android.online.gallery.data.remote.api.GalleryApi
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
-import me.tbandawa.android.online.gallery.data.remote.responses.UserResponse
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 
 class GalleryRepositoryImpl(
     sqlDriver: SqlDriver,
     private val galleryApi: GalleryApi,
-    private val userMapper: ResponseMapper<UserResponse, User>
+    private val userMapper: UserMapper
 ): GalleryRepository, BaseApiCall() {
 
     private val database = Database(sqlDriver)

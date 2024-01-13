@@ -15,6 +15,7 @@ constraint = "1.0.1"
 navigation = "2.5.0-alpha02"
 splash = "1.0.0-beta02"
 dateTime = "0.4.0"
+timber = "4.7.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -36,11 +37,13 @@ sql-delight-android-driver = { module = "com.squareup.sqldelight:android-driver"
 sql-delight-native-driver = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqlDelight" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+timber-debug = { module = "com.jakewharton.timber:timber", version.ref = "timber"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

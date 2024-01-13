@@ -13,7 +13,7 @@ class UserViewModel(
 ): BaseViewModel() {
 
     private val _userResource = MutableStateFlow<ResourceState<User>>(ResourceState.Empty)
-    val userResource: StateFlow<ResourceState<User>> = _userResource
+    val userResource: StateFlow<ResourceState<User>> get() = _userResource
 
     fun getUser(): User? = galleryRepository.getUser()
 

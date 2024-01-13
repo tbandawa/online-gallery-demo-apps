@@ -39,6 +39,7 @@ fun AuthScreen(
     navController: NavController,
     exitApp: () -> Unit
 ) {
+
     Surface(
         modifier = Modifier
             .background(Color.White)
