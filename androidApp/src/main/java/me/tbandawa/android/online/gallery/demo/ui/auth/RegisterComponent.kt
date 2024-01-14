@@ -322,7 +322,13 @@ fun RegisterComponent(
                     isEmailValid = textEmail.text.isNotBlank()
                     isPasswordValid = textPassword.text.isNotBlank()
                     if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
-
+                        userViewModel.signUpUser(
+                            firstname = textFirstName.text,
+                            lastname = textLastName.text,
+                            username = textUserName.text,
+                            email = textEmail.text,
+                            password = textPassword.text
+                        )
                     }
                 },
                 shape = RoundedCornerShape(50),
