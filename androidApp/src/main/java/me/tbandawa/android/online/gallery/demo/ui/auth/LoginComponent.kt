@@ -1,6 +1,8 @@
 package me.tbandawa.android.online.gallery.demo.ui.auth
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +47,7 @@ import me.tbandawa.android.online.gallery.data.viewmodel.UserViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageBox
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageType
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun LoginComponent(
@@ -59,6 +62,9 @@ fun LoginComponent(
     var showPassword by remember { mutableStateOf(false) }
     var textUserName by remember { mutableStateOf(TextFieldValue("")) }
     var textPassword by remember { mutableStateOf(TextFieldValue("")) }
+
+    var isUsernameValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
 
     Surface(
         modifier = Modifier
@@ -118,8 +124,9 @@ fun LoginComponent(
                 value = textUserName,
                 singleLine = true,
                 enabled = !isLoading,
-                onValueChange = {
-                    textUserName = it
+                onValueChange = { input ->
+                    textUserName = input
+                    isUsernameValid = input.text.isNotBlank()
                 },
                 placeholder = { Text(text = "User Name") },
                 modifier = Modifier
@@ -127,15 +134,20 @@ fun LoginComponent(
                     .height(50.dp)
                     .background(
                         color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(60.dp)
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = if (isUsernameValid) Color.Transparent else Color.Red,
+                        shape = RoundedCornerShape(10.dp)
                     ),
-                shape = RoundedCornerShape(60.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = Color(0x90024040),
+                    unfocusedPlaceholderColor = if (isUsernameValid) Color(0x90024040) else Color(0xfff55050),
                     disabledLeadingIconColor = Color(0xff024040)
                 )
             )
@@ -145,8 +157,9 @@ fun LoginComponent(
                 value = textPassword,
                 singleLine = true,
                 enabled = !isLoading,
-                onValueChange = {
-                    textPassword = it
+                onValueChange = { input ->
+                    textPassword = input
+                    isPasswordValid = input.text.isNotBlank()
                 },
                 placeholder = { Text(text = "Password") },
                 modifier = Modifier
@@ -154,15 +167,20 @@ fun LoginComponent(
                     .height(50.dp)
                     .background(
                         color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(60.dp)
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = if (isPasswordValid) Color.Transparent else Color.Red,
+                        shape = RoundedCornerShape(10.dp)
                     ),
-                shape = RoundedCornerShape(60.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = Color(0x90024040),
+                    unfocusedPlaceholderColor = if (isUsernameValid) Color(0x90024040) else Color(0xfff55050),
                     disabledLeadingIconColor = Color(0xff024040)
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -193,7 +211,11 @@ fun LoginComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    userViewModel.signInUser(username = textUserName.text, password = textPassword.text)
+                    isUsernameValid = textUserName.text.isNotBlank()
+                    isPasswordValid = textPassword.text.isNotBlank()
+                    if (isUsernameValid && isPasswordValid) {
+                        userViewModel.signInUser(username = textUserName.text, password = textPassword.text)
+                    }
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
