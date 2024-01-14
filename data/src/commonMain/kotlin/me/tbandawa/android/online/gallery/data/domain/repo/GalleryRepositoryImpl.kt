@@ -12,6 +12,7 @@ import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.remote.api.BaseApiCall
 import me.tbandawa.android.online.gallery.data.remote.api.GalleryApi
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
+import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 
 class GalleryRepositoryImpl(
@@ -28,6 +29,18 @@ class GalleryRepositoryImpl(
         emit(ResourceState.Loading)
         emit(handleApiCall {
             userMapper.mapToModel(galleryApi.signInUser(signInRequest))
+        }.also { results ->
+            if (results is ResourceState.Success) {
+                database.clearUser()
+                database.saveUser(results.data)
+            }
+        })
+    }.flowOn(Dispatchers.Main)
+
+    override suspend fun signUpUser(userRequest: UserRequest): Flow<ResourceState<User>> = flow {
+        emit(ResourceState.Loading)
+        emit(handleApiCall {
+            userMapper.mapToModel(galleryApi.signUpUser(userRequest))
         }.also { results ->
             if (results is ResourceState.Success) {
                 database.clearUser()

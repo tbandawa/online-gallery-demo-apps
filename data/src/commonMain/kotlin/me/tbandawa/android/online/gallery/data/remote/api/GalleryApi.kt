@@ -17,6 +17,7 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
+import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
 import me.tbandawa.android.online.gallery.data.remote.responses.UserResponse
 
 class GalleryApi {
@@ -48,6 +49,14 @@ class GalleryApi {
             url("$BASE_URL/signin")
             contentType(ContentType.Application.Json)
             setBody(signInRequest)
+        }.body<UserResponse>()
+    }
+
+    suspend fun signUpUser(userRequest: UserRequest): UserResponse {
+        return httpClient.post {
+            url("$BASE_URL/signup")
+            contentType(ContentType.Application.Json)
+            setBody(userRequest)
         }.body<UserResponse>()
     }
 }
