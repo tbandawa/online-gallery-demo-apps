@@ -1,6 +1,7 @@
 package me.tbandawa.android.online.gallery.demo.ui.auth
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,12 +41,35 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.R
-import me.tbandawa.android.online.gallery.demo.ui.components.Screen
+import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
+import me.tbandawa.android.online.gallery.data.viewmodel.UserViewModel
+import me.tbandawa.android.online.gallery.demo.ui.components.MessageBox
+import me.tbandawa.android.online.gallery.demo.ui.components.MessageType
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun RegisterComponent(
     navController: NavController
 ) {
+
+    val userViewModel: UserViewModel = koinViewModel()
+    val userState by userViewModel.userResource.collectAsState()
+
+    var isLoading by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    var showPassword by remember { mutableStateOf(false) }
+    var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
+    var textLastName by remember { mutableStateOf(TextFieldValue("")) }
+    var textUserName by remember { mutableStateOf(TextFieldValue("")) }
+    var textEmail by remember { mutableStateOf(TextFieldValue("")) }
+    var textPassword by remember { mutableStateOf(TextFieldValue("")) }
+
+    var isFirstNameValid by remember { mutableStateOf(true) }
+    var isLastNameValid by remember { mutableStateOf(true) }
+    var isUserNameValid by remember { mutableStateOf(true) }
+    var isEmailValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
+
     Surface(
         modifier = Modifier
             .padding(bottom = 25.dp, start = 15.dp, end = 15.dp)
@@ -54,15 +79,6 @@ fun RegisterComponent(
                 .fillMaxSize()
                 .background(color = Color.Gray)
         ) {
-
-            var isLoading by remember { mutableStateOf(false) }
-            var showPassword by remember { mutableStateOf(false) }
-            var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
-            var textLastName by remember { mutableStateOf(TextFieldValue("")) }
-            var textUserName by remember { mutableStateOf(TextFieldValue("")) }
-            var textEmail by remember { mutableStateOf(TextFieldValue("")) }
-            var textPassword by remember { mutableStateOf(TextFieldValue("")) }
-
             Spacer(modifier = Modifier.height(55.dp))
             Text(
                 text = "Create account",
@@ -74,13 +90,47 @@ fun RegisterComponent(
                 modifier = Modifier.padding(start = 2.dp, end = 2.dp)
             )
 
+            when(userState) {
+                is ResourceState.Loading -> {
+                    isLoading = true
+                    isError = false
+                }
+                is ResourceState.Success -> {
+                    navController.navigate("home"){
+                        launchSingleTop = true
+                        popUpTo("auth") {
+                            inclusive = true
+                        }
+                    }
+                }
+                is ResourceState.Error -> {
+                    val error = (userState as ResourceState.Error<*>).data!!
+                    isLoading = false
+                    isError = true
+
+                    MessageBox(
+                        type = MessageType.ERROR,
+                        title = error.error!!,
+                        message = error.messages.toString(),
+                        visibility = isError
+                    ) {
+                        userViewModel.resetState()
+                    }
+                }
+                is ResourceState.Empty -> {
+                    isLoading = false
+                    isError = false
+                }
+            }
+
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
                 value = textFirstName,
                 singleLine = true,
                 enabled = !isLoading,
-                onValueChange = {
-                    textFirstName = it
+                onValueChange = { input ->
+                    textFirstName = input
+                    isFirstNameValid = input.text.isNotBlank()
                 },
                 placeholder = { Text(text = "First Name") },
                 modifier = Modifier
@@ -88,15 +138,20 @@ fun RegisterComponent(
                     .height(50.dp)
                     .background(
                         color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(60.dp)
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = if (isFirstNameValid) Color.Transparent else Color.Red,
+                        shape = RoundedCornerShape(10.dp)
                     ),
-                shape = RoundedCornerShape(60.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = Color(0x90024040),
+                    unfocusedPlaceholderColor = if (isFirstNameValid) Color(0x90024040) else Color(0xfff55050),
                     disabledLeadingIconColor = Color(0xff024040)
                 )
             )
@@ -106,8 +161,9 @@ fun RegisterComponent(
                 value = textLastName,
                 singleLine = true,
                 enabled = !isLoading,
-                onValueChange = {
-                    textLastName = it
+                onValueChange = { input ->
+                    textLastName = input
+                    isLastNameValid = input.text.isNotBlank()
                 },
                 placeholder = { Text(text = "Last Name") },
                 modifier = Modifier
@@ -115,15 +171,21 @@ fun RegisterComponent(
                     .height(50.dp)
                     .background(
                         color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(60.dp)
-                    ),
-                shape = RoundedCornerShape(60.dp),
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = if (isLastNameValid) Color.Transparent else Color.Red,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                ,
+                shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = Color(0x90024040),
+                    unfocusedPlaceholderColor = if (isLastNameValid) Color(0x90024040) else Color(0xfff55050),
                     disabledLeadingIconColor = Color(0xff024040)
                 )
             )
@@ -133,8 +195,9 @@ fun RegisterComponent(
                 value = textUserName,
                 singleLine = true,
                 enabled = !isLoading,
-                onValueChange = {
-                    textUserName = it
+                onValueChange = { input ->
+                    textUserName = input
+                    isUserNameValid = input.text.isNotBlank()
                 },
                 placeholder = { Text(text = "User Name") },
                 modifier = Modifier
@@ -142,15 +205,20 @@ fun RegisterComponent(
                     .height(50.dp)
                     .background(
                         color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(60.dp)
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = if (isUserNameValid) Color.Transparent else Color.Red,
+                        shape = RoundedCornerShape(10.dp)
                     ),
-                shape = RoundedCornerShape(60.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = Color(0x90024040),
+                    unfocusedPlaceholderColor = if (isUserNameValid) Color(0x90024040) else Color(0xfff55050),
                     disabledLeadingIconColor = Color(0xff024040)
                 )
             )
@@ -160,8 +228,9 @@ fun RegisterComponent(
                 value = textEmail,
                 singleLine = true,
                 enabled = !isLoading,
-                onValueChange = {
-                    textEmail = it
+                onValueChange = { input ->
+                    textEmail = input
+                    isEmailValid = isValidEmail(input.text)
                 },
                 placeholder = { Text(text = "Email") },
                 modifier = Modifier
@@ -169,17 +238,23 @@ fun RegisterComponent(
                     .height(50.dp)
                     .background(
                         color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(60.dp)
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = if (isEmailValid) Color.Transparent else Color.Red,
+                        shape = RoundedCornerShape(10.dp)
                     ),
-                shape = RoundedCornerShape(60.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = Color(0x90024040),
+                    unfocusedPlaceholderColor = if (isEmailValid) Color(0x90024040) else Color(0xfff55050),
                     disabledLeadingIconColor = Color(0xff024040)
-                )
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
 
             Spacer(modifier = Modifier.height(25.dp))
@@ -187,8 +262,9 @@ fun RegisterComponent(
                 value = textPassword,
                 singleLine = true,
                 enabled = !isLoading,
-                onValueChange = {
-                    textPassword = it
+                onValueChange = { input ->
+                    textPassword = input
+                    isPasswordValid = input.text.isNotBlank()
                 },
                 placeholder = { Text(text = "Password") },
                 modifier = Modifier
@@ -196,15 +272,20 @@ fun RegisterComponent(
                     .height(50.dp)
                     .background(
                         color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(60.dp)
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 2.dp,
+                        color = if (isPasswordValid) Color.Transparent else Color.Red,
+                        shape = RoundedCornerShape(10.dp)
                     ),
-                shape = RoundedCornerShape(60.dp),
+                shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = Color(0x90024040),
+                    unfocusedPlaceholderColor = if (isPasswordValid) Color(0x90024040) else Color(0xfff55050),
                     disabledLeadingIconColor = Color(0xff024040)
                 ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -235,13 +316,14 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    /*navController.navigate(Screen.Gallery.route) {
-                        launchSingleTop = true
-                        popUpTo(Screen.Auth.route) {
-                            inclusive = true
-                        }
-                    }*/
-                    isLoading = !isLoading
+                    isFirstNameValid = textFirstName.text.isNotBlank()
+                    isLastNameValid = textLastName.text.isNotBlank()
+                    isUserNameValid = textUserName.text.isNotBlank()
+                    isEmailValid = textEmail.text.isNotBlank()
+                    isPasswordValid = textPassword.text.isNotBlank()
+                    if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
+
+                    }
                 },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
@@ -270,6 +352,11 @@ fun RegisterComponent(
             }
         }
     }
+}
+
+fun isValidEmail(email: String): Boolean {
+    val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+    return email.matches(emailRegex)
 }
 
 @Preview
