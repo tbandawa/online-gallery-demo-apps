@@ -32,17 +32,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.demo.ui.components.ToolBar as ProfileToolbar
 import me.tbandawa.android.online.gallery.R
+import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun ProfileScreen(
-    navController: NavController
-) {
+fun ProfileScreen() {
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
         val scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
 
@@ -58,7 +55,7 @@ fun ProfileScreen(
             frontLayerBackgroundColor = Color(0xffCEE6E6),
             backLayerBackgroundColor = Color.White,
             appBar =  {
-                ProfileToolbar("Profile", scrollBehavior)
+                MainToolbar("Profile")
             },
             backLayerContent = {
                 Column(
@@ -191,5 +188,5 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen(navController = rememberNavController())
+    ProfileScreen()
 }

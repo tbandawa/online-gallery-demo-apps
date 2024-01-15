@@ -40,13 +40,13 @@ fun MainNavigation(
         startDestination = "galleries"
     ) {
         composable(route = "galleries") {
-            GalleriesScreen(navController = navController)
+            GalleriesScreen()
         }
         composable(route = "create") {
             CreateScreen()
         }
         composable(route = "profile") {
-            ProfileScreen(navController = navController)
+            ProfileScreen()
         }
         composable(route = "search") {
             SearchScreen(navController = navController)

@@ -8,10 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import me.tbandawa.android.online.gallery.demo.ui.components.ToolBar
+import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CreateScreen(
@@ -22,13 +21,10 @@ fun CreateScreen(
         color = MaterialTheme.colorScheme.background
     ) {
 
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
         Scaffold(
             topBar = {
-                ToolBar(
-                    "New Gallery",
-                    scrollBehavior
+                MainToolbar(
+                    "New Gallery"
                 )
             },
             containerColor = Color.White
