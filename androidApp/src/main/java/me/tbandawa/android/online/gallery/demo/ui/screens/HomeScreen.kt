@@ -46,7 +46,7 @@ fun MainNavigation(
             CreateScreen()
         }
         composable(route = "profile") {
-            ProfileScreen()
+            ProfileScreen(navController = navController)
         }
         composable(route = "search") {
             SearchScreen(navController = navController)
