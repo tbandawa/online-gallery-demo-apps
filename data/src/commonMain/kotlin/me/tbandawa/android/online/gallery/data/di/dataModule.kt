@@ -4,12 +4,14 @@ import me.tbandawa.android.online.gallery.data.domain.mappers.ErrorMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.GalleriesMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.GalleryMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.ImageMapper
+import me.tbandawa.android.online.gallery.data.domain.mappers.ProfileMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.ProfilePhotoMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.UserMapper
 import me.tbandawa.android.online.gallery.data.domain.repo.GalleryRepository
 import me.tbandawa.android.online.gallery.data.domain.repo.GalleryRepositoryImpl
 import me.tbandawa.android.online.gallery.data.remote.api.GalleryApi
-import me.tbandawa.android.online.gallery.data.viewmodel.UserViewModel
+import me.tbandawa.android.online.gallery.data.viewmodel.SplashViewModel
+import me.tbandawa.android.online.gallery.data.viewmodel.AuthViewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.bind
@@ -36,16 +38,21 @@ val galleriesMapperModule = module {
     single { GalleriesMapper(get()) }
 }
 
+val profileMapperModule = module {
+    single { ProfileMapper(get(), get()) }
+}
+
 val apiModule = module {
     single { GalleryApi() }
 }
 
 val repositoryModule = module {
-    single { GalleryRepositoryImpl(get(), get(), get(), get()) } bind GalleryRepository::class
+    single { GalleryRepositoryImpl(get(), get(), get(), get(), get()) } bind GalleryRepository::class
 }
 
 val viewModelModule = module {
-    single { UserViewModel(get()) }
+    single { SplashViewModel(get()) }
+    single { AuthViewModel(get()) }
 }
 
 fun initKoin(appDeclaration: KoinAppDeclaration) = startKoin {
@@ -57,6 +64,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration) = startKoin {
         userMapperModule,
         galleryMapperModule,
         galleriesMapperModule,
+        profileMapperModule,
         apiModule,
         repositoryModule,
         viewModelModule

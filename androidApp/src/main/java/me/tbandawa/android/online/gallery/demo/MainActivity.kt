@@ -1,8 +1,6 @@
 package me.tbandawa.android.online.gallery.demo
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,43 +8,54 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.online.gallery.data.viewmodel.SplashViewModel
 import me.tbandawa.android.online.gallery.demo.ui.auth.AuthScreen
 import me.tbandawa.android.online.gallery.demo.ui.screens.HomeScreen
 import me.tbandawa.android.online.gallery.demo.ui.theme.OnlineGalleryDemoTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
+
+    private val userViewModel: SplashViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        var keepSplashOnScreen = true
-        installSplashScreen().setKeepOnScreenCondition { keepSplashOnScreen }
-        Handler(Looper.getMainLooper()).postDelayed({ keepSplashOnScreen = false }, 3000L)
+
+        installSplashScreen().setKeepOnScreenCondition {
+            userViewModel.getProfile()
+            userViewModel.authState.value.complete
+        }
 
         super.onCreate(savedInstanceState)
 
         setContent {
 
             val navController = rememberNavController()
+            val authValue = userViewModel.authState.collectAsState().value
 
             OnlineGalleryDemoTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = "auth"
-                    ) {
-                        composable(route = "auth") {
-                            AuthScreen(navController)
-                        }
-                        composable(route = "home") {
-                            HomeScreen()
+                    if (authValue.value != 0) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = if (authValue.value == 2) "auth" else "home"
+                        ) {
+                            composable(route = "auth") {
+                                AuthScreen(navController)
+                            }
+                            composable(route = "home") {
+                                HomeScreen()
+                            }
                         }
                     }
                 }

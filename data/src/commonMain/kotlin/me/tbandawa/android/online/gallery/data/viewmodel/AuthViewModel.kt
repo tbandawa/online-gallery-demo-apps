@@ -9,14 +9,12 @@ import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
 import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 
-class UserViewModel(
+class AuthViewModel(
     private val galleryRepository: GalleryRepository
 ): BaseViewModel() {
 
     private val _userResource = MutableStateFlow<ResourceState<User>>(ResourceState.Empty)
     val userResource: StateFlow<ResourceState<User>> get() = _userResource
-
-    fun getUser(): User? = galleryRepository.getUser()
 
     fun signInUser(username: String, password: String) {
         coroutineScope.launch {

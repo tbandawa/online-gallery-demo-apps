@@ -42,7 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
-import me.tbandawa.android.online.gallery.data.viewmodel.UserViewModel
+import me.tbandawa.android.online.gallery.data.viewmodel.AuthViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageBox
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageType
 import org.koin.androidx.compose.koinViewModel
@@ -52,8 +52,8 @@ fun RegisterComponent(
     navController: NavController
 ) {
 
-    val userViewModel: UserViewModel = koinViewModel()
-    val userState by userViewModel.userResource.collectAsState()
+    val authViewModel: AuthViewModel = koinViewModel()
+    val userState by authViewModel.userResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
@@ -114,7 +114,7 @@ fun RegisterComponent(
                         message = error.messages.toString(),
                         visibility = isError
                     ) {
-                        userViewModel.resetState()
+                        authViewModel.resetState()
                     }
                 }
                 is ResourceState.Empty -> {
@@ -322,7 +322,7 @@ fun RegisterComponent(
                     isEmailValid = textEmail.text.isNotBlank()
                     isPasswordValid = textPassword.text.isNotBlank()
                     if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
-                        userViewModel.signUpUser(
+                        authViewModel.signUpUser(
                             firstname = textFirstName.text,
                             lastname = textLastName.text,
                             username = textUserName.text,

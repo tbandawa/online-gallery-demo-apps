@@ -9,21 +9,24 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
+import io.ktor.client.utils.EmptyContent.headers
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
 import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
+import me.tbandawa.android.online.gallery.data.remote.responses.ProfileResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.UserResponse
 
 class GalleryApi {
 
     companion object {
-        const val BASE_URL = "http://192.168.0.77:8080/spring-image-upload/api/auth"
+        const val BASE_URL = "http://192.168.0.77:8080/spring-image-upload/api"
     }
 
     private val httpClient = HttpClient {
@@ -46,7 +49,7 @@ class GalleryApi {
 
     suspend fun signInUser(signInRequest: SignInRequest): UserResponse {
         return httpClient.post {
-            url("$BASE_URL/signin")
+            url("$BASE_URL/auth/signin")
             contentType(ContentType.Application.Json)
             setBody(signInRequest)
         }.body<UserResponse>()
@@ -54,9 +57,19 @@ class GalleryApi {
 
     suspend fun signUpUser(userRequest: UserRequest): UserResponse {
         return httpClient.post {
-            url("$BASE_URL/signup")
+            url("$BASE_URL/auth/signup")
             contentType(ContentType.Application.Json)
             setBody(userRequest)
         }.body<UserResponse>()
+    }
+
+    suspend fun getProfile(token: String, userId: Long): ProfileResponse {
+        return httpClient.get {
+            url("$BASE_URL/user/$userId")
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.Application.Json)
+        }.body()
     }
 }

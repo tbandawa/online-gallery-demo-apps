@@ -42,7 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
-import me.tbandawa.android.online.gallery.data.viewmodel.UserViewModel
+import me.tbandawa.android.online.gallery.data.viewmodel.AuthViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageBox
 import me.tbandawa.android.online.gallery.demo.ui.components.MessageType
 import org.koin.androidx.compose.koinViewModel
@@ -52,8 +52,8 @@ fun LoginComponent(
     navController: NavController
 ) {
 
-    val userViewModel: UserViewModel = koinViewModel()
-    val userState by userViewModel.userResource.collectAsState()
+    val authViewModel: AuthViewModel = koinViewModel()
+    val userState by authViewModel.userResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
@@ -108,7 +108,7 @@ fun LoginComponent(
                         message = error.messages.toString(),
                         visibility = isError
                     ) {
-                        userViewModel.resetState()
+                        authViewModel.resetState()
                     }
                 }
                 is ResourceState.Empty -> {
@@ -212,7 +212,7 @@ fun LoginComponent(
                     isUserNameValid = textUserName.text.isNotBlank()
                     isPasswordValid = textPassword.text.isNotBlank()
                     if (isUserNameValid && isPasswordValid) {
-                        userViewModel.signInUser(username = textUserName.text, password = textPassword.text)
+                        authViewModel.signInUser(username = textUserName.text, password = textPassword.text)
                     }
                 },
                 shape = RoundedCornerShape(50),
