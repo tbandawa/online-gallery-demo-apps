@@ -53,6 +53,7 @@ class GalleryRepositoryImpl(
     }.flowOn(Dispatchers.Main)
 
     override suspend fun getProfile(token: String, profileId: Long): Flow<ResourceState<Profile>> = flow {
+        emit(ResourceState.Empty)
         emit(ResourceState.Loading)
         emit(handleApiCall {
             profileMapper.mapToModel(galleryApi.getProfile(token, profileId))
