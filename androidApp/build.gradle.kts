@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.splashscreen)
     implementation(libs.koin.compose)
+    implementation(libs.coil.compose)
     implementation(libs.timber.debug)
     debugImplementation(libs.compose.ui.tooling)
 }

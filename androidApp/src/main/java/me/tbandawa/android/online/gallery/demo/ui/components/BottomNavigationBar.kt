@@ -45,7 +45,7 @@ fun BottomNavigationBar(
                     ),
                     "Galleries",
                     modifier = Modifier
-                        .size(25.dp)
+                        .size(20.dp)
                 )
             },
             selected = currentRoute == "galleries",
@@ -77,7 +77,7 @@ fun BottomNavigationBar(
                     ),
                     "Galleries",
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(55.dp)
                 )
             },
             selected = currentRoute == "create",
@@ -109,7 +109,7 @@ fun BottomNavigationBar(
                     ),
                     "Profile",
                     modifier = Modifier
-                        .size(25.dp)
+                        .size(20.dp)
                 )
             },
             selected = currentRoute == "profile",
