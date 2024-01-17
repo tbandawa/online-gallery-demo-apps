@@ -1,6 +1,5 @@
 package me.tbandawa.android.online.gallery.data.viewmodel
 
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -19,7 +18,6 @@ class SplashViewModel(
         val user = galleryRepository.getUser()
         if (user != null) {
             coroutineScope.launch {
-                delay(3000)
                 galleryRepository.getProfile(user.token, user.id).collect { results ->
                     when(results) {
                         is ResourceState.Loading -> {}
@@ -35,7 +33,6 @@ class SplashViewModel(
             }
         } else {
             coroutineScope.launch {
-                delay(3000)
                 _authState.value = AuthState(2, false)
             }
         }
