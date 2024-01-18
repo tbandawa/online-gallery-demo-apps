@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -47,7 +48,8 @@ fun CreateScreen(
 
     var selectImages by remember { mutableStateOf(listOf<Uri>()) }
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
-        selectImages = uriList
+        //selectImages = uriList
+        selectImages += uriList
     }
 
     Surface(
@@ -139,14 +141,45 @@ fun CreateScreen(
                 )
 
                 Spacer(modifier = Modifier.height(25.dp))
-                Text(
-                    text = "Images",
-                    style = TextStyle(
-                        color = Color(0xff024040),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp
-                    ),
-                    modifier = Modifier.padding(bottom = 5.dp)
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Images",
+                        style = TextStyle(
+                            color = Color(0xff024040),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp
+                        ),
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterVertically)
+                    )
+                    Spacer(Modifier.weight(1f))
+                    TextButton(
+                        onClick = {
+                            galleryLauncher.launch("image/*")
+                        },
+                        modifier = Modifier
+                            .height(35.dp)
+                    ) {
+                        Image(
+                            painterResource(id = R.drawable.ic_add),
+                            contentDescription ="Add Image",
+                            modifier = Modifier.size(20.dp))
+                        Text(
+                            text = "Add Image",
+                            Modifier
+                                .padding(start = 10.dp)
+                        )
+                    }
+                }
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                        .height(1.dp)
+                        .background(color = Color(0xff024040))
                 )
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -160,16 +193,16 @@ fun CreateScreen(
                     ) {
                         FilledTonalButton(
                             onClick = {
-                                galleryLauncher.launch("image/*")
+
                             },
                             shape = RoundedCornerShape(25)
                         ) {
                             Image(
-                                painterResource(id = R.drawable.ic_add),
-                                contentDescription ="Add Image",
+                                painterResource(id = R.drawable.ic_upload),
+                                contentDescription ="Upload",
                                 modifier = Modifier.size(20.dp))
                             Text(
-                                text = "Add to cart",
+                                text = "Upload",
                                 Modifier
                                     .padding(start = 10.dp)
                             )
