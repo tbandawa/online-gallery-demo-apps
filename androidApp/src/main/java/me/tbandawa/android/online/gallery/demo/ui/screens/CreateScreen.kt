@@ -1,7 +1,10 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -19,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,13 +35,17 @@ import coil.compose.rememberImagePainter
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 import timber.log.Timber
+import java.io.File
 import java.util.*
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CreateScreen(
 
 ) {
+
+    val context = LocalContext.current
 
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
@@ -200,10 +208,13 @@ fun CreateScreen(
                     ) {
                         FilledTonalButton(
                             onClick = {
+
                                 isTitleValid = textTitle.text.isNotBlank()
                                 isDescriptionValid = textDescription.text.isNotBlank()
                                 if (isTitleValid && isDescriptionValid) {
-
+                                    selectedUris.forEach { uri ->
+                                        Timber.d("file name => ${getFileNameFromUri(context, uri)}")
+                                    }
                                 }
                             },
                             shape = RoundedCornerShape(25),
@@ -231,6 +242,8 @@ fun ImageFile(
     uri: Uri,
     selectedUri: (uri: Uri) -> Unit
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(5.dp))
@@ -254,30 +267,19 @@ fun ImageFile(
 
             val (info, closeIcon) = createRefs()
 
-            Column(
+            Text(
+                text = getFileNameFromUri(context, uri) ?: "Image",
+                style = TextStyle(
+                    color = Color(0xff024040),
+                    fontSize = 14.sp
+                ),
                 modifier = Modifier
                     .constrainAs(info) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                     }
-            ) {
-                Text(
-                    text = "Some text",
-                    style = TextStyle(
-                        color = Color(0xff024040),
-                        fontSize = 16.sp
-                    ),
-                    modifier = Modifier.padding(start = 5.dp)
-                )
-                Text(
-                    text = "Some text",
-                    style = TextStyle(
-                        color = Color(0xff024040),
-                        fontSize = 14.sp
-                    ),
-                    modifier = Modifier.padding(start = 5.dp)
-                )
-            }
+                    .padding(end = 30.dp)
+            )
             Image(
                 painter = painterResource(id = R.drawable.ic_close),
                 contentDescription = null,
@@ -296,6 +298,16 @@ fun ImageFile(
             )
         }
     }
+}
+
+@SuppressLint("Range")
+fun getFileNameFromUri(context: Context, uri: Uri): String? {
+    val fileName: String?
+    val cursor = context.contentResolver.query(uri, null, null, null, null)
+    cursor?.moveToFirst()
+    fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+    cursor?.close()
+    return fileName
 }
 
 @Preview
