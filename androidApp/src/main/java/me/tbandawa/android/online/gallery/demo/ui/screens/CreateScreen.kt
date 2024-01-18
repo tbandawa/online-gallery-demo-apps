@@ -30,6 +30,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil.compose.rememberImagePainter
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
+import timber.log.Timber
 import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -46,10 +47,9 @@ fun CreateScreen(
     var isTitleValid by remember { mutableStateOf(true) }
     var isDescriptionValid by remember { mutableStateOf(true) }
 
-    var selectImages by remember { mutableStateOf(listOf<Uri>()) }
+    var selectedUris by remember { mutableStateOf(listOf<Uri>()) }
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
-        //selectImages = uriList
-        selectImages += uriList
+        selectedUris += uriList
     }
 
     Surface(
@@ -184,8 +184,15 @@ fun CreateScreen(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    selectImages.forEach { uri ->
-                        ImageFile(uri = uri)
+                    selectedUris.forEach { uri ->
+                        ImageFile(
+                            uri = uri
+                        ) { selectedUri ->
+                            val uriIndex = selectedUris.indexOf(selectedUri)
+                            val flyUris = selectedUris.toMutableList()
+                            flyUris.removeAt(uriIndex)
+                            selectedUris = flyUris
+                        }
                     }
                     Box(
                         modifier = Modifier
@@ -193,9 +200,14 @@ fun CreateScreen(
                     ) {
                         FilledTonalButton(
                             onClick = {
+                                isTitleValid = textTitle.text.isNotBlank()
+                                isDescriptionValid = textDescription.text.isNotBlank()
+                                if (isTitleValid && isDescriptionValid) {
 
+                                }
                             },
-                            shape = RoundedCornerShape(25)
+                            shape = RoundedCornerShape(25),
+                            enabled = selectedUris.isNotEmpty()
                         ) {
                             Image(
                                 painterResource(id = R.drawable.ic_upload),
@@ -215,7 +227,10 @@ fun CreateScreen(
 }
 
 @Composable
-fun ImageFile(uri: Uri) {
+fun ImageFile(
+    uri: Uri,
+    selectedUri: (uri: Uri) -> Unit
+) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(5.dp))
@@ -274,23 +289,12 @@ fun ImageFile(uri: Uri) {
                     .size(20.dp)
                     .clickable(
                         enabled = true,
-                        onClick = { }
+                        onClick = {
+                            selectedUri(uri)
+                        }
                     )
             )
         }
-        Image(
-            painter = painterResource(id = R.drawable.ic_close),
-            contentDescription = null,
-            modifier = Modifier
-                .size(35.dp)
-                .padding(top = 5.dp, end = 8.dp)
-                .clickable(
-                    enabled = true,
-                    onClick = {
-
-                    }
-                )
-        )
     }
 }
 
