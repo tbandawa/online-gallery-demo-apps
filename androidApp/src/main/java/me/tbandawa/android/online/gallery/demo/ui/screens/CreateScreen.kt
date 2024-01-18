@@ -1,6 +1,9 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,14 +51,10 @@ fun CreateScreen(
     var isTitleValid by remember { mutableStateOf(true) }
     var isDescriptionValid by remember { mutableStateOf(true) }
 
-    val imagesList = arrayListOf(
-        "https://images.unsplash.com/photo-1446889727648-8c23e3039b24?q=80&w=3185&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1508515053963-70c7cc39dfb5?q=80&w=3614&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1597589022928-bb4002c099ec?q=80&w=3024&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1663162221489-385e5d75d29f?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1642602519174-0318c786f6d8?q=80&w=4096&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        "https://images.unsplash.com/photo-1635197425857-2850b3dfc633?q=80&w=3500&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    )
+    var selectImages by remember { mutableStateOf(listOf<Uri>()) }
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
+        selectImages = uriList
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -162,15 +161,17 @@ fun CreateScreen(
                         Column(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            imagesList.forEach { image ->
-                                ImageFile(url = image)
+                            selectImages.forEach { uri ->
+                                ImageFile(uri = uri)
                             }
                             Box(
                                 modifier = Modifier
                                     .padding(top = 0.dp)
                             ) {
                                 FilledTonalButton(
-                                    onClick = { },
+                                    onClick = {
+                                        galleryLauncher.launch("image/*")
+                                    },
                                     shape = RoundedCornerShape(25)
                                 ) {
                                     Image(
@@ -194,14 +195,7 @@ fun CreateScreen(
 }
 
 @Composable
-fun ImageFile(url: String) {
-    val imageUrl = rememberImagePainter(
-        data = url,
-        builder = {
-            crossfade(true)
-            size(OriginalSize)
-        }
-    )
+fun ImageFile(uri: Uri) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(5.dp))
@@ -210,14 +204,13 @@ fun ImageFile(url: String) {
             .fillMaxWidth()
     ) {
         Image(
-            painter = imageUrl,
+            painter = rememberImagePainter(uri),
             contentDescription = "Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(50.dp)
                 .clip(RoundedCornerShape(5.dp))
         )
-
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth(1f)
