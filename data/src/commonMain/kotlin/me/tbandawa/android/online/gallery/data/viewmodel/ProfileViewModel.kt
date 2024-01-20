@@ -17,7 +17,7 @@ class ProfileViewModel(
     fun getProfile() {
         coroutineScope.launch {
             val user = galleryRepository.getUser()
-            galleryRepository.getProfile(user!!.token, user.id).collect { results ->
+            galleryRepository.getProfile(user!!.id).collect { results ->
                 _profileResource.value = results
             }
         }
@@ -25,8 +25,7 @@ class ProfileViewModel(
 
     fun viewProfile(profileId: Long) {
         coroutineScope.launch {
-            val user = galleryRepository.getUser()
-            galleryRepository.getProfile(user!!.token, profileId).collect { results ->
+            galleryRepository.getProfile(profileId).collect { results ->
                 _profileResource.value = results
             }
         }

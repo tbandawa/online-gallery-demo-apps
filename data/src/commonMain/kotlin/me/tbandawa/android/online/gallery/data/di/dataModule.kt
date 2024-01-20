@@ -12,6 +12,7 @@ import me.tbandawa.android.online.gallery.data.domain.repo.GalleryRepositoryImpl
 import me.tbandawa.android.online.gallery.data.remote.api.GalleryApi
 import me.tbandawa.android.online.gallery.data.viewmodel.SplashViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.AuthViewModel
+import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
@@ -48,13 +49,14 @@ val apiModule = module {
 }
 
 val repositoryModule = module {
-    single { GalleryRepositoryImpl(get(), get(), get(), get(), get()) } bind GalleryRepository::class
+    single { GalleryRepositoryImpl(get(), get(), get(), get(), get(), get()) } bind GalleryRepository::class
 }
 
 val viewModelModule = module {
     single { SplashViewModel(get()) }
     single { AuthViewModel(get()) }
     single { ProfileViewModel(get()) }
+    single { GalleryViewModel(get()) }
 }
 
 fun initKoin(appDeclaration: KoinAppDeclaration) = startKoin {

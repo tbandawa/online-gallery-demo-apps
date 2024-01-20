@@ -18,7 +18,7 @@ class SplashViewModel(
         val user = galleryRepository.getUser()
         if (user != null) {
             coroutineScope.launch {
-                galleryRepository.getProfile(user.token, user.id).collect { results ->
+                galleryRepository.getProfile(user.id).collect { results ->
                     when(results) {
                         is ResourceState.Loading -> {}
                         is ResourceState.Success -> {

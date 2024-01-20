@@ -1,6 +1,7 @@
 package me.tbandawa.android.online.gallery.data.domain.repo
 
 import kotlinx.coroutines.flow.Flow
+import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.domain.models.Profile
 import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
@@ -11,6 +12,6 @@ interface GalleryRepository {
     fun getUser(): User?
     suspend fun signInUser(signInRequest: SignInRequest): Flow<ResourceState<User>>
     suspend fun signUpUser(userRequest: UserRequest): Flow<ResourceState<User>>
-
-    suspend fun getProfile(token: String, profileId: Long): Flow<ResourceState<Profile>>
+    suspend fun getProfile(profileId: Long): Flow<ResourceState<Profile>>
+    suspend fun createGallery(title: String, description: String, images: Map<String, ByteArray>): Flow<ResourceState<Gallery>>
 }
