@@ -84,7 +84,7 @@ class GalleryApi {
     }
 
     suspend fun createGallery(token: String, title: String, description: String, images: Map<String, ByteArray>): GalleryResponse {
-        return httpClient.post("[url]") {
+        return httpClient.post("$BASE_URL/gallery") {
             headers {
                 append("Authorization", "Bearer $token")
             }

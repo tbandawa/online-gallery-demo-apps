@@ -1,7 +1,10 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,9 +37,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberImagePainter
 import me.tbandawa.android.online.gallery.R
+import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
+import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
+import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
 import java.util.*
+
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -45,6 +54,8 @@ fun CreateScreen(
 ) {
 
     val context = LocalContext.current
+    val galleryViewModel: GalleryViewModel = koinViewModel()
+    val galleryState by galleryViewModel.galleryResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
@@ -57,6 +68,21 @@ fun CreateScreen(
     var selectedUris by remember { mutableStateOf(listOf<Uri>()) }
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
         selectedUris += uriList
+    }
+
+    when (galleryState) {
+        is ResourceState.Empty -> {}
+        is ResourceState.Loading -> {
+            Timber.d("loading -----------")
+        }
+        is ResourceState.Success -> {
+            val success = (galleryState as ResourceState.Success<*>).data!!
+            Timber.d("success => $success")
+        }
+        is ResourceState.Error -> {
+            val error = (galleryState as ResourceState.Error<*>).data!!
+            Timber.d("error => $error")
+        }
     }
 
     Surface(
@@ -239,9 +265,16 @@ fun CreateScreen(
                             isTitleValid = textTitle.text.isNotBlank()
                             isDescriptionValid = textDescription.text.isNotBlank()
                             if (isTitleValid && isDescriptionValid) {
+                                val images = mutableMapOf<String, ByteArray>()
                                 selectedUris.forEach { uri ->
-                                    Timber.d("file name => ${getFileNameFromUri(context, uri)}")
+                                    images[getFileNameFromUri(context, uri)!!] =
+                                        convertImageToByte(context, uri)!!
                                 }
+                                galleryViewModel.createGallery(
+                                    textTitle.text,
+                                    textDescription.text,
+                                    images
+                                )
                             }
                         },
                         shape = RoundedCornerShape(25),
@@ -318,6 +351,21 @@ fun getFileNameFromUri(context: Context, uri: Uri): String? {
     fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
     cursor?.close()
     return fileName
+}
+
+fun convertImageToByte(context: Context, uri: Uri?): ByteArray? {
+    var data: ByteArray? = null
+    try {
+        val cr: ContentResolver = context.contentResolver
+        val inputStream = cr.openInputStream(uri!!)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        data = baos.toByteArray()
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+    }
+    return data
 }
 
 @Preview
