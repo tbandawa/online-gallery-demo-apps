@@ -59,8 +59,8 @@ fun CreateScreen(
 
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var textTitle by remember { mutableStateOf(TextFieldValue("")) }
-    var textDescription by remember { mutableStateOf(TextFieldValue("")) }
+    var textTitle = remember { mutableStateOf("") }
+    var textDescription = remember { mutableStateOf("") }
 
     var isTitleValid by remember { mutableStateOf(true) }
     var isDescriptionValid by remember { mutableStateOf(true) }
@@ -117,12 +117,12 @@ fun CreateScreen(
                         .padding(16.dp)
                 ) {
                     TextField(
-                        value = textTitle,
+                        value = textTitle.value,
                         singleLine = true,
                         enabled = !isLoading,
                         onValueChange = { input ->
-                            textTitle = input
-                            isTitleValid = input.text.isNotBlank()
+                            textTitle.value = input
+                            isTitleValid = input.isNotBlank()
                         },
                         placeholder = { Text(text = "Title") },
                         modifier = Modifier
@@ -150,14 +150,14 @@ fun CreateScreen(
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
-                        value = textDescription,
+                        value = textDescription.value,
                         singleLine = false,
                         maxLines = 4,
                         minLines = 4,
                         enabled = !isLoading,
                         onValueChange = { input ->
-                            textDescription = input
-                            isDescriptionValid = input.text.isNotBlank()
+                            textDescription.value = input
+                            isDescriptionValid = input.isNotBlank()
                         },
                         placeholder = { Text(text = "Description") },
                         modifier = Modifier
@@ -262,8 +262,8 @@ fun CreateScreen(
                     Spacer(Modifier.weight(1f))
                     FilledTonalButton(
                         onClick = {
-                            isTitleValid = textTitle.text.isNotBlank()
-                            isDescriptionValid = textDescription.text.isNotBlank()
+                            isTitleValid = textTitle.value.isNotBlank()
+                            isDescriptionValid = textDescription.value.isNotBlank()
                             if (isTitleValid && isDescriptionValid) {
                                 val images = mutableMapOf<String, ByteArray>()
                                 selectedUris.forEach { uri ->
@@ -271,8 +271,8 @@ fun CreateScreen(
                                         convertImageToByte(context, uri)!!
                                 }
                                 galleryViewModel.createGallery(
-                                    textTitle.text,
-                                    textDescription.text,
+                                    textTitle.value,
+                                    textDescription.value,
                                     images
                                 )
                             }
