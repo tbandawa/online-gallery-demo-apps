@@ -30,6 +30,7 @@ import kotlinx.serialization.json.Json
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
 import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
 import me.tbandawa.android.online.gallery.data.remote.responses.GalleryResponse
+import me.tbandawa.android.online.gallery.data.remote.responses.ProfilePhotoResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.ProfileResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.UserResponse
 
@@ -80,6 +81,23 @@ class GalleryApi {
                 append("Authorization", "Bearer $token")
             }
             contentType(ContentType.Application.Json)
+        }.body()
+    }
+
+    suspend fun uploadProfilePicture(token: String, photoTitle: String, photoBytes: ByteArray): ProfilePhotoResponse {
+        return httpClient.post("$BASE_URL/profile") {
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.MultiPart.FormData)
+            setBody(MultiPartFormDataContent(
+                formData {
+                    append("profile_photo", photoBytes, Headers.build {
+                        append(HttpHeaders.ContentType, "image/png")
+                        append(HttpHeaders.ContentDisposition, "filename=\"$photoTitle\"")
+                    })
+                }
+            ))
         }.body()
     }
 

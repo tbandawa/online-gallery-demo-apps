@@ -9,9 +9,11 @@ import me.tbandawa.android.online.gallery.data.cache.Database
 import me.tbandawa.android.online.gallery.data.domain.mappers.ErrorMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.GalleryMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.ProfileMapper
+import me.tbandawa.android.online.gallery.data.domain.mappers.ProfilePhotoMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.UserMapper
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.domain.models.Profile
+import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
 import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.remote.api.BaseApiCall
 import me.tbandawa.android.online.gallery.data.remote.api.GalleryApi
@@ -25,6 +27,7 @@ class GalleryRepositoryImpl(
     private val userMapper: UserMapper,
     private val profileMapper: ProfileMapper,
     private val galleryMapper: GalleryMapper,
+    private val profilePhotoMapper: ProfilePhotoMapper,
     errorMapper: ErrorMapper
 ): GalleryRepository, BaseApiCall(errorMapper) {
 
@@ -74,6 +77,18 @@ class GalleryRepositoryImpl(
         emit(ResourceState.Loading)
         emit(handleApiCall {
             galleryMapper.mapToModel(galleryApi.createGallery(user!!.token, title, description, images))
+        })
+    }.flowOn(Dispatchers.Main)
+
+    override suspend fun uploadProfilePicture(
+        photoTitle: String,
+        photoBytes: ByteArray
+    ): Flow<ResourceState<ProfilePhoto>> = flow {
+        val user = getUser()
+        emit(ResourceState.Empty)
+        emit(ResourceState.Loading)
+        emit(handleApiCall {
+            profilePhotoMapper.mapToModel(galleryApi.uploadProfilePicture(user!!.token, photoTitle, photoBytes))
         })
     }.flowOn(Dispatchers.Main)
 }
