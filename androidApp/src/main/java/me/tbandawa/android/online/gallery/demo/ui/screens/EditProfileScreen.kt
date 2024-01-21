@@ -1,24 +1,41 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +46,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,32 +53,62 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberImagePainter
+import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
+import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
+import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EditProfileScreen(
     navController: NavController
 ) {
+
+    val scope = rememberCoroutineScope()
+    val profileViewModel: ProfileViewModel = koinViewModel()
+    val userState by profileViewModel.userResource.collectAsState()
+
+    var isLoading by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    var showPassword by remember { mutableStateOf(false) }
+
+    var profilePhoto = rememberImagePainter(
+        data = null,
+        builder = {
+            crossfade(true)
+        }
+    )
+
+    var photoUrl = remember { mutableStateOf("") }
+    var textFirstName = remember { mutableStateOf("") }
+    var textLastName = remember { mutableStateOf("") }
+    var textUserName = remember { mutableStateOf("") }
+    var textEmail = remember { mutableStateOf("") }
+    var textPassword = remember { mutableStateOf("") }
+
+    var isFirstNameValid by remember { mutableStateOf(true) }
+    var isLastNameValid by remember { mutableStateOf(true) }
+    var isUserNameValid by remember { mutableStateOf(true) }
+    var isEmailValid by remember { mutableStateOf(true) }
+    var isPasswordValid by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            val user = (userState as ResourceState.Success).data
+            textFirstName.value = user.firstname
+            textLastName.value = user.lastname
+            textUserName.value = user.username
+            textEmail.value = user.email
+            photoUrl.value = user.profilePhoto.thumbnail!!
+        }
+    }
+
     Surface(
         modifier = Modifier
             .padding(bottom = 16.dp, start = 15.dp, end = 15.dp)
     ) {
-
-        var isLoading by remember { mutableStateOf(false) }
-        var isError by remember { mutableStateOf(false) }
-        var showPassword by remember { mutableStateOf(false) }
-        var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
-        var textLastName by remember { mutableStateOf(TextFieldValue("")) }
-        var textUserName by remember { mutableStateOf(TextFieldValue("")) }
-        var textEmail by remember { mutableStateOf(TextFieldValue("")) }
-        var textPassword by remember { mutableStateOf(TextFieldValue("")) }
-
-        var isFirstNameValid by remember { mutableStateOf(true) }
-        var isLastNameValid by remember { mutableStateOf(true) }
-        var isUserNameValid by remember { mutableStateOf(true) }
-        var isEmailValid by remember { mutableStateOf(true) }
-        var isPasswordValid by remember { mutableStateOf(true) }
 
         Scaffold(
             topBar = { NavigationToolbar("Edit Profile", navController) }
@@ -86,20 +132,20 @@ fun EditProfileScreen(
                         }
                 ) {
 
-                    var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
-                    var textLastName by remember { mutableStateOf(TextFieldValue("")) }
-                    var textUserName by remember { mutableStateOf(TextFieldValue("")) }
-                    var textEmail by remember { mutableStateOf(TextFieldValue("")) }
-                    var textPassword by remember { mutableStateOf(TextFieldValue("")) }
-
                     ConstraintLayout(
                         modifier = Modifier
                             .align(alignment = CenterHorizontally)
                             .padding(it)
                     ) {
                         val (editButton, avatarView) = createRefs()
+                        val profilePhoto = rememberImagePainter(
+                            data = photoUrl.value,
+                            builder = {
+                                crossfade(true)
+                            }
+                        )
                         Image(
-                            painter = painterResource(R.drawable.ic_launcher_foreground),
+                            painter = profilePhoto,
                             contentDescription = "avatar",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
@@ -138,11 +184,11 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(35.dp))
                     TextField(
-                        value = textFirstName,
+                        value = textFirstName.value,
                         singleLine = true,
                         onValueChange = { input ->
-                            textFirstName = input
-                            isFirstNameValid = input.text.isNotBlank()
+                            textFirstName.value = input
+                            isFirstNameValid = input.isNotBlank()
                         },
                         placeholder = { Text(text = "First Name") },
                         modifier = Modifier
@@ -170,12 +216,12 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
-                        value = textLastName,
+                        value = textLastName.value,
                         singleLine = true,
                         enabled = !isLoading,
                         onValueChange = { input ->
-                            textLastName = input
-                            isLastNameValid = input.text.isNotBlank()
+                            textLastName.value = input
+                            isLastNameValid = input.isNotBlank()
                         },
                         placeholder = { Text(text = "Last Name") },
                         modifier = Modifier
@@ -203,9 +249,9 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
-                        value = textUserName,
+                        value = textUserName.value,
                         onValueChange = { input ->
-                            textUserName = input
+                            textUserName.value = input
                         },
                         enabled = false,
                         placeholder = { Text(text = "User Name") },
@@ -229,9 +275,9 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
-                        value = textEmail,
+                        value = textEmail.value,
                         onValueChange = { input ->
-                            textEmail = input
+                            textEmail.value = input
                         },
                         enabled = false,
                         placeholder = { Text(text = "Email") },
@@ -260,12 +306,12 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
-                        value = textPassword,
+                        value = textPassword.value,
                         singleLine = true,
                         enabled = !isLoading,
                         onValueChange = { input ->
-                            textPassword = input
-                            isPasswordValid = input.text.isNotBlank()
+                            textPassword.value = input
+                            isPasswordValid = input.isNotBlank()
                         },
                         placeholder = { Text(text = "Password") },
                         modifier = Modifier
@@ -318,9 +364,9 @@ fun EditProfileScreen(
 
                 Button(
                     onClick = {
-                        isFirstNameValid = textFirstName.text.isNotBlank()
-                        isLastNameValid = textLastName.text.isNotBlank()
-                        isPasswordValid = textPassword.text.isNotBlank()
+                        isFirstNameValid = textFirstName.value.isNotBlank()
+                        isLastNameValid = textLastName.value.isNotBlank()
+                        isPasswordValid = textPassword.value.isNotBlank()
                         if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
                             /*authViewModel.signUpUser(
                                 firstname = textFirstName.text,
