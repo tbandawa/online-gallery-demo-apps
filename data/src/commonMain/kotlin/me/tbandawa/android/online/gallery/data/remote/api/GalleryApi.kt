@@ -121,4 +121,15 @@ class GalleryApi {
             ))
         }.body()
     }
+
+    suspend fun editUser(token: String, userRequest: UserRequest): UserResponse {
+        return httpClient.post {
+            url("$BASE_URL/user")
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.Application.Json)
+            setBody(userRequest)
+        }.body<UserResponse>()
+    }
 }

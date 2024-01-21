@@ -91,4 +91,17 @@ class GalleryRepositoryImpl(
             profilePhotoMapper.mapToModel(galleryApi.uploadProfilePicture(user!!.token, photoTitle, photoBytes))
         })
     }.flowOn(Dispatchers.Main)
+
+    override suspend fun editUser(userRequest: UserRequest): Flow<ResourceState<User>> = flow {
+        val user = getUser()
+        emit(ResourceState.Loading)
+        emit(handleApiCall {
+            userMapper.mapToModel(galleryApi.editUser(user!!.token, userRequest))
+        }.also { results ->
+            if (results is ResourceState.Success) {
+                database.clearUser()
+                database.saveUser(results.data)
+            }
+        })
+    }.flowOn(Dispatchers.Main)
 }
