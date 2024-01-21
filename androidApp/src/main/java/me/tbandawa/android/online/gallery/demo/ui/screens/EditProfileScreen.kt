@@ -5,9 +5,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -20,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,9 +45,24 @@ fun EditProfileScreen(
     navController: NavController
 ) {
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
+        modifier = Modifier
+            .padding(bottom = 16.dp, start = 15.dp, end = 15.dp)
     ) {
+
+        var isLoading by remember { mutableStateOf(false) }
+        var isError by remember { mutableStateOf(false) }
+        var showPassword by remember { mutableStateOf(false) }
+        var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
+        var textLastName by remember { mutableStateOf(TextFieldValue("")) }
+        var textUserName by remember { mutableStateOf(TextFieldValue("")) }
+        var textEmail by remember { mutableStateOf(TextFieldValue("")) }
+        var textPassword by remember { mutableStateOf(TextFieldValue("")) }
+
+        var isFirstNameValid by remember { mutableStateOf(true) }
+        var isLastNameValid by remember { mutableStateOf(true) }
+        var isUserNameValid by remember { mutableStateOf(true) }
+        var isEmailValid by remember { mutableStateOf(true) }
+        var isPasswordValid by remember { mutableStateOf(true) }
 
         Scaffold(
             topBar = { NavigationToolbar("Edit Profile", navController) }
@@ -85,7 +111,9 @@ fun EditProfileScreen(
                                 }
                         )
                         Button(
-                            onClick = {},
+                            onClick = {
+
+                            },
                             modifier= Modifier
                                 .size(40.dp)
                                 .padding(bottom = 5.dp, end = 5.dp)
@@ -97,7 +125,7 @@ fun EditProfileScreen(
                             border= BorderStroke(0.dp, Color(0xff024040)),
                             contentPadding = PaddingValues(0.dp),
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(0xff024040)
+                                containerColor = Color(0xff024040)
                             )
                         ) {
                             Icon(
@@ -111,8 +139,10 @@ fun EditProfileScreen(
                     Spacer(modifier = Modifier.height(35.dp))
                     TextField(
                         value = textFirstName,
-                        onValueChange = {
-                            textFirstName = it
+                        singleLine = true,
+                        onValueChange = { input ->
+                            textFirstName = input
+                            isFirstNameValid = input.text.isNotBlank()
                         },
                         placeholder = { Text(text = "First Name") },
                         modifier = Modifier
@@ -120,24 +150,32 @@ fun EditProfileScreen(
                             .height(50.dp)
                             .background(
                                 color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(60.dp)
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .border(
+                                width = 2.dp,
+                                color = if (isFirstNameValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(10.dp)
                             ),
-                        shape = RoundedCornerShape(60.dp),
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = Color(0xff024040),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color(0xff024040),
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent,
-                            placeholderColor = Color(0x90024040),
-                            leadingIconColor = Color(0xff024040)
+                            unfocusedPlaceholderColor = if (isFirstNameValid) Color(0x90024040) else Color(0xfff55050),
+                            disabledLeadingIconColor = Color(0xff024040)
                         )
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
                         value = textLastName,
-                        onValueChange = {
-                            textLastName = it
+                        singleLine = true,
+                        enabled = !isLoading,
+                        onValueChange = { input ->
+                            textLastName = input
+                            isLastNameValid = input.text.isNotBlank()
                         },
                         placeholder = { Text(text = "Last Name") },
                         modifier = Modifier
@@ -145,74 +183,89 @@ fun EditProfileScreen(
                             .height(50.dp)
                             .background(
                                 color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(60.dp)
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .border(
+                                width = 2.dp,
+                                color = if (isLastNameValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(10.dp)
                             ),
-                        shape = RoundedCornerShape(60.dp),
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = Color(0xff024040),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color(0xff024040),
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent,
-                            placeholderColor = Color(0x90024040),
-                            leadingIconColor = Color(0xff024040)
+                            unfocusedPlaceholderColor = if (isLastNameValid) Color(0x90024040) else Color(0xfff55050),
+                            disabledLeadingIconColor = Color(0xff024040)
                         )
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
                         value = textUserName,
-                        onValueChange = {
-                            textUserName = it
+                        onValueChange = { input ->
+                            textUserName = input
                         },
+                        enabled = false,
                         placeholder = { Text(text = "User Name") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp)
                             .background(
                                 color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(60.dp)
+                                shape = RoundedCornerShape(10.dp)
                             ),
-                        shape = RoundedCornerShape(60.dp),
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = Color(0xff024040),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color(0xff024040),
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent,
-                            placeholderColor = Color(0x90024040),
-                            leadingIconColor = Color(0xff024040)
+                            unfocusedPlaceholderColor = if (isUserNameValid) Color(0x90024040) else Color(0xfff55050),
+                            disabledLeadingIconColor = Color(0xff024040)
                         )
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
                         value = textEmail,
-                        onValueChange = {
-                            textEmail = it
+                        onValueChange = { input ->
+                            textEmail = input
                         },
+                        enabled = false,
                         placeholder = { Text(text = "Email") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(50.dp)
                             .background(
                                 color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(60.dp)
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .border(
+                                width = 2.dp,
+                                color = if (isEmailValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(10.dp)
                             ),
-                        shape = RoundedCornerShape(60.dp),
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = Color(0xff024040),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color(0xff024040),
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent,
-                            placeholderColor = Color(0x90024040),
-                            leadingIconColor = Color(0xff024040)
+                            unfocusedPlaceholderColor = if (isEmailValid) Color(0x90024040) else Color(0xfff55050),
+                            disabledLeadingIconColor = Color(0xff024040)
                         )
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))
                     TextField(
                         value = textPassword,
-                        onValueChange = {
-                            textPassword = it
+                        singleLine = true,
+                        enabled = !isLoading,
+                        onValueChange = { input ->
+                            textPassword = input
+                            isPasswordValid = input.text.isNotBlank()
                         },
                         placeholder = { Text(text = "Password") },
                         modifier = Modifier
@@ -220,25 +273,64 @@ fun EditProfileScreen(
                             .height(50.dp)
                             .background(
                                 color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(60.dp)
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .border(
+                                width = 2.dp,
+                                color = if (isPasswordValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(10.dp)
                             ),
-                        shape = RoundedCornerShape(60.dp),
-                        colors = TextFieldDefaults.textFieldColors(
-                            textColor = Color(0xff024040),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color(0xff024040),
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             disabledIndicatorColor = Color.Transparent,
-                            placeholderColor = Color(0x90024040),
-                            leadingIconColor = Color(0xff024040)
+                            unfocusedPlaceholderColor = if (isPasswordValid) Color(0x90024040) else Color(0xfff55050),
+                            disabledLeadingIconColor = Color(0xff024040)
                         ),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        visualTransformation = PasswordVisualTransformation()
+                        visualTransformation = if (showPassword) {
+                            VisualTransformation.None
+                        } else {
+                            PasswordVisualTransformation()
+                        },
+                        trailingIcon = {
+                            if (showPassword) {
+                                IconButton(onClick = { showPassword = false }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_visibility_on),
+                                        contentDescription = "Show Password"
+                                    )
+                                }
+                            } else {
+                                IconButton(onClick = { showPassword = true }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_visibility_off),
+                                        contentDescription = "Hide Password"
+                                    )
+                                }
+                            }
+                        }
                     )
 
                 }
 
                 Button(
-                    onClick = { },
+                    onClick = {
+                        isFirstNameValid = textFirstName.text.isNotBlank()
+                        isLastNameValid = textLastName.text.isNotBlank()
+                        isPasswordValid = textPassword.text.isNotBlank()
+                        if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
+                            /*authViewModel.signUpUser(
+                                firstname = textFirstName.text,
+                                lastname = textLastName.text,
+                                username = textUserName.text,
+                                email = textEmail.text,
+                                password = textPassword.text
+                            )*/
+                        }
+                    },
                     shape = RoundedCornerShape(50),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -247,17 +339,25 @@ fun EditProfileScreen(
                             bottom.linkTo(parent.bottom)
                         },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color(0xff024040)
+                        containerColor = Color(0xff024040)
                     )
                 ){
-                    Text(
-                        text = "Save Changes",
-                        style = TextStyle(
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(21.dp),
                             color = Color.White,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 18.sp
+                            strokeWidth = 2.dp)
+                    } else {
+                        Text(
+                            text = "Save Changes",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp
+                            )
                         )
-                    )
+                    }
                 }
 
             }

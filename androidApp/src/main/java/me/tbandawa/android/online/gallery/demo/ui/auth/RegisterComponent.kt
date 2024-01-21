@@ -177,8 +177,7 @@ fun RegisterComponent(
                         width = 2.dp,
                         color = if (isLastNameValid) Color.Transparent else Color.Red,
                         shape = RoundedCornerShape(10.dp)
-                    )
-                ,
+                    ),
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color(0xff024040),
