@@ -58,11 +58,12 @@ fun RegisterComponent(
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
-    var textFirstName by remember { mutableStateOf(TextFieldValue("")) }
-    var textLastName by remember { mutableStateOf(TextFieldValue("")) }
-    var textUserName by remember { mutableStateOf(TextFieldValue("")) }
-    var textEmail by remember { mutableStateOf(TextFieldValue("")) }
-    var textPassword by remember { mutableStateOf(TextFieldValue("")) }
+
+    var textFirstName = remember { mutableStateOf("") }
+    var textLastName = remember { mutableStateOf("") }
+    var textUserName = remember { mutableStateOf("") }
+    var textEmail = remember { mutableStateOf("") }
+    var textPassword = remember { mutableStateOf("") }
 
     var isFirstNameValid by remember { mutableStateOf(true) }
     var isLastNameValid by remember { mutableStateOf(true) }
@@ -125,12 +126,12 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
-                value = textFirstName,
+                value = textFirstName.value,
                 singleLine = true,
                 enabled = !isLoading,
                 onValueChange = { input ->
-                    textFirstName = input
-                    isFirstNameValid = input.text.isNotBlank()
+                    textFirstName.value = input
+                    isFirstNameValid = input.isNotBlank()
                 },
                 placeholder = { Text(text = "First Name") },
                 modifier = Modifier
@@ -158,12 +159,12 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
-                value = textLastName,
+                value = textLastName.value,
                 singleLine = true,
                 enabled = !isLoading,
                 onValueChange = { input ->
-                    textLastName = input
-                    isLastNameValid = input.text.isNotBlank()
+                    textLastName.value = input
+                    isLastNameValid = input.isNotBlank()
                 },
                 placeholder = { Text(text = "Last Name") },
                 modifier = Modifier
@@ -191,12 +192,12 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
-                value = textUserName,
+                value = textUserName.value,
                 singleLine = true,
                 enabled = !isLoading,
                 onValueChange = { input ->
-                    textUserName = input
-                    isUserNameValid = input.text.isNotBlank()
+                    textUserName.value = input
+                    isUserNameValid = input.isNotBlank()
                 },
                 placeholder = { Text(text = "User Name") },
                 modifier = Modifier
@@ -224,12 +225,12 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
-                value = textEmail,
+                value = textEmail.value,
                 singleLine = true,
                 enabled = !isLoading,
                 onValueChange = { input ->
-                    textEmail = input
-                    isEmailValid = isValidEmail(input.text)
+                    textEmail.value = input
+                    isEmailValid = isValidEmail(input)
                 },
                 placeholder = { Text(text = "Email") },
                 modifier = Modifier
@@ -258,12 +259,12 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
-                value = textPassword,
+                value = textPassword.value,
                 singleLine = true,
                 enabled = !isLoading,
                 onValueChange = { input ->
-                    textPassword = input
-                    isPasswordValid = input.text.isNotBlank()
+                    textPassword.value = input
+                    isPasswordValid = input.isNotBlank()
                 },
                 placeholder = { Text(text = "Password") },
                 modifier = Modifier
@@ -315,18 +316,18 @@ fun RegisterComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    isFirstNameValid = textFirstName.text.isNotBlank()
-                    isLastNameValid = textLastName.text.isNotBlank()
-                    isUserNameValid = textUserName.text.isNotBlank()
-                    isEmailValid = textEmail.text.isNotBlank()
-                    isPasswordValid = textPassword.text.isNotBlank()
+                    isFirstNameValid = textFirstName.value.isNotBlank()
+                    isLastNameValid = textLastName.value.isNotBlank()
+                    isUserNameValid = textUserName.value.isNotBlank()
+                    isEmailValid = textEmail.value.isNotBlank()
+                    isPasswordValid = textPassword.value.isNotBlank()
                     if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
                         authViewModel.signUpUser(
-                            firstname = textFirstName.text,
-                            lastname = textLastName.text,
-                            username = textUserName.text,
-                            email = textEmail.text,
-                            password = textPassword.text
+                            firstname = textFirstName.value,
+                            lastname = textLastName.value,
+                            username = textUserName.value,
+                            email = textEmail.value,
+                            password = textPassword.value
                         )
                     }
                 },

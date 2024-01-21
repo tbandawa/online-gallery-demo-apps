@@ -58,8 +58,8 @@ fun LoginComponent(
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
-    var textUserName by remember { mutableStateOf(TextFieldValue("")) }
-    var textPassword by remember { mutableStateOf(TextFieldValue("")) }
+    var textUserName = remember { mutableStateOf("") }
+    var textPassword = remember { mutableStateOf("") }
 
     var isUserNameValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
@@ -119,12 +119,12 @@ fun LoginComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
-                value = textUserName,
+                value = textUserName.value,
                 singleLine = true,
                 enabled = !isLoading,
                 onValueChange = { input ->
-                    textUserName = input
-                    isUserNameValid = input.text.isNotBlank()
+                    textUserName.value = input
+                    isUserNameValid = input.isNotBlank()
                 },
                 placeholder = { Text(text = "User Name") },
                 modifier = Modifier
@@ -152,12 +152,12 @@ fun LoginComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
-                value = textPassword,
+                value = textPassword.value,
                 singleLine = true,
                 enabled = !isLoading,
                 onValueChange = { input ->
-                    textPassword = input
-                    isPasswordValid = input.text.isNotBlank()
+                    textPassword.value = input
+                    isPasswordValid = input.isNotBlank()
                 },
                 placeholder = { Text(text = "Password") },
                 modifier = Modifier
@@ -209,10 +209,10 @@ fun LoginComponent(
             Spacer(modifier = Modifier.height(25.dp))
             Button(
                 onClick = {
-                    isUserNameValid = textUserName.text.isNotBlank()
-                    isPasswordValid = textPassword.text.isNotBlank()
+                    isUserNameValid = textUserName.value.isNotBlank()
+                    isPasswordValid = textPassword.value.isNotBlank()
                     if (isUserNameValid && isPasswordValid) {
-                        authViewModel.signInUser(username = textUserName.text, password = textPassword.text)
+                        authViewModel.signInUser(username = textUserName.value, password = textPassword.value)
                     }
                 },
                 shape = RoundedCornerShape(50),
