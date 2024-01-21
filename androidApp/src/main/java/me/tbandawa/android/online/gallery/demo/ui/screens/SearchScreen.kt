@@ -36,8 +36,7 @@ fun SearchScreen(
             topBar = {
                 NavigationToolbar(
                     "Search",
-                    navController,
-                    scrollBehavior
+                    navController
                 )
             },
             containerColor = Color.White

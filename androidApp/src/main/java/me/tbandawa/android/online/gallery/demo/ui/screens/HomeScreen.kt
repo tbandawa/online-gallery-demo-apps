@@ -46,10 +46,13 @@ fun MainNavigation(
             CreateScreen()
         }
         composable(route = "profile") {
-            ProfileScreen()
+            ProfileScreen(navController = navController)
         }
         composable(route = "search") {
             SearchScreen(navController = navController)
+        }
+        composable(route = "profile/edit") {
+            EditProfileScreen(navController = navController)
         }
         composable(route = "gallery/{id}") { backStackEntry ->
             val galleryId = backStackEntry.arguments?.getLong("id")
