@@ -33,7 +33,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -109,10 +108,15 @@ fun RegisterComponent(
                     isLoading = false
                     isError = true
 
+                    var errorMessage = ""
+                    for(message in error.messages!!) {
+                        errorMessage += "$message\n"
+                    }
+
                     MessageBox(
                         type = MessageType.ERROR,
                         title = error.error!!,
-                        message = error.messages.toString(),
+                        message = errorMessage,
                         visibility = isError
                     ) {
                         authViewModel.resetState()

@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -327,7 +328,7 @@ fun ProfileScreen(
             },
             frontLayerContent = {
                 Box(
-                    contentAlignment = Center,
+                    contentAlignment = TopCenter,
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
@@ -343,6 +344,16 @@ fun ProfileScreen(
                     }
                     if (isSuccess) {
                         Galleries(galleries = galleryList)
+                    }
+                    if (galleryList.isEmpty()) {
+                        Text(
+                            text = "No Galleries",
+                            style = TextStyle(
+                                color = Color(0xff024040),
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 16.sp
+                            )
+                        )
                     }
                 }
             }

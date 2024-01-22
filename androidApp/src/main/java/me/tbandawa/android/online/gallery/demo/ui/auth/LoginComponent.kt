@@ -102,10 +102,15 @@ fun LoginComponent(
                     isLoading = false
                     isError = true
 
+                    var errorMessage = ""
+                    for(message in error.messages!!) {
+                        errorMessage += "$message\n"
+                    }
+
                     MessageBox(
                         type = MessageType.ERROR,
                         title = error.error!!,
-                        message = error.messages.toString(),
+                        message = errorMessage,
                         visibility = isError
                     ) {
                         authViewModel.resetState()
