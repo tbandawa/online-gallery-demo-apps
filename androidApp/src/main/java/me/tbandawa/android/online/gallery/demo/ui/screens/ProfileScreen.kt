@@ -24,7 +24,6 @@ import androidx.compose.material.BackdropValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.rememberBackdropScaffoldState
@@ -35,7 +34,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -51,6 +54,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import kotlinx.coroutines.launch
+import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.Galleries
@@ -71,8 +75,24 @@ fun ProfileScreen(
         val profileViewModel: ProfileViewModel = koinViewModel()
         val profileState by profileViewModel.profileResource.collectAsState()
 
+        var isLoading by remember { mutableStateOf(false) }
+        var isSuccess by remember { mutableStateOf(false) }
+        var isError by remember { mutableStateOf(false) }
+
+        val photoUrl = remember { mutableStateOf("") }
+        val firstName = remember { mutableStateOf("") }
+        val lastName = remember { mutableStateOf("") }
+        val email = remember { mutableStateOf("") }
+        val galleryCount = remember { mutableIntStateOf(0) }
+        var galleryList = remember { listOf<Gallery>() }
+
         LaunchedEffect(Unit) {
             scope.launch {
+                val user = profileViewModel.getUserData()!!
+                firstName.value = user.firstname
+                lastName.value = user.lastname
+                email.value = user.email
+                photoUrl.value = user.profilePhoto.thumbnail!!
                 profileViewModel.getProfile()
             }
         }
@@ -80,218 +100,234 @@ fun ProfileScreen(
         val scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
 
         when (profileState) {
-            is ResourceState.Empty -> {}
             is ResourceState.Loading -> {
-                Text(
-                    text = "Loading..."
-                )
+                isLoading = true
+                isError = false
             }
             is ResourceState.Success -> {
-
                 val profile = (profileState as ResourceState.Success).data
+                galleryCount.intValue = profile.gallery.size
+                galleryList = profile.gallery
+                isLoading = false
+                isSuccess = true
+            }
+            is ResourceState.Error -> {
+                val error = (profileState as ResourceState.Error<*>).data!!
+                isLoading = false
+                isError = true
+            }
+            is ResourceState.Empty -> {
+                isLoading = false
+                isSuccess = false
+                isError = false
+            }
+        }
 
-                val profilePhoto = rememberImagePainter(
-                    data = profile.profilePhoto.thumbnail,
-                    builder = {
-                        crossfade(true)
-                    }
-                )
+        val profilePhoto = rememberImagePainter(
+            data = photoUrl.value,
+            builder = {
+                crossfade(true)
+            }
+        )
 
-                BackdropScaffold(
-                    scaffoldState = scaffoldState,
-                    peekHeight = BackdropScaffoldDefaults.PeekHeight,
-                    persistentAppBar = true,
-                    stickyFrontLayer = true,
-                    headerHeight = BackdropScaffoldDefaults.HeaderHeight,
-                    frontLayerShape = BackdropScaffoldDefaults.frontLayerShape,
-                    frontLayerElevation = 10.dp,
-                    frontLayerScrimColor = Color.Unspecified,
-                    frontLayerBackgroundColor = Color.White,
-                    backLayerBackgroundColor = Color.White,
-                    appBar =  {
-                        MainToolbar("Profile")
-                    },
-                    backLayerContent = {
+        BackdropScaffold(
+            scaffoldState = scaffoldState,
+            peekHeight = BackdropScaffoldDefaults.PeekHeight,
+            persistentAppBar = true,
+            stickyFrontLayer = true,
+            headerHeight = BackdropScaffoldDefaults.HeaderHeight,
+            frontLayerShape = BackdropScaffoldDefaults.frontLayerShape,
+            frontLayerElevation = 10.dp,
+            frontLayerScrimColor = Color.Unspecified,
+            frontLayerBackgroundColor = Color.White,
+            backLayerBackgroundColor = Color.White,
+            appBar =  {
+                MainToolbar("Profile")
+            },
+            backLayerContent = {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 5.dp)
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                ) {
+
+                    Image(
+                        painter = profilePhoto,
+                        contentDescription = "avatar",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(145.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, Color.Gray, CircleShape)
+                            .align(alignment = CenterHorizontally)
+                    )
+
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Text(
+                        text = "${firstName.value} ${lastName.value}",
+                        style = TextStyle(
+                            color = Color(0xff024040),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
+                        ),
+                        modifier = Modifier
+                            .padding(start = 0.dp, top = 10.dp)
+                            .align(alignment = CenterHorizontally)
+                    )
+
+                    Text(
+                        text = email.value,
+                        style = TextStyle(
+                            color = Color(0xff024040),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 18.sp
+                        ),
+                        modifier = Modifier
+                            .align(alignment = CenterHorizontally)
+                    )
+
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
                         Column(
-                            modifier = Modifier
-                                .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 5.dp)
-                                .wrapContentHeight()
-                                .fillMaxWidth()
+                            horizontalAlignment = CenterHorizontally
                         ) {
-
-                            Image(
-                                painter = profilePhoto,
-                                contentDescription = "avatar",
-                                contentScale = ContentScale.Crop,
+                            Card(
+                                shape = RoundedCornerShape(20.dp),
                                 modifier = Modifier
-                                    .size(145.dp)
-                                    .clip(CircleShape)
-                                    .border(2.dp, Color.Gray, CircleShape)
-                                    .align(alignment = CenterHorizontally)
-                            )
-
-                            Spacer(modifier = Modifier.height(15.dp))
-                            Text(
-                                text = "${profile.firstname} ${profile.lastname}",
-                                style = TextStyle(
-                                    color = Color(0xff024040),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 20.sp
-                                ),
-                                modifier = Modifier
-                                    .padding(start = 0.dp, top = 10.dp)
-                                    .align(alignment = CenterHorizontally)
-                            )
-
-                            Text(
-                                text = profile.email,
-                                style = TextStyle(
-                                    color = Color(0xff024040),
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = 18.sp
-                                ),
-                                modifier = Modifier
-                                    .align(alignment = CenterHorizontally)
-                            )
-
-                            Spacer(modifier = Modifier.height(5.dp))
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
+                                    .padding(10.dp)
                             ) {
-                                Column(
-                                    horizontalAlignment = CenterHorizontally
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Card(
-                                        shape = RoundedCornerShape(20.dp),
+                                    Text(
+                                        text = "${galleryCount.intValue}",
+                                        style = TextStyle(
+                                            color = Color(0xff024040),
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 14.sp
+                                        ),
                                         modifier = Modifier
-                                            .padding(10.dp)
+                                            .padding(start = 10.dp)
+                                    )
+                                    Text(
+                                        text = "Posts",
+                                        style = TextStyle(
+                                            color = Color(0xff024040),
+                                            fontWeight = FontWeight.Normal,
+                                            fontSize = 14.sp
+                                        ),
+                                        modifier = Modifier
+                                            .padding(start = 5.dp, end = 10.dp)
+                                    )
+
+                                    Box(
+                                        modifier = Modifier
+                                            .background(color = Color(0xff2596be))
+                                            .clickable {
+                                                navController.navigate("profile/edit")
+                                            }
+                                            .padding(
+                                                PaddingValues(
+                                                    horizontal = 5.dp,
+                                                    vertical = 5.dp
+                                                )
+                                            ),
+                                        contentAlignment = Alignment.Center
                                     ) {
                                         Row(
                                             horizontalArrangement = Arrangement.Center,
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Text(
-                                                text = "${profile.gallery.size}",
-                                                style = TextStyle(
-                                                    color = Color(0xff024040),
-                                                    fontWeight = FontWeight.Bold,
-                                                    fontSize = 14.sp
-                                                ),
+                                            Icon(
+                                                Icons.Default.Edit,
+                                                contentDescription = "Edit",
+                                                tint = Color.White,
                                                 modifier = Modifier
-                                                    .padding(start = 10.dp)
-                                            )
-                                            Text(
-                                                text = "Posts",
-                                                style = TextStyle(
-                                                    color = Color(0xff024040),
-                                                    fontWeight = FontWeight.Normal,
-                                                    fontSize = 14.sp
-                                                ),
-                                                modifier = Modifier
-                                                    .padding(start = 5.dp, end = 10.dp)
-                                            )
-
-                                            Box(
-                                                modifier = Modifier
-                                                    .background(color = Color(0xff2596be))
-                                                    .clickable {
-                                                        navController.navigate("profile/edit")
-                                                    }
+                                                    .size(25.dp)
                                                     .padding(
                                                         PaddingValues(
                                                             horizontal = 5.dp,
-                                                            vertical = 5.dp
+                                                            vertical = 0.dp
                                                         )
-                                                    ),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Row(
-                                                    horizontalArrangement = Arrangement.Center,
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    Icon(
-                                                        Icons.Default.Edit,
-                                                        contentDescription = "Edit",
-                                                        tint = Color.White,
-                                                        modifier = Modifier
-                                                            .size(25.dp)
-                                                            .padding(PaddingValues(horizontal = 5.dp, vertical = 0.dp))
                                                     )
-                                                    Text(
-                                                        text = "Edit",
-                                                        fontSize = 14.sp,
-                                                        color = Color.White,
-                                                        fontWeight = FontWeight.Normal,
-                                                        modifier = Modifier
-                                                            .padding(end = 5.dp)
-                                                    )
-                                                }
-                                            }
-
-                                            Box(
+                                            )
+                                            Text(
+                                                text = "Edit",
+                                                fontSize = 14.sp,
+                                                color = Color.White,
+                                                fontWeight = FontWeight.Normal,
                                                 modifier = Modifier
-                                                    .background(color = Color(0xffFf7878))
-                                                    .clip(
-                                                        RoundedCornerShape(
-                                                            topEnd = 30.dp,
-                                                            bottomEnd = 30.dp
-                                                        )
-                                                    )
-                                                    .clickable {
+                                                    .padding(end = 5.dp)
+                                            )
+                                        }
+                                    }
 
-                                                    }
+                                    Box(
+                                        modifier = Modifier
+                                            .background(color = Color(0xffFf7878))
+                                            .clip(
+                                                RoundedCornerShape(
+                                                    topEnd = 30.dp,
+                                                    bottomEnd = 30.dp
+                                                )
+                                            )
+                                            .clickable {
+
+                                            }
+                                            .padding(
+                                                PaddingValues(
+                                                    horizontal = 5.dp,
+                                                    vertical = 5.dp
+                                                )
+                                            ),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Row(
+                                            horizontalArrangement = Arrangement.Center,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                Icons.Default.ExitToApp,
+                                                contentDescription = "Logout",
+                                                tint = Color.White,
+                                                modifier = Modifier
+                                                    .size(25.dp)
                                                     .padding(
                                                         PaddingValues(
                                                             horizontal = 5.dp,
-                                                            vertical = 5.dp
+                                                            vertical = 0.dp
                                                         )
-                                                    ),
-                                                contentAlignment = Alignment.Center
-                                            ) {
-                                                Row(
-                                                    horizontalArrangement = Arrangement.Center,
-                                                    verticalAlignment = Alignment.CenterVertically
-                                                ) {
-                                                    Icon(
-                                                        Icons.Default.ExitToApp,
-                                                        contentDescription = "Logout",
-                                                        tint = Color.White,
-                                                        modifier = Modifier
-                                                            .size(25.dp)
-                                                            .padding(PaddingValues(horizontal = 5.dp, vertical = 0.dp))
                                                     )
-                                                    Text(
-                                                        text = "Logout",
-                                                        fontSize = 14.sp,
-                                                        color = Color.White,
-                                                        fontWeight = FontWeight.Normal,
-                                                        modifier = Modifier
-                                                            .padding(end = 5.dp)
-                                                    )
-                                                }
-                                            }
+                                            )
+                                            Text(
+                                                text = "Logout",
+                                                fontSize = 14.sp,
+                                                color = Color.White,
+                                                fontWeight = FontWeight.Normal,
+                                                modifier = Modifier
+                                                    .padding(end = 5.dp)
+                                            )
                                         }
                                     }
                                 }
                             }
-
-                            Spacer(modifier = Modifier.height(25.dp))
-
                         }
-                    },
-                    frontLayerContent = {
-                        Galleries(galleries = profile.gallery)
                     }
-                )
+
+                    Spacer(modifier = Modifier.height(25.dp))
+
+                }
+            },
+            frontLayerContent = {
+                Galleries(galleries = galleryList)
             }
-            is ResourceState.Error -> {
-                Text(
-                    text = "Error!"
-                )
-            }
-        }
+        )
     }
 }
 
