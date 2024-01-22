@@ -23,12 +23,6 @@ class ProfileViewModel(
     private val _userResource = MutableStateFlow<ResourceState<User>>(ResourceState.Empty)
     val userResource: StateFlow<ResourceState<User>> get() = _userResource
 
-    init {
-        coroutineScope.launch {
-            _userResource.value = ResourceState.Success(galleryRepository.getUser()!!)
-        }
-    }
-
     fun getUserData(): User? = galleryRepository.getUser()
 
     fun getProfile() {
@@ -73,5 +67,9 @@ class ProfileViewModel(
                 _userResource.value = results
             }
         }
+    }
+
+    fun resetState() {
+        _userResource.value = ResourceState.Empty
     }
 }

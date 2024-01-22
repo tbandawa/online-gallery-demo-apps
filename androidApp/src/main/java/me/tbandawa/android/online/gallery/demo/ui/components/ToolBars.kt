@@ -161,7 +161,7 @@ fun NavigationToolbar(
                         start.linkTo(parent.start)
                     }
             ) {
-                androidx.compose.material.Icon(
+                Icon(
                     painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = "Back",
                     modifier = Modifier
@@ -170,7 +170,7 @@ fun NavigationToolbar(
             }
 
             //Title
-            androidx.compose.material.Text(
+            Text(
                 modifier = Modifier
                     .width(IntrinsicSize.Max)
                     .constrainAs(titleText) {

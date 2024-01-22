@@ -59,6 +59,7 @@ import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
+import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -72,31 +73,25 @@ fun EditProfileScreen(
 
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
+    var isSuccess by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
 
-    var profilePhoto = rememberImagePainter(
-        data = null,
-        builder = {
-            crossfade(true)
-        }
-    )
-
-    var photoUrl = remember { mutableStateOf("") }
-    var textFirstName = remember { mutableStateOf("") }
-    var textLastName = remember { mutableStateOf("") }
-    var textUserName = remember { mutableStateOf("") }
-    var textEmail = remember { mutableStateOf("") }
-    var textPassword = remember { mutableStateOf("") }
+    val photoUrl = remember { mutableStateOf("") }
+    val textFirstName = remember { mutableStateOf("") }
+    val textLastName = remember { mutableStateOf("") }
+    val textUserName = remember { mutableStateOf("") }
+    val textEmail = remember { mutableStateOf("") }
+    val textPassword = remember { mutableStateOf("") }
 
     var isFirstNameValid by remember { mutableStateOf(true) }
     var isLastNameValid by remember { mutableStateOf(true) }
-    var isUserNameValid by remember { mutableStateOf(true) }
-    var isEmailValid by remember { mutableStateOf(true) }
+    val isUserNameValid by remember { mutableStateOf(true) }
+    val isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         scope.launch {
-            val user = (userState as ResourceState.Success).data
+            val user = profileViewModel.getUserData()!!
             textFirstName.value = user.firstname
             textLastName.value = user.lastname
             textUserName.value = user.username
@@ -111,8 +106,34 @@ fun EditProfileScreen(
     ) {
 
         Scaffold(
-            topBar = { NavigationToolbar("Edit Profile", navController) }
+            topBar = { NavigationToolbar("Edit Profile", navController) },
+            containerColor = Color.White
         ) {
+
+            when(userState) {
+                is ResourceState.Loading -> {
+                    isLoading = true
+                    isError = false
+                }
+                is ResourceState.Success -> {
+                    isLoading = false
+                    isSuccess = true
+                }
+                is ResourceState.Error -> {
+                    val error = (userState as ResourceState.Error<*>).data!!
+                    isLoading = false
+                    isError = true
+                }
+                is ResourceState.Empty -> {
+                    isLoading = false
+                    isSuccess = false
+                    isError = false
+                }
+            }
+
+            SuccessDialog(showDialog = isSuccess, message = "Changes Successfully Saved") {
+                profileViewModel.resetState()
+            }
 
             ConstraintLayout(
                 modifier = Modifier
@@ -186,6 +207,7 @@ fun EditProfileScreen(
                     TextField(
                         value = textFirstName.value,
                         singleLine = true,
+                        enabled = !isLoading,
                         onValueChange = { input ->
                             textFirstName.value = input
                             isFirstNameValid = input.isNotBlank()
@@ -368,13 +390,13 @@ fun EditProfileScreen(
                         isLastNameValid = textLastName.value.isNotBlank()
                         isPasswordValid = textPassword.value.isNotBlank()
                         if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
-                            /*authViewModel.signUpUser(
-                                firstname = textFirstName.text,
-                                lastname = textLastName.text,
-                                username = textUserName.text,
-                                email = textEmail.text,
-                                password = textPassword.text
-                            )*/
+                            profileViewModel.editUser(
+                                firstname = textFirstName.value,
+                                lastname = textLastName.value,
+                                username = textUserName.value,
+                                email = textEmail.value,
+                                password = textPassword.value
+                            )
                         }
                     },
                     shape = RoundedCornerShape(50),

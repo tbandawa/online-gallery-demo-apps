@@ -63,7 +63,8 @@ fun ProfileScreen(
     navController: NavController
 ) {
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
     ) {
 
         val scope = rememberCoroutineScope()
@@ -222,7 +223,9 @@ fun ProfileScreen(
                                                         text = "Edit",
                                                         fontSize = 14.sp,
                                                         color = Color.White,
-                                                        fontWeight = FontWeight.Normal
+                                                        fontWeight = FontWeight.Normal,
+                                                        modifier = Modifier
+                                                            .padding(end = 5.dp)
                                                     )
                                                 }
                                             }
@@ -233,7 +236,7 @@ fun ProfileScreen(
                                                     .clip(
                                                         RoundedCornerShape(
                                                             topEnd = 30.dp,
-                                                            bottomStart = 30.dp
+                                                            bottomEnd = 30.dp
                                                         )
                                                     )
                                                     .clickable {
@@ -263,7 +266,9 @@ fun ProfileScreen(
                                                         text = "Logout",
                                                         fontSize = 14.sp,
                                                         color = Color.White,
-                                                        fontWeight = FontWeight.Normal
+                                                        fontWeight = FontWeight.Normal,
+                                                        modifier = Modifier
+                                                            .padding(end = 5.dp)
                                                     )
                                                 }
                                             }
