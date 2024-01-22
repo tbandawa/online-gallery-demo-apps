@@ -372,6 +372,7 @@ fun EditProfileScreen(
                                 IconButton(onClick = { showPassword = false }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_visibility_on),
+                                        tint = Color(0xff024040),
                                         contentDescription = "Show Password"
                                     )
                                 }
@@ -379,6 +380,7 @@ fun EditProfileScreen(
                                 IconButton(onClick = { showPassword = true }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_visibility_off),
+                                        tint = Color(0xff024040),
                                         contentDescription = "Hide Password"
                                     )
                                 }
