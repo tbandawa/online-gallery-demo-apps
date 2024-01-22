@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,8 +60,8 @@ fun CreateScreen(
     var isLoading by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    val textTitle = remember { mutableStateOf("") }
-    val textDescription = remember { mutableStateOf("") }
+    val textTitle = rememberSaveable { mutableStateOf("") }
+    val textDescription = rememberSaveable { mutableStateOf("") }
 
     var isTitleValid by remember { mutableStateOf(true) }
     var isDescriptionValid by remember { mutableStateOf(true) }
