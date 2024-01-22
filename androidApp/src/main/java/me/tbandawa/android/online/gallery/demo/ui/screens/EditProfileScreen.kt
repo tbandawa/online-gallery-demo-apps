@@ -166,6 +166,8 @@ fun EditProfileScreen(
                             data = photoUrl.value,
                             builder = {
                                 crossfade(true)
+                                placeholder(R.drawable.ic_user)
+                                error(R.drawable.ic_user)
                             }
                         )
                         Image(
@@ -175,7 +177,6 @@ fun EditProfileScreen(
                             modifier = Modifier
                                 .size(145.dp)
                                 .clip(CircleShape)
-                                .border(2.dp, Color.Gray, CircleShape)
                                 .constrainAs(avatarView) {
                                     top.linkTo(parent.top)
                                 }

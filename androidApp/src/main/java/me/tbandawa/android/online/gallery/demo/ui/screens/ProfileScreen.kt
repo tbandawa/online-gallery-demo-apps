@@ -56,6 +56,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import kotlinx.coroutines.launch
+import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
@@ -129,6 +130,8 @@ fun ProfileScreen(
             data = photoUrl.value,
             builder = {
                 crossfade(true)
+                placeholder(R.drawable.ic_user)
+                error(R.drawable.ic_user)
             }
         )
 
@@ -161,7 +164,6 @@ fun ProfileScreen(
                         modifier = Modifier
                             .size(145.dp)
                             .clip(CircleShape)
-                            .border(2.dp, Color.Gray, CircleShape)
                             .align(alignment = CenterHorizontally)
                     )
 
@@ -333,27 +335,33 @@ fun ProfileScreen(
                         .fillMaxSize()
                 ) {
                     if (isLoading) {
-                        Text(
-                            text = "Loading",
-                            style = TextStyle(
-                                color = Color(0xff024040),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 16.sp
+                        Column {
+                            Spacer(modifier = Modifier.height(90.dp))
+                            Text(
+                                text = "Loading",
+                                style = TextStyle(
+                                    color = Color(0xff024040),
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 16.sp
+                                )
                             )
-                        )
+                        }
                     }
                     if (isSuccess) {
                         Galleries(galleries = galleryList)
                     }
                     if (galleryList.isEmpty()) {
-                        Text(
-                            text = "No Galleries",
-                            style = TextStyle(
-                                color = Color(0xff024040),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 16.sp
+                        Column {
+                            Spacer(modifier = Modifier.height(90.dp))
+                            Text(
+                                text = "No Galleries",
+                                style = TextStyle(
+                                    color = Color(0xff024040),
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 16.sp
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
