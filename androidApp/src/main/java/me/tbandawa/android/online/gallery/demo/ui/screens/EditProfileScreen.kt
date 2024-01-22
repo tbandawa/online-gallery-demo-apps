@@ -72,8 +72,8 @@ fun EditProfileScreen(
     val userState by profileViewModel.userResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
-    var isError by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
 
     val photoUrl = remember { mutableStateOf("") }

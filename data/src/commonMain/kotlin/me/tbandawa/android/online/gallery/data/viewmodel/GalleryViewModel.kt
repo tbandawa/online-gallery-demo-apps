@@ -25,4 +25,8 @@ class GalleryViewModel(
             }
         }
     }
+
+    fun resetState() {
+        _galleryResource.value = ResourceState.Empty
+    }
 }

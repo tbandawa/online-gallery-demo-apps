@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,8 +39,8 @@ import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
+import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.util.*
@@ -58,9 +57,10 @@ fun CreateScreen(
     val galleryState by galleryViewModel.galleryResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
+    var isSuccess by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var textTitle = remember { mutableStateOf("") }
-    var textDescription = remember { mutableStateOf("") }
+    val textTitle = remember { mutableStateOf("") }
+    val textDescription = remember { mutableStateOf("") }
 
     var isTitleValid by remember { mutableStateOf(true) }
     var isDescriptionValid by remember { mutableStateOf(true) }
@@ -70,19 +70,32 @@ fun CreateScreen(
         selectedUris += uriList
     }
 
-    when (galleryState) {
-        is ResourceState.Empty -> {}
+    when(galleryState) {
         is ResourceState.Loading -> {
-            Timber.d("loading -----------")
+            isLoading = true
+            isError = false
         }
         is ResourceState.Success -> {
-            val success = (galleryState as ResourceState.Success<*>).data!!
-            Timber.d("success => $success")
+            isLoading = false
+            isSuccess = true
         }
         is ResourceState.Error -> {
             val error = (galleryState as ResourceState.Error<*>).data!!
-            Timber.d("error => $error")
+            isLoading = false
+            isError = true
         }
+        is ResourceState.Empty -> {
+            isLoading = false
+            isSuccess = false
+            isError = false
+        }
+    }
+
+    SuccessDialog(showDialog = isSuccess, message = "Gallery Successfully Created") {
+        textTitle.value = ""
+        textDescription.value = ""
+        selectedUris = emptyList()
+        galleryViewModel.resetState()
     }
 
     Surface(
@@ -247,7 +260,8 @@ fun CreateScreen(
                             galleryLauncher.launch("image/*")
                         },
                         modifier = Modifier
-                            .height(35.dp)
+                            .height(35.dp),
+                        enabled = !isLoading
                     ) {
                         Image(
                             painterResource(id = R.drawable.ic_add),
@@ -278,14 +292,14 @@ fun CreateScreen(
                             }
                         },
                         shape = RoundedCornerShape(25),
-                        enabled = selectedUris.isNotEmpty()
+                        enabled = selectedUris.isNotEmpty() || isLoading
                     ) {
                         Image(
                             painterResource(id = R.drawable.ic_upload),
                             contentDescription ="Upload",
                             modifier = Modifier.size(20.dp))
                         Text(
-                            text = "Upload",
+                            text = if (isLoading) "Uploading" else "Upload",
                             Modifier
                                 .padding(start = 10.dp)
                         )
@@ -359,9 +373,9 @@ fun convertImageToByte(context: Context, uri: Uri?): ByteArray? {
         val cr: ContentResolver = context.contentResolver
         val inputStream = cr.openInputStream(uri!!)
         val bitmap = BitmapFactory.decodeStream(inputStream)
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        data = baos.toByteArray()
+        val byteArrayOutput = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutput)
+        data = byteArrayOutput.toByteArray()
     } catch (e: FileNotFoundException) {
         e.printStackTrace()
     }
