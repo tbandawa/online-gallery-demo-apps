@@ -40,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -325,7 +326,25 @@ fun ProfileScreen(
                 }
             },
             frontLayerContent = {
-                Galleries(galleries = galleryList)
+                Box(
+                    contentAlignment = Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    if (isLoading) {
+                        Text(
+                            text = "Loading",
+                            style = TextStyle(
+                                color = Color(0xff024040),
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 16.sp
+                            )
+                        )
+                    }
+                    if (isSuccess) {
+                        Galleries(galleries = galleryList)
+                    }
+                }
             }
         )
     }
