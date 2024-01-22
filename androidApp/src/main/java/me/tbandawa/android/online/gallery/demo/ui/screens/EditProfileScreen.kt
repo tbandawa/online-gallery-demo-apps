@@ -23,6 +23,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -100,63 +101,65 @@ fun EditProfileScreen(
         }
     }
 
+    when(userState) {
+        is ResourceState.Loading -> {
+            isLoading = true
+            isError = false
+        }
+        is ResourceState.Success -> {
+            isLoading = false
+            isSuccess = true
+        }
+        is ResourceState.Error -> {
+            val error = (userState as ResourceState.Error<*>).data!!
+            isLoading = false
+            isError = true
+        }
+        is ResourceState.Empty -> {
+            isLoading = false
+            isSuccess = false
+            isError = false
+        }
+    }
+
+    SuccessDialog(showDialog = isSuccess, message = "Changes Successfully Saved") {
+        profileViewModel.resetState()
+    }
+
     Surface(
         modifier = Modifier
-            .padding(bottom = 16.dp, start = 15.dp, end = 15.dp)
+            .fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
 
         Scaffold(
-            topBar = { NavigationToolbar("Edit Profile", navController) },
+            topBar = {
+                NavigationToolbar(
+                    "Edit Profile", navController
+                )
+            },
             containerColor = Color.White
-        ) {
-
-            when(userState) {
-                is ResourceState.Loading -> {
-                    isLoading = true
-                    isError = false
-                }
-                is ResourceState.Success -> {
-                    isLoading = false
-                    isSuccess = true
-                }
-                is ResourceState.Error -> {
-                    val error = (userState as ResourceState.Error<*>).data!!
-                    isLoading = false
-                    isError = true
-                }
-                is ResourceState.Empty -> {
-                    isLoading = false
-                    isSuccess = false
-                    isError = false
-                }
-            }
-
-            SuccessDialog(showDialog = isSuccess, message = "Changes Successfully Saved") {
-                profileViewModel.resetState()
-            }
+        ) { it ->
 
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(it)
             ) {
 
                 val (inputLayout, saveButton) = createRefs()
 
                 Column(
                     modifier = Modifier
-                        .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 5.dp)
-                        .wrapContentHeight()
-                        .fillMaxWidth()
                         .constrainAs(inputLayout) {
                             top.linkTo(parent.top)
                         }
+                        .padding(it)
+                        .padding(16.dp)
                 ) {
 
                     ConstraintLayout(
                         modifier = Modifier
                             .align(alignment = CenterHorizontally)
-                            .padding(it)
                     ) {
                         val (editButton, avatarView) = createRefs()
                         val profilePhoto = rememberImagePainter(

@@ -54,7 +54,6 @@ fun ToolBar(
 fun MainToolbar(
     title: String
 ) {
-
     TopAppBar(
         backgroundColor = Color.Transparent,
         elevation = 0.dp,
@@ -99,7 +98,6 @@ fun MainToolbar(
             }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -130,63 +128,71 @@ fun HomeToolBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationToolbar(
     title: String,
     navController: NavController
 ) {
-    //TopAppBar Content
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(1f)
-            .height(32.dp)
-    ) {
+    TopAppBar(
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        modifier= Modifier
+            .background(color = Color.White)
+            .fillMaxWidth(),
 
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxWidth(1f)
         ) {
 
-            val (navigationIcon, titleText, _) = createRefs()
+        //TopAppBar Content
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .height(32.dp)
+        ) {
 
-            //Navigation Icon
-            androidx.compose.material.IconButton(
-                onClick = {
-                    navController.navigateUp()
-                },
-                enabled = true,
+            ConstraintLayout(
                 modifier = Modifier
-                    .constrainAs(navigationIcon) {
-                        start.linkTo(parent.start)
-                    }
+                    .fillMaxWidth(1f)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = "Back",
+
+                val (navigationIcon, titleText, _) = createRefs()
+
+                //Navigation Icon
+                androidx.compose.material.IconButton(
+                    onClick = {
+                        navController.navigateUp()
+                    },
+                    enabled = true,
                     modifier = Modifier
-                        .size(20.dp)
+                        .constrainAs(navigationIcon) {
+                            start.linkTo(parent.start)
+                        }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .size(20.dp)
+                    )
+                }
+
+                //Title
+                androidx.compose.material.Text(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
+                        .constrainAs(titleText) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        },
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    text = title,
+                    style = TextStyle(
+                        color = Color(0xff024040),
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 22.sp
+                    )
                 )
             }
-
-            //Title
-            Text(
-                modifier = Modifier
-                    .width(IntrinsicSize.Max)
-                    .constrainAs(titleText) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                text = title,
-                style = TextStyle(
-                    color = Color(0xff024040),
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 22.sp
-                )
-            )
-
         }
     }
 }
