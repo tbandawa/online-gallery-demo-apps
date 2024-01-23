@@ -1,5 +1,8 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -43,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,6 +66,7 @@ import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
+import me.tbandawa.android.online.gallery.demo.ui.components.ProfilePictureDialog
 import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
 import org.koin.androidx.compose.koinViewModel
 
@@ -69,13 +75,19 @@ fun EditProfileScreen(
     navController: NavController
 ) {
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val profileViewModel: ProfileViewModel = koinViewModel()
     val userState by profileViewModel.userResource.collectAsState()
+    val profilePhotoState by profileViewModel.profilePhotoResource.collectAsState()
 
-    var isLoading by remember { mutableStateOf(false) }
-    var isSuccess by remember { mutableStateOf(false) }
-    var isError by remember { mutableStateOf(false) }
+    var isEditPhotoLoading by remember { mutableStateOf(false) }
+    var isEditPhotoSuccess by remember { mutableStateOf(false) }
+    var isEditPhotoError by remember { mutableStateOf(false) }
+
+    var isEditUserLoading by remember { mutableStateOf(false) }
+    var isEditUserSuccess by remember { mutableStateOf(false) }
+    var isEditUserError by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
 
     val photoUrl = remember { mutableStateOf("") }
@@ -91,6 +103,16 @@ fun EditProfileScreen(
     val isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
 
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            uri?.let {
+                imageUri = it
+            }
+        }
+    )
+
     LaunchedEffect(Unit) {
         scope.launch {
             val user = profileViewModel.getUserData()!!
@@ -104,28 +126,68 @@ fun EditProfileScreen(
 
     when(userState) {
         is ResourceState.Loading -> {
-            isLoading = true
-            isError = false
+            isEditUserLoading = true
+            isEditUserError = false
         }
         is ResourceState.Success -> {
-            isLoading = false
-            isSuccess = true
+            isEditUserLoading = false
+            isEditUserSuccess = true
         }
         is ResourceState.Error -> {
             val error = (userState as ResourceState.Error<*>).data!!
-            isLoading = false
-            isError = true
+            isEditUserLoading = false
+            isEditUserError = true
         }
         is ResourceState.Empty -> {
-            isLoading = false
-            isSuccess = false
-            isError = false
+            isEditUserLoading = false
+            isEditUserSuccess = false
+            isEditUserError = false
         }
     }
 
-    SuccessDialog(showDialog = isSuccess, message = "Changes Successfully Saved") {
+    when(profilePhotoState) {
+        is ResourceState.Loading -> {
+            isEditPhotoLoading = true
+            isEditPhotoError = false
+        }
+        is ResourceState.Success -> {
+            isEditPhotoLoading = false
+            isEditPhotoSuccess = true
+            imageUri = null
+        }
+        is ResourceState.Error -> {
+            val error = (profilePhotoState as ResourceState.Error<*>).data!!
+            isEditPhotoLoading = false
+            isEditPhotoError = true
+        }
+        is ResourceState.Empty -> {
+            isEditPhotoLoading = false
+            isEditPhotoSuccess = false
+            isEditPhotoError = false
+        }
+    }
+
+    SuccessDialog(showDialog = isEditUserSuccess, message = "Changes Successfully Saved") {
         profileViewModel.resetState()
     }
+
+    SuccessDialog(showDialog = isEditPhotoSuccess, message = "Changes Successfully Saved") {
+        profileViewModel.resetState()
+    }
+
+    ProfilePictureDialog(
+        uri = imageUri,
+        isLoading = isEditPhotoLoading,
+        { uri ->
+            profileViewModel.uploadProfilePicture(
+                photoTitle = getFileNameFromUri(context, uri)!!,
+                photoBytes = convertImageToByte(context, uri)!!
+            )
+        },
+        {
+            imageUri = null
+        }
+    )
 
     Surface(
         modifier = Modifier
@@ -189,7 +251,7 @@ fun EditProfileScreen(
                             )
                             Button(
                                 onClick = {
-
+                                    galleryLauncher.launch("image/*")
                                 },
                                 modifier= Modifier
                                     .size(40.dp)
@@ -206,7 +268,7 @@ fun EditProfileScreen(
                                 )
                             ) {
                                 Icon(
-                                    Icons.Default.Add,
+                                    Icons.Default.Edit,
                                     contentDescription = "Edit Profile Picture",
                                     tint = Color.White
                                 )
@@ -217,7 +279,7 @@ fun EditProfileScreen(
                         TextField(
                             value = textFirstName.value,
                             singleLine = true,
-                            enabled = !isLoading,
+                            enabled = !isEditUserLoading,
                             onValueChange = { input ->
                                 textFirstName.value = input
                                 isFirstNameValid = input.isNotBlank()
@@ -250,7 +312,7 @@ fun EditProfileScreen(
                         TextField(
                             value = textLastName.value,
                             singleLine = true,
-                            enabled = !isLoading,
+                            enabled = !isEditUserLoading,
                             onValueChange = { input ->
                                 textLastName.value = input
                                 isLastNameValid = input.isNotBlank()
@@ -340,7 +402,7 @@ fun EditProfileScreen(
                         TextField(
                             value = textPassword.value,
                             singleLine = true,
-                            enabled = !isLoading,
+                            enabled = !isEditUserLoading,
                             onValueChange = { input ->
                                 textPassword.value = input
                                 isPasswordValid = input.isNotBlank()
@@ -425,7 +487,7 @@ fun EditProfileScreen(
                             containerColor = Color(0xff024040)
                         )
                     ){
-                        if (isLoading) {
+                        if (isEditUserLoading) {
                             CircularProgressIndicator(
                                 modifier = Modifier
                                     .size(21.dp),

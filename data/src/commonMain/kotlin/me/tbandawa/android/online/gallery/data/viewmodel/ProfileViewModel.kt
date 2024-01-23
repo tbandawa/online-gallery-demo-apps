@@ -71,5 +71,6 @@ class ProfileViewModel(
 
     fun resetState() {
         _userResource.value = ResourceState.Empty
+        _profilePhotoResource.value = ResourceState.Empty
     }
 }
