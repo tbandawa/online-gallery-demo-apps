@@ -13,6 +13,9 @@ insertUser:
 INSERT INTO UserData(id, token, firstname, lastname, username, email, thumbnailUrl, imageUrl)
 VALUES(?, ?, ?, ?, ?, ?, ?, ?);
 
+updatePhoto:
+UPDATE UserData SET thumbnailUrl = ?, imageUrl = ? WHERE id = ?;
+
 getUser:
 SELECT UserData.*
 FROM UserData;

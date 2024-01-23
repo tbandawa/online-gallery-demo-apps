@@ -26,6 +26,12 @@ internal class Database(sqlDriver: SqlDriver) {
         }
     }
 
+    internal fun updatePhoto(id: Long, thumbnailUUrl: String, imageUrl: String) {
+        dbQuery.transaction { 
+            dbQuery.updatePhoto(thumbnailUUrl, imageUrl, id)
+        }
+    }
+
     internal fun getUser(): User? {
         val userData = dbQuery.getUser().executeAsOneOrNull()
         return userData?.let { mapUser(it) }

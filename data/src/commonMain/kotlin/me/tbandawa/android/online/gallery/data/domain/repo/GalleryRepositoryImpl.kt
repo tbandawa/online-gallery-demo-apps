@@ -89,6 +89,13 @@ class GalleryRepositoryImpl(
         emit(ResourceState.Loading)
         emit(handleApiCall {
             profilePhotoMapper.mapToModel(galleryApi.uploadProfilePicture(user!!.token, photoTitle, photoBytes))
+        }.also { results ->
+            if (results is ResourceState.Success) {
+                database.updatePhoto(
+                    user!!.id, results.data.thumbnail!!,
+                    results.data.image!!
+                )
+            }
         })
     }.flowOn(Dispatchers.Main)
 
