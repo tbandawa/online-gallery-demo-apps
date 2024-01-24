@@ -1,6 +1,5 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,8 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
+import coil.request.CachePolicy
 import coil.request.ImageRequest
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
@@ -128,14 +126,6 @@ fun ProfileScreen(
             }
         }
 
-        val profilePhoto = rememberAsyncImagePainter(
-            ImageRequest.Builder(LocalContext.current).data(data = photoUrl.value).apply(block = fun ImageRequest.Builder.() {
-                crossfade(true)
-                placeholder(R.drawable.ic_user)
-                error(R.drawable.ic_user)
-            }).build()
-        )
-
         BackdropScaffold(
             scaffoldState = scaffoldState,
             peekHeight = BackdropScaffoldDefaults.PeekHeight,
@@ -158,9 +148,19 @@ fun ProfileScreen(
                         .fillMaxWidth()
                 ) {
 
-                    Image(
-                        painter = profilePhoto,
-                        contentDescription = "avatar",
+                    val imageRequest = ImageRequest.Builder(LocalContext.current)
+                        .data(data = profileViewModel.getUserData()!!.profilePhoto.thumbnail)
+                        .diskCachePolicy(CachePolicy.DISABLED)
+                        .memoryCachePolicy(CachePolicy.DISABLED)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                            placeholder(R.drawable.ic_user)
+                            error(R.drawable.ic_user)
+                        }).build()
+
+                    AsyncImage(
+                        model = imageRequest,
+                        contentDescription = "Profile Photo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(145.dp)

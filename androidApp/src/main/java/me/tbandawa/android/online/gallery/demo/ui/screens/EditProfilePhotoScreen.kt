@@ -37,7 +37,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import kotlinx.coroutines.launch
+import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
@@ -73,7 +76,7 @@ fun EditProfilePhotoScreen(
     LaunchedEffect(Unit) {
         scope.launch {
             val user = profileViewModel.getUserData()!!
-            photoUrl = user.profilePhoto.thumbnail!!
+            photoUrl = user.profilePhoto.image!!
         }
     }
 
@@ -83,9 +86,9 @@ fun EditProfilePhotoScreen(
             isError = false
         }
         is ResourceState.Success -> {
-            //val profilePhoto = (profilePhotoState as ResourceState.Success).data
-            //photoUri = null
-            //photoUrl = profilePhoto.thumbnail!!
+            val profilePhoto = (profilePhotoState as ResourceState.Success).data
+            photoUri = null
+            photoUrl = profilePhoto.image!!
             isLoading = false
             isSuccess = true
         }
@@ -103,8 +106,8 @@ fun EditProfilePhotoScreen(
 
     SuccessDialog(showDialog = isSuccess, message = "Changes Successfully Saved") {
         val user = profileViewModel.getUserData()!!
-        //photoUri = null
-        //photoUrl = user.profilePhoto.thumbnail.toString()
+        photoUri = null
+        photoUrl = user.profilePhoto.image.toString()
         profileViewModel.resetState()
     }
 
@@ -132,9 +135,19 @@ fun EditProfilePhotoScreen(
 
                 val (photoLayout, controlLayout) = createRefs()
 
+                val imageRequest = ImageRequest.Builder(LocalContext.current)
+                    .data(data = if (photoUri != null) photoUri else photoUrl)
+                    .diskCachePolicy(CachePolicy.DISABLED)
+                    .memoryCachePolicy(CachePolicy.DISABLED)
+                    .apply(block = fun ImageRequest.Builder.() {
+                        crossfade(true)
+                        placeholder(R.drawable.ic_user)
+                        error(R.drawable.ic_user)
+                    }).build()
+
                 AsyncImage(
-                    model = if (photoUri != null) photoUri else photoUrl,
-                    contentDescription = "",
+                    model = imageRequest,
+                    contentDescription = "Profile Photo",
                     modifier = Modifier
                         .constrainAs(photoLayout) {
                             start.linkTo(parent.start)

@@ -1,10 +1,6 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -60,7 +56,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.compose.rememberImagePainter
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import kotlinx.coroutines.launch
@@ -69,9 +64,7 @@ import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
-import okhttp3.Dispatcher
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
 
 @Composable
 fun EditProfileScreen(
@@ -103,7 +96,6 @@ fun EditProfileScreen(
     LaunchedEffect(Unit) {
         scope.launch {
             val user = profileViewModel.getUserData()!!
-            Timber.d("EditProfileScreen, photo from db => ${user.profilePhoto.thumbnail}")
             textFirstName.value = user.firstname
             textLastName.value = user.lastname
             textUserName.value = user.username
@@ -179,14 +171,19 @@ fun EditProfileScreen(
                         ) {
                             val (editButton, avatarView) = createRefs()
 
+
                             val imageRequest = ImageRequest.Builder(LocalContext.current)
-                                .data(profileViewModel.getUserData()?.profilePhoto?.thumbnail)
+                                .data(data = photoUrl)
                                 .diskCachePolicy(CachePolicy.DISABLED)
                                 .memoryCachePolicy(CachePolicy.DISABLED)
-                                .build()
+                                .apply(block = fun ImageRequest.Builder.() {
+                                    crossfade(true)
+                                    placeholder(R.drawable.ic_user)
+                                    error(R.drawable.ic_user)
+                                }).build()
 
                             AsyncImage(
-                                model = imageRequest /*profileViewModel.getUserData()!!.profilePhoto.thumbnail!!*/,
+                                model = imageRequest,
                                 contentDescription = "Profile Photo",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -196,17 +193,7 @@ fun EditProfileScreen(
                                         top.linkTo(parent.top)
                                     }
                             )
-                            /*Image(
-                                painter = profilePhoto,
-                                contentDescription = "Profile Photo",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(145.dp)
-                                    .clip(CircleShape)
-                                    .constrainAs(avatarView) {
-                                        top.linkTo(parent.top)
-                                    }
-                            )*/
+
                             Button(
                                 onClick = {
                                     navController.navigate("profile/photo")
