@@ -34,7 +34,24 @@ fun Galleries(
             .padding(start = 5.dp, end = 5.dp)
     ) {
         items(galleries) { gallery ->
-            Column {
+            Column(
+                modifier = Modifier
+                    .padding(bottom = 15.dp)
+            ) {
+                LazyRow {
+                    items(gallery.images) { image ->
+                        AsyncImage(
+                            model = image.thumbnail,
+                            contentDescription = "Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(top = 5.dp, end = 10.dp, bottom = 5.dp)
+                                .height(145.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                                .align(alignment = Alignment.CenterHorizontally)
+                        )
+                    }
+                }
                 Text(
                     text = gallery.title,
                     style = TextStyle(
@@ -43,20 +60,6 @@ fun Galleries(
                         fontSize = 16.sp
                     )
                 )
-                LazyRow {
-                    items(gallery.images) { image ->
-                        AsyncImage(
-                            model = image.thumbnail,
-                            contentDescription = "Image",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .padding(top = 5.dp, end = 10.dp, bottom = 20.dp)
-                                .height(145.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                                .align(alignment = Alignment.CenterHorizontally)
-                        )
-                    }
-                }
             }
         }
     }
