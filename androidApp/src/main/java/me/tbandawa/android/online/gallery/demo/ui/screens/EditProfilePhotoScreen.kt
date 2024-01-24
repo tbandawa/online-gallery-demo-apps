@@ -36,17 +36,17 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
+import coil.imageLoader
 import kotlinx.coroutines.launch
-import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun EditProfilePhotoScreen(
     navController: NavController
@@ -135,18 +135,8 @@ fun EditProfilePhotoScreen(
 
                 val (photoLayout, controlLayout) = createRefs()
 
-                val imageRequest = ImageRequest.Builder(LocalContext.current)
-                    .data(data = if (photoUri != null) photoUri else photoUrl)
-                    .diskCachePolicy(CachePolicy.DISABLED)
-                    .memoryCachePolicy(CachePolicy.DISABLED)
-                    .apply(block = fun ImageRequest.Builder.() {
-                        crossfade(true)
-                        placeholder(R.drawable.ic_user)
-                        error(R.drawable.ic_user)
-                    }).build()
-
                 AsyncImage(
-                    model = imageRequest,
+                    model = if (photoUri != null) photoUri else photoUrl,
                     contentDescription = "Profile Photo",
                     modifier = Modifier
                         .constrainAs(photoLayout) {
@@ -188,6 +178,10 @@ fun EditProfilePhotoScreen(
                     if (photoUri != null) {
                         FilledTonalButton(
                             onClick = {
+
+                                context.imageLoader.diskCache?.clear()
+                                context.imageLoader.memoryCache?.clear()
+
                                 profileViewModel.uploadProfilePicture(
                                     photoTitle = getFileNameFromUri(context, photoUri!!)!!,
                                     photoBytes = getBytesFromUri(context, photoUri)!!

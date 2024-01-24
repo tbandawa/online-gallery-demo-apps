@@ -44,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,10 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import kotlinx.coroutines.launch
-import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
@@ -148,18 +144,8 @@ fun ProfileScreen(
                         .fillMaxWidth()
                 ) {
 
-                    val imageRequest = ImageRequest.Builder(LocalContext.current)
-                        .data(data = profileViewModel.getUserData()!!.profilePhoto.thumbnail)
-                        .diskCachePolicy(CachePolicy.DISABLED)
-                        .memoryCachePolicy(CachePolicy.DISABLED)
-                        .apply(block = fun ImageRequest.Builder.() {
-                            crossfade(true)
-                            placeholder(R.drawable.ic_user)
-                            error(R.drawable.ic_user)
-                        }).build()
-
                     AsyncImage(
-                        model = imageRequest,
+                        model = photoUrl.value,
                         contentDescription = "Profile Photo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
