@@ -40,8 +40,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil.compose.rememberImagePainter
 import me.tbandawa.android.online.gallery.R
-import me.tbandawa.android.online.gallery.demo.ui.screens.convertImageToByte
-import me.tbandawa.android.online.gallery.demo.ui.screens.getFileNameFromUri
 
 @Composable
 fun SuccessDialog(
@@ -221,6 +219,6 @@ fun ProfilePictureDialog(
 @Preview
 @Composable
 fun DialogsPreview() {
-    //SuccessDialog(showDialog = true, message = "Changes Successfully Saved") {}
-    ProfilePictureDialog(null, false, {}, {})
+    SuccessDialog(showDialog = true, message = "Changes Successfully Saved") {}
+    //ProfilePictureDialog(null, false, {}, {})
 }

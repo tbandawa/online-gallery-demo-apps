@@ -1,6 +1,5 @@
 package me.tbandawa.android.online.gallery.demo.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,8 +20,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
-import coil.size.OriginalSize
+import coil.compose.AsyncImage
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 
 @Composable
@@ -47,15 +45,8 @@ fun Galleries(
                 )
                 LazyRow {
                     items(gallery.images) { image ->
-                        val imageUrl = rememberImagePainter(
-                            data = image.thumbnail,
-                            builder = {
-                                crossfade(true)
-                                size(OriginalSize)
-                            }
-                        )
-                        Image(
-                            painter = imageUrl,
+                        AsyncImage(
+                            model = image.thumbnail,
                             contentDescription = "Image",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier

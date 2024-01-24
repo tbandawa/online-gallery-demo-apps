@@ -17,7 +17,7 @@ navigation = "2.5.0-alpha02"
 splash = "1.0.0-beta02"
 dateTime = "0.4.0"
 timber = "4.7.1"
-coil = "1.4.0"
+coil = "2.5.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

@@ -2,7 +2,6 @@ package me.tbandawa.android.online.gallery.demo.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,13 +39,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +53,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
@@ -126,13 +128,12 @@ fun ProfileScreen(
             }
         }
 
-        val profilePhoto = rememberImagePainter(
-            data = photoUrl.value,
-            builder = {
+        val profilePhoto = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current).data(data = photoUrl.value).apply(block = fun ImageRequest.Builder.() {
                 crossfade(true)
                 placeholder(R.drawable.ic_user)
                 error(R.drawable.ic_user)
-            }
+            }).build()
         )
 
         BackdropScaffold(
@@ -167,7 +168,7 @@ fun ProfileScreen(
                             .align(alignment = CenterHorizontally)
                     )
 
-                    Spacer(modifier = Modifier.height(15.dp))
+                   Spacer(modifier = Modifier.height(15.dp))
                     Text(
                         text = "${firstName.value} ${lastName.value}",
                         style = TextStyle(

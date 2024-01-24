@@ -283,7 +283,7 @@ fun CreateScreen(
                                 val images = mutableMapOf<String, ByteArray>()
                                 selectedUris.forEach { uri ->
                                     images[getFileNameFromUri(context, uri)!!] =
-                                        convertImageToByte(context, uri)!!
+                                        getBytesFromUri(context, uri)!!
                                 }
                                 galleryViewModel.createGallery(
                                     textTitle.value,
@@ -368,7 +368,7 @@ fun getFileNameFromUri(context: Context, uri: Uri): String? {
     return fileName
 }
 
-fun convertImageToByte(context: Context, uri: Uri?): ByteArray? {
+fun getBytesFromUri(context: Context, uri: Uri?): ByteArray? {
     var data: ByteArray? = null
     try {
         val cr: ContentResolver = context.contentResolver
