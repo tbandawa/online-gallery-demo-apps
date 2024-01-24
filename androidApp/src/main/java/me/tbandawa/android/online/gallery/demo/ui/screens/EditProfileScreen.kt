@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -60,12 +61,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
+import okhttp3.Dispatcher
 import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
 
@@ -174,17 +178,15 @@ fun EditProfileScreen(
                                 .align(alignment = CenterHorizontally)
                         ) {
                             val (editButton, avatarView) = createRefs()
-                            /*val profilePhoto = rememberImagePainter(
-                                data = photoUrl.value,
-                                builder = {
-                                    crossfade(true)
-                                    placeholder(R.drawable.ic_user)
-                                    error(R.drawable.ic_user)
-                                }
-                            )*/
-                            val user = profileViewModel.getUserData()!!
+
+                            val imageRequest = ImageRequest.Builder(LocalContext.current)
+                                .data(profileViewModel.getUserData()?.profilePhoto?.thumbnail)
+                                .diskCachePolicy(CachePolicy.DISABLED)
+                                .memoryCachePolicy(CachePolicy.DISABLED)
+                                .build()
+
                             AsyncImage(
-                                model = profileViewModel.getUserData()!!.profilePhoto.thumbnail!!,
+                                model = imageRequest /*profileViewModel.getUserData()!!.profilePhoto.thumbnail!!*/,
                                 contentDescription = "Profile Photo",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
