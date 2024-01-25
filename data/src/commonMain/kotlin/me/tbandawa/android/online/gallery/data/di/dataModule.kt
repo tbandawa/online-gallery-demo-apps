@@ -4,6 +4,7 @@ import me.tbandawa.android.online.gallery.data.domain.mappers.ErrorMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.GalleriesMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.GalleryMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.ImageMapper
+import me.tbandawa.android.online.gallery.data.domain.mappers.ProfileInfoMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.ProfileMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.ProfilePhotoMapper
 import me.tbandawa.android.online.gallery.data.domain.mappers.UserMapper
@@ -33,7 +34,7 @@ val userMapperModule = module {
 }
 
 val galleryMapperModule = module {
-    single { GalleryMapper(get()) }
+    single { GalleryMapper(get(), get()) }
 }
 
 val galleriesMapperModule = module {
@@ -42,6 +43,10 @@ val galleriesMapperModule = module {
 
 val profileMapperModule = module {
     single { ProfileMapper(get(), get()) }
+}
+
+val profileInfoMapperModule = module {
+    single { ProfileInfoMapper(get()) }
 }
 
 val apiModule = module {
@@ -69,6 +74,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration) = startKoin {
         galleryMapperModule,
         galleriesMapperModule,
         profileMapperModule,
+        profileInfoMapperModule,
         apiModule,
         repositoryModule,
         viewModelModule

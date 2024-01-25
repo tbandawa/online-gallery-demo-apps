@@ -6,5 +6,6 @@ data class Gallery(
     val description: String,
     val images: List<Image>,
     val created: String,
-    val userId: Long
+    val userId: Long,
+    val profile: ProfileInfo?
 )

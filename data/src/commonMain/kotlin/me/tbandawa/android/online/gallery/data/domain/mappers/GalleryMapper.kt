@@ -4,7 +4,8 @@ import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.responses.GalleryResponse
 
 class GalleryMapper(
-    private val imageMapper: ImageMapper
+    private val imageMapper: ImageMapper,
+    private val profileInfoMapper: ProfileInfoMapper
 ): ResponseMapper<GalleryResponse, Gallery> {
 
     override fun mapToModel(entity: GalleryResponse): Gallery {
@@ -16,7 +17,10 @@ class GalleryMapper(
                 imageResponse -> imageMapper.mapToModel(imageResponse)
             },
             entity.created,
-            entity.userId
+            entity.userId,
+            entity.user?.let { user ->
+                profileInfoMapper.mapToModel(user)
+            }
         )
     }
 }

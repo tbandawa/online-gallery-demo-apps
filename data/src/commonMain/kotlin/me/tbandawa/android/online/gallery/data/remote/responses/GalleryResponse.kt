@@ -9,5 +9,6 @@ data class GalleryResponse(
     val description: String,
     val images: List<ImageResponse>,
     val created: String,
-    val userId: Long
+    val userId: Long,
+    val user: ProfileInfoResponse?
 )
