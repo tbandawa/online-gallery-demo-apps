@@ -51,10 +51,10 @@ fun BottomNavigationBar(
             selected = currentRoute == "galleries",
             colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.White,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black,
-                unselectedIconColor = Color.Black.copy(0.4f),
-                unselectedTextColor = Color.Black.copy(0.4f)
+                selectedIconColor = Color(0xff024040),
+                selectedTextColor = Color(0xff024040),
+                unselectedIconColor = Color(0xff45024040),
+                unselectedTextColor = Color(0xff45024040)
             ),
             onClick = {
                 navController.navigate("galleries") {
@@ -83,10 +83,10 @@ fun BottomNavigationBar(
             selected = currentRoute == "create",
             colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.White,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black,
-                unselectedIconColor = Color.Black.copy(0.4f),
-                unselectedTextColor = Color.Black.copy(0.4f)
+                selectedIconColor = Color(0xff024040),
+                selectedTextColor = Color(0xff024040),
+                unselectedIconColor = Color(0xff45024040),
+                unselectedTextColor = Color(0xff45024040)
             ),
             onClick = {
                 navController.navigate("create") {
@@ -115,10 +115,10 @@ fun BottomNavigationBar(
             selected = currentRoute == "profile",
             colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.White,
-                selectedIconColor = Color.Black,
-                selectedTextColor = Color.Black,
-                unselectedIconColor = Color.Black.copy(0.4f),
-                unselectedTextColor = Color.Black.copy(0.4f)
+                selectedIconColor = Color(0xff024040),
+                selectedTextColor = Color(0xff024040),
+                unselectedIconColor = Color(0xff45024040),
+                unselectedTextColor = Color(0xff45024040)
             ),
             onClick = {
                 navController.navigate("profile") {
