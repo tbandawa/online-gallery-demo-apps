@@ -40,7 +40,7 @@ fun MainNavigation(
         startDestination = "galleries"
     ) {
         composable(route = "galleries") {
-            GalleriesScreen()
+            GalleriesScreen(navController = navController)
         }
         composable(route = "create") {
             CreateScreen()

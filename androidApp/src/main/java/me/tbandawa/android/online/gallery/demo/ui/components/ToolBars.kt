@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,32 +99,75 @@ fun MainToolbar(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeToolBar(
     title: String,
-    navController: NavController,
-    scrollBehavior: TopAppBarScrollBehavior
+    navController: NavController
 ) {
-    MediumTopAppBar(
-        title = {
-            Text(
-                text = title
-            )
-        },
-        actions = {
-            IconButton(onClick = { navController.navigate("search") }) {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search"
+    TopAppBar(
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        modifier= Modifier
+            .background(color = Color.White)
+            .fillMaxWidth(),
+
+        ) {
+
+        //TopAppBar Content
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .height(32.dp)
+        ) {
+
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+            ) {
+
+                val (_, titleText, searchIcon) = createRefs()
+
+                // Title
+                Text(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
+                        .constrainAs(titleText) {
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        },
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    text = title,
+                    style = TextStyle(
+                        color = Color(0xff024040),
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 22.sp
+                    )
                 )
+
+                // Search Icon
+                IconButton(
+                    onClick = {
+                        navController.navigate("search")
+                    },
+                    enabled = true,
+                    modifier = Modifier
+                        .constrainAs(searchIcon) {
+                            end.linkTo(parent.end)
+                        }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_search),
+                        contentDescription = "Back",
+                        tint = Color(0xff024040),
+                        modifier = Modifier
+                            .size(25.dp)
+                    )
+                }
+
             }
-        },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = Color.White
-        ),
-        scrollBehavior = scrollBehavior
-    )
+        }
+    }
 }
 
 @Composable
@@ -170,8 +212,9 @@ fun NavigationToolbar(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_back),
                         contentDescription = "Back",
+                        tint = Color(0xff024040),
                         modifier = Modifier
-                            .size(20.dp)
+                            .size(25.dp)
                     )
                 }
 
@@ -200,7 +243,7 @@ fun NavigationToolbar(
 @Preview(showBackground = true)
 @Composable
 fun ToolBarsPreview() {
-    MainToolbar(
-        title = "Galleries"
-    )
+    //MainToolbar(title = "Galleries")
+    HomeToolBar(title = "Home Toolbar", navController = rememberNavController())
+    //NavigationToolbar(title = "Navigation Toolbar", navController = rememberNavController())
 }

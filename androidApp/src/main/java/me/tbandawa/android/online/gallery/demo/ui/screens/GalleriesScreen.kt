@@ -7,11 +7,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.online.gallery.demo.ui.components.HomeToolBar
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 
 @Composable
-fun GalleriesScreen() {
+fun GalleriesScreen(
+    navController: NavController
+) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -19,8 +23,9 @@ fun GalleriesScreen() {
 
         Scaffold(
             topBar = {
-                MainToolbar(
-                    "Galleries"
+                HomeToolBar(
+                    title = "Galleries",
+                    navController = navController
                 )
             },
             containerColor = Color.White
@@ -33,5 +38,7 @@ fun GalleriesScreen() {
 @Preview
 @Composable
 fun GalleriesScreenPreview() {
-    GalleriesScreen()
+    GalleriesScreen(
+        navController = rememberNavController()
+    )
 }
