@@ -44,7 +44,7 @@ class GalleryRepositoryImpl(
                 database.saveUser(results.data)
             }
         })
-    }.flowOn(Dispatchers.Main)
+    }.flowOn(Dispatchers.Default)
 
     override suspend fun signUpUser(userRequest: UserRequest): Flow<ResourceState<User>> = flow {
         emit(ResourceState.Loading)
@@ -56,7 +56,7 @@ class GalleryRepositoryImpl(
                 database.saveUser(results.data)
             }
         })
-    }.flowOn(Dispatchers.Main)
+    }.flowOn(Dispatchers.Default)
 
     override suspend fun getProfile(profileId: Long): Flow<ResourceState<Profile>> = flow {
         val user = getUser()
@@ -65,7 +65,7 @@ class GalleryRepositoryImpl(
         emit(handleApiCall {
             profileMapper.mapToModel(galleryApi.getProfile(user!!.token, profileId))
         })
-    }.flowOn(Dispatchers.Main)
+    }.flowOn(Dispatchers.Default)
 
     override suspend fun createGallery(
         title: String,
@@ -78,7 +78,7 @@ class GalleryRepositoryImpl(
         emit(handleApiCall {
             galleryMapper.mapToModel(galleryApi.createGallery(user!!.token, title, description, images))
         })
-    }.flowOn(Dispatchers.Main)
+    }.flowOn(Dispatchers.Default)
 
     override suspend fun uploadProfilePicture(
         photoTitle: String,
@@ -97,7 +97,7 @@ class GalleryRepositoryImpl(
                 )
             }
         })
-    }.flowOn(Dispatchers.Main)
+    }.flowOn(Dispatchers.Default)
 
     override suspend fun editUser(userRequest: UserRequest): Flow<ResourceState<User>> = flow {
         val user = getUser()
@@ -110,5 +110,5 @@ class GalleryRepositoryImpl(
                 database.saveUser(results.data)
             }
         })
-    }.flowOn(Dispatchers.Main)
+    }.flowOn(Dispatchers.Default)
 }
