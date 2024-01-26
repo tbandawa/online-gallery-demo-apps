@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.splashscreen)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
     implementation(libs.koin.compose)
     implementation(libs.coil.compose)
     implementation(libs.timber.debug)
