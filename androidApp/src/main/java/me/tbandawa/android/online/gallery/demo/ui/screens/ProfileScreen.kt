@@ -56,7 +56,7 @@ import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
-import me.tbandawa.android.online.gallery.demo.ui.components.Galleries
+import me.tbandawa.android.online.gallery.demo.ui.components.ProfileGalleries
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 import org.koin.androidx.compose.koinViewModel
 
@@ -154,7 +154,7 @@ fun ProfileScreen(
                             .align(alignment = CenterHorizontally)
                     )
 
-                   Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
                     Text(
                         text = "${firstName.value} ${lastName.value}",
                         style = TextStyle(
@@ -335,7 +335,7 @@ fun ProfileScreen(
                         }
                     }
                     if (isSuccess) {
-                        Galleries(galleries = galleryList)
+                        ProfileGalleries(galleries = galleryList)
                     }
                     if (galleryList.isEmpty()) {
                         Column {
