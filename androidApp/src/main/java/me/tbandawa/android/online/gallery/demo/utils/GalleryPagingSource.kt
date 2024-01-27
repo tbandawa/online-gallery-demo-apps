@@ -3,11 +3,11 @@ package me.tbandawa.android.online.gallery.demo.utils
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
-import me.tbandawa.android.online.gallery.data.domain.repo.GalleryRepositoryImpl
+import me.tbandawa.android.online.gallery.data.domain.repo.GalleryRepository
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 
 class GalleryPagingSource(
-    private val galleryRepository: GalleryRepositoryImpl
+    private val galleryRepository: GalleryRepository
 ): PagingSource<Int, Gallery>() {
 
     companion object {
