@@ -139,7 +139,7 @@ fun ProfileScreen(
             backLayerContent = {
                 Column(
                     modifier = Modifier
-                        .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 5.dp)
+                        .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 5.dp)
                         .wrapContentHeight()
                         .fillMaxWidth()
                 ) {

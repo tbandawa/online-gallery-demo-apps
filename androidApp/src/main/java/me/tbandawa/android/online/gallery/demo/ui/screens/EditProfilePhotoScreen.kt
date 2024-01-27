@@ -130,7 +130,7 @@ fun EditProfilePhotoScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
-                    .padding(16.dp)
+                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
             ) {
 
                 val (photoLayout, controlLayout) = createRefs()

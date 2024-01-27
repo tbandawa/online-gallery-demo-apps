@@ -135,7 +135,8 @@ fun EditProfileScreen(
         Scaffold(
             topBar = {
                 NavigationToolbar(
-                    "Edit Profile", navController
+                    title = "Edit Profile",
+                    navController = navController
                 )
             },
             containerColor = Color.White
@@ -143,6 +144,8 @@ fun EditProfileScreen(
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
+                    .padding(it)
+                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
             ) {
                 ConstraintLayout(
                     modifier = Modifier
@@ -158,8 +161,6 @@ fun EditProfileScreen(
                                 top.linkTo(parent.top)
                                 end.linkTo(parent.end)
                             }
-                            .padding(it)
-                            .padding(16.dp)
                     ) {
 
                         ConstraintLayout(

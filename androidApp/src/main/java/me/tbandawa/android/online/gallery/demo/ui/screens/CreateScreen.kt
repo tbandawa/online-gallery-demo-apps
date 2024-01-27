@@ -115,6 +115,8 @@ fun CreateScreen(
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(it)
+                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
             ) {
 
                 val (info, grid, control) = createRefs()
@@ -126,8 +128,6 @@ fun CreateScreen(
                             top.linkTo(parent.top)
                             end.linkTo(parent.end)
                         }
-                        .padding(it)
-                        .padding(16.dp)
                 ) {
                     TextField(
                         value = textTitle.value,

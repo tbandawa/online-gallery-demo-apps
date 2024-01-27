@@ -1,18 +1,22 @@
 package me.tbandawa.android.online.gallery.demo.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,30 +26,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Galleries(
-    galleries: List<Gallery>
+fun GalleryItem(
+    gallery: Gallery
 ) {
-    LazyColumn(
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+    val profile = gallery.profile!!
+
+    Box(
         modifier = Modifier
-            .padding(start = 5.dp, end = 5.dp)
+            .padding(top = 5.dp, bottom = 10.dp)
     ) {
-        items(galleries) { gallery ->
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            ),
+            onClick = {
 
-            val profile = gallery.profile!!
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
+            }
+        ) {
+            Column {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -57,48 +63,42 @@ fun Galleries(
                         contentDescription = "Profile Photo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(45.dp)
+                            .size(35.dp)
                             .clip(CircleShape)
                     )
                     Column {
                         Text(
-                            text = "${profile.firstname} ${profile.lastname}",
+                            text = gallery.title,
                             style = TextStyle(
                                 color = Color(0xff024040),
                                 fontWeight = FontWeight.Medium,
-                                fontSize = 16.sp
+                                fontSize = 12.sp
                             ),
                             modifier = Modifier
                                 .padding(start = 5.dp, top = 0.dp)
                         )
                         Text(
-                            text = gallery.created,
+                            text = "${gallery.images.size} photos added by ${gallery.profile!!.firstname} - ${gallery.created}",
                             style = TextStyle(
                                 color = Color(0xff024040),
                                 fontWeight = FontWeight.Normal,
-                                fontSize = 14.sp
+                                fontSize = 10.sp
                             ),
                             modifier = Modifier
                                 .padding(start = 5.dp, top = 0.dp)
                         )
                     }
                 }
-                Text(
-                    text = gallery.title,
-                    style = TextStyle(
-                        color = Color(0xff024040),
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp
-                    )
-                )
-                LazyRow {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     items(gallery.images) { image ->
                         AsyncImage(
                             model = image.thumbnail,
                             contentDescription = "Image",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
-                                .padding(top = 5.dp, end = 10.dp, bottom = 5.dp)
+                                .padding(top = 5.dp)
                                 .height(145.dp)
                                 .clip(RoundedCornerShape(10.dp))
                                 .align(alignment = Alignment.CenterHorizontally)
@@ -108,12 +108,4 @@ fun Galleries(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun GalleriesPreview() {
-    Galleries(
-        galleries = listOf()
-    )
 }
