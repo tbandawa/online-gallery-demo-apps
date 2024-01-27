@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -176,9 +181,8 @@ fun EditProfilePhotoScreen(
                     }
                     Spacer(Modifier.weight(1f))
                     if (photoUri != null) {
-                        FilledTonalButton(
+                        Button(
                             onClick = {
-
                                 context.imageLoader.diskCache?.clear()
                                 context.imageLoader.memoryCache?.clear()
 
@@ -187,21 +191,30 @@ fun EditProfilePhotoScreen(
                                     photoBytes = getBytesFromUri(context, photoUri)!!
                                 )
                             },
-                            shape = RoundedCornerShape(5),
+                            shape = RoundedCornerShape(50),
                             modifier = Modifier
                                 .padding(top = 0.dp, bottom = 0.dp)
                                 .height(35.dp),
-                            enabled = !isLoading
-                        ) {
-                            Text(
-                                text = if (isLoading) "Updating" else "Update",
-                                style = TextStyle(
-                                    color = Color(0xff024040),
-                                    fontSize = 14.sp
-                                ),
-                                modifier = Modifier
-                                    .padding(start = 10.dp)
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xff024040)
                             )
+                        ){
+                            if (isLoading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .size(21.dp),
+                                    color = Color.White,
+                                    strokeWidth = 2.dp)
+                            } else {
+                                Text(
+                                    text = "Update",
+                                    style = TextStyle(
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 16.sp
+                                    )
+                                )
+                            }
                         }
                     }
                 }
