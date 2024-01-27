@@ -124,7 +124,7 @@ fun EditProfilePhotoScreen(
                 )
             },
             containerColor = Color.White
-        ) { it ->
+        ) {
 
             ConstraintLayout(
                 modifier = Modifier

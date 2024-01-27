@@ -29,13 +29,11 @@ import me.tbandawa.android.online.gallery.demo.ui.components.HomeToolBar
 import me.tbandawa.android.online.gallery.demo.ui.viewmodels.PagingGalleryViewModel
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleriesScreen(
     navController: NavController
 ) {
 
-    val scope = rememberCoroutineScope()
     val pagingGalleryViewModel: PagingGalleryViewModel = koinViewModel()
     val galleries = pagingGalleryViewModel.newsData.collectAsLazyPagingItems()
 
@@ -53,7 +51,7 @@ fun GalleriesScreen(
                 )
             },
             containerColor = Color.White
-        ) { it ->
+        ) {
 
             LazyColumn(
                 modifier = Modifier
@@ -64,12 +62,9 @@ fun GalleriesScreen(
                     GalleryItem(gallery!!)
                 }
 
-                when (val state = galleries.loadState.refresh) { //FIRST LOAD
-                    is LoadState.Error -> {
-                        //TODO Error Item
-                        //state.error to get error message
-                    }
-                    is LoadState.Loading -> { // Loading UI
+                when (val state = galleries.loadState.refresh) {
+                    is LoadState.Error -> { }
+                    is LoadState.Loading -> {
                         item {
                             Column(
                                 modifier = Modifier
@@ -80,9 +75,8 @@ fun GalleriesScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(8.dp),
-                                    text = "Refresh Loading"
+                                    text = "Loading..."
                                 )
-
                                 CircularProgressIndicator(color = Color.Black)
                             }
                         }
@@ -90,12 +84,9 @@ fun GalleriesScreen(
                     else -> {}
                 }
 
-                when (val state = galleries.loadState.append) { // Pagination
-                    is LoadState.Error -> {
-                        //TODO Pagination Error Item
-                        //state.error to get error message
-                    }
-                    is LoadState.Loading -> { // Pagination Loading UI
+                when (val state = galleries.loadState.append) {
+                    is LoadState.Error -> { }
+                    is LoadState.Loading -> {
                         item {
                             Column(
                                 modifier = Modifier
@@ -103,8 +94,7 @@ fun GalleriesScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center,
                             ) {
-                                Text(text = "Pagination Loading")
-
+                                Text(text = "Loading Galleries")
                                 CircularProgressIndicator(color = Color.Black)
                             }
                         }
@@ -112,7 +102,6 @@ fun GalleriesScreen(
                     else -> {}
                 }
             }
-
         }
     }
 }

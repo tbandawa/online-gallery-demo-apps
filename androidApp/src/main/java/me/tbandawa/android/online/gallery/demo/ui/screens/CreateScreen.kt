@@ -111,7 +111,7 @@ fun CreateScreen(
                 )
             },
             containerColor = Color.White
-        ) { it ->
+        ) {
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()

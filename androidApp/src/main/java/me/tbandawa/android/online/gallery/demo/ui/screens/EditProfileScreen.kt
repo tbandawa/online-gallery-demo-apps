@@ -140,7 +140,7 @@ fun EditProfileScreen(
                 )
             },
             containerColor = Color.White
-        ) { it ->
+        ) {
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
@@ -409,7 +409,7 @@ fun EditProfileScreen(
                         shape = RoundedCornerShape(50),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 20.dp)
+                            .padding(top = 32.dp)
                             .constrainAs(saveButton) {
                                 start.linkTo(parent.start)
                                 top.linkTo(inputLayout.bottom)

@@ -45,11 +45,9 @@ fun SearchScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
+                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                ) {
+                Column {
 
                     var searchText by remember { mutableStateOf(TextFieldValue("")) }
 
