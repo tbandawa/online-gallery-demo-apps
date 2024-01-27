@@ -30,6 +30,7 @@ import io.ktor.utils.io.core.writeFully
 import kotlinx.serialization.json.Json
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
 import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
+import me.tbandawa.android.online.gallery.data.remote.responses.GalleriesResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.GalleryResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.ProfilePhotoResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.ProfileResponse
@@ -120,6 +121,16 @@ class GalleryApi {
                     }
                 }
             ))
+        }.body()
+    }
+
+    suspend fun getGalleries(token: String, page: Int): GalleriesResponse {
+        return httpClient.get {
+            url("$BASE_URL/galleries/$page")
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.Application.Json)
         }.body()
     }
 

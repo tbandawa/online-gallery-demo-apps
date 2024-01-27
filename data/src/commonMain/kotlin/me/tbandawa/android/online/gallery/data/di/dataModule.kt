@@ -54,7 +54,7 @@ val apiModule = module {
 }
 
 val repositoryModule = module {
-    single { GalleryRepositoryImpl(get(), get(), get(), get(), get(), get(), get()) } bind GalleryRepository::class
+    single { GalleryRepositoryImpl(get(), get(), get(), get(), get(), get(), get(), get()) } bind GalleryRepository::class
 }
 
 val viewModelModule = module {
