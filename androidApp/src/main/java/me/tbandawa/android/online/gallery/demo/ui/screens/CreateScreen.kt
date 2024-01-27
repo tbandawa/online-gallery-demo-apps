@@ -57,7 +57,6 @@ fun CreateScreen(
     val galleryState by galleryViewModel.galleryResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
-    var isSuccess by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     val textTitle = rememberSaveable { mutableStateOf("") }
     val textDescription = rememberSaveable { mutableStateOf("") }
@@ -77,7 +76,12 @@ fun CreateScreen(
         }
         is ResourceState.Success -> {
             isLoading = false
-            isSuccess = true
+            SuccessDialog(message = "Gallery Successfully Created") {
+                textTitle.value = ""
+                textDescription.value = ""
+                selectedUris = emptyList()
+                galleryViewModel.resetState()
+            }
         }
         is ResourceState.Error -> {
             val error = (galleryState as ResourceState.Error<*>).data!!
@@ -86,16 +90,8 @@ fun CreateScreen(
         }
         is ResourceState.Empty -> {
             isLoading = false
-            isSuccess = false
             isError = false
         }
-    }
-
-    SuccessDialog(showDialog = isSuccess, message = "Gallery Successfully Created") {
-        textTitle.value = ""
-        textDescription.value = ""
-        selectedUris = emptyList()
-        galleryViewModel.resetState()
     }
 
     Surface(

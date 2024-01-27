@@ -64,8 +64,6 @@ fun EditProfilePhotoScreen(
     val profilePhotoState by profileViewModel.profilePhotoResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
-    var isSuccess by remember { mutableStateOf(false) }
-    var isError by remember { mutableStateOf(false) }
 
     var photoUrl by remember { mutableStateOf("") }
     var photoUri by remember { mutableStateOf<Uri?>(null) }
@@ -89,42 +87,34 @@ fun EditProfilePhotoScreen(
     when(profilePhotoState) {
         is ResourceState.Loading -> {
             isLoading = true
-            isError = false
         }
         is ResourceState.Success -> {
             val profilePhoto = (profilePhotoState as ResourceState.Success).data
             photoUri = null
             photoUrl = profilePhoto.image!!
             isLoading = false
-            isSuccess = true
+
+            SuccessDialog(message = "Changes Successfully Saved") {
+                profileViewModel.resetState()
+            }
         }
         is ResourceState.Error -> {
             val error = (profilePhotoState as ResourceState.Error<*>).data!!
             isLoading = false
-            isError = true
 
             var errorMessage = ""
             for(message in error.messages!!) {
                 errorMessage += "$message\n"
             }
 
-            ErrorDialog(showDialog = isError, message = errorMessage) {
+            ErrorDialog(message = errorMessage) {
                 profileViewModel.resetState()
             }
 
         }
         is ResourceState.Empty -> {
             isLoading = false
-            isSuccess = false
-            isError = false
         }
-    }
-
-    SuccessDialog(showDialog = isSuccess, message = "Changes Successfully Saved") {
-        val user = profileViewModel.getUserData()!!
-        photoUri = null
-        photoUrl = user.profilePhoto.image.toString()
-        profileViewModel.resetState()
     }
 
     Surface(

@@ -35,87 +35,84 @@ import me.tbandawa.android.online.gallery.R
 
 @Composable
 fun SuccessDialog(
-    showDialog: Boolean,
     message: String,
     onDismiss: () -> Unit
 ) {
-    if (showDialog) {
-        Dialog(
-            onDismissRequest = {
-                onDismiss()
-            }
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        }
+    ) {
+        Box(
+            Modifier
+                .pointerInput(Unit) { detectTapGestures { } }
+                .shadow(8.dp, shape = RoundedCornerShape(5.dp))
+                .width(300.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(
+                    MaterialTheme.colorScheme.surface,
+                )
+                .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
+            contentAlignment = Alignment.Center
         ) {
-            Box(
-                Modifier
-                    .pointerInput(Unit) { detectTapGestures { } }
-                    .shadow(8.dp, shape = RoundedCornerShape(5.dp))
-                    .width(300.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(
-                        MaterialTheme.colorScheme.surface,
-                    )
-                    .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
-                contentAlignment = Alignment.Center
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_check),
-                        tint = Color(0xff024040),
-                        contentDescription = "Success",
-                        modifier = Modifier
-                            .size(45.dp)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_check),
+                    tint = Color(0xff024040),
+                    contentDescription = "Success",
+                    modifier = Modifier
+                        .size(45.dp)
+                )
+                Text(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
+                        .padding(bottom = 10.dp),
+                    textAlign = TextAlign.Center,
+                    text = message,
+                    style = TextStyle(
+                        color = Color(0xff024040),
+                        fontSize = 16.sp
                     )
-                    Text(
-                        modifier = Modifier
-                            .width(IntrinsicSize.Max)
-                            .padding(bottom = 10.dp),
-                        textAlign = TextAlign.Center,
-                        text = message,
-                        style = TextStyle(
-                            color = Color(0xff024040),
-                            fontSize = 16.sp
-                        )
-                    )
+                )
 
-                    Box(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(
-                                    topStart = 15.dp,
-                                    topEnd = 15.dp,
-                                    bottomEnd = 15.dp,
-                                    bottomStart = 15.dp
-                                )
+                Box(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = 15.dp,
+                                topEnd = 15.dp,
+                                bottomEnd = 15.dp,
+                                bottomStart = 15.dp
                             )
-                            .background(
-                                color = Color(0xff024040)
-                            )
-                            .clickable {
-                                onDismiss()
-                            }
-                            .padding(
-                                PaddingValues(
-                                    horizontal = 5.dp,
-                                    vertical = 2.dp
-                                )
-                            ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = "Okay",
-                                fontSize = 14.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Normal,
-                                modifier = Modifier
-                                    .padding(start = 5.dp, end = 5.dp)
-                            )
+                        )
+                        .background(
+                            color = Color(0xff024040)
+                        )
+                        .clickable {
+                            onDismiss()
                         }
+                        .padding(
+                            PaddingValues(
+                                horizontal = 5.dp,
+                                vertical = 2.dp
+                            )
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Okay",
+                            fontSize = 14.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal,
+                            modifier = Modifier
+                                .padding(start = 5.dp, end = 5.dp)
+                        )
                     }
                 }
             }
@@ -125,87 +122,84 @@ fun SuccessDialog(
 
 @Composable
 fun ErrorDialog(
-    showDialog: Boolean,
     message: String,
     onDismiss: () -> Unit
 ) {
-    if (showDialog) {
-        Dialog(
-            onDismissRequest = {
-                onDismiss()
-            }
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        }
+    ) {
+        Box(
+            Modifier
+                .pointerInput(Unit) { detectTapGestures { } }
+                .shadow(8.dp, shape = RoundedCornerShape(5.dp))
+                .width(300.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(
+                    MaterialTheme.colorScheme.surface,
+                )
+                .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
+            contentAlignment = Alignment.Center
         ) {
-            Box(
-                Modifier
-                    .pointerInput(Unit) { detectTapGestures { } }
-                    .shadow(8.dp, shape = RoundedCornerShape(5.dp))
-                    .width(300.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(
-                        MaterialTheme.colorScheme.surface,
-                    )
-                    .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
-                contentAlignment = Alignment.Center
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_error),
-                        tint = Color(0xffFF0000),
-                        contentDescription = "Success",
-                        modifier = Modifier
-                            .size(45.dp)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_error),
+                    tint = Color(0xffFF0000),
+                    contentDescription = "Success",
+                    modifier = Modifier
+                        .size(45.dp)
+                )
+                Text(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
+                        .padding(bottom = 10.dp),
+                    textAlign = TextAlign.Center,
+                    text = message,
+                    style = TextStyle(
+                        color = Color(0xffFF0000),
+                        fontSize = 16.sp
                     )
-                    Text(
-                        modifier = Modifier
-                            .width(IntrinsicSize.Max)
-                            .padding(bottom = 10.dp),
-                        textAlign = TextAlign.Center,
-                        text = message,
-                        style = TextStyle(
-                            color = Color(0xffFF0000),
-                            fontSize = 16.sp
-                        )
-                    )
+                )
 
-                    Box(
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(
-                                    topStart = 15.dp,
-                                    topEnd = 15.dp,
-                                    bottomEnd = 15.dp,
-                                    bottomStart = 15.dp
-                                )
+                Box(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = 15.dp,
+                                topEnd = 15.dp,
+                                bottomEnd = 15.dp,
+                                bottomStart = 15.dp
                             )
-                            .background(
-                                color = Color(0xffFF0000)
-                            )
-                            .clickable {
-                                onDismiss()
-                            }
-                            .padding(
-                                PaddingValues(
-                                    horizontal = 5.dp,
-                                    vertical = 2.dp
-                                )
-                            ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = "Okay",
-                                fontSize = 14.sp,
-                                color = Color.White,
-                                fontWeight = FontWeight.Normal,
-                                modifier = Modifier
-                                    .padding(start = 5.dp, end = 5.dp)
-                            )
+                        )
+                        .background(
+                            color = Color(0xffFF0000)
+                        )
+                        .clickable {
+                            onDismiss()
                         }
+                        .padding(
+                            PaddingValues(
+                                horizontal = 5.dp,
+                                vertical = 2.dp
+                            )
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Okay",
+                            fontSize = 14.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal,
+                            modifier = Modifier
+                                .padding(start = 5.dp, end = 5.dp)
+                        )
                     }
                 }
             }
@@ -216,5 +210,5 @@ fun ErrorDialog(
 @Preview
 @Composable
 fun DialogsPreview() {
-    ErrorDialog(showDialog = true, message = "Changes Successfully Saved") {}
+    ErrorDialog(message = "Changes Successfully Saved") {}
 }

@@ -73,7 +73,7 @@ fun EditProfileScreen(
     val userState by profileViewModel.userResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
-    var isSuccess by remember { mutableStateOf(false) }
+    //var isSuccess by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
 
@@ -107,8 +107,9 @@ fun EditProfileScreen(
             isError = false
         }
         is ResourceState.Success -> {
-            isLoading = false
-            isSuccess = true
+            SuccessDialog(message = "Changes Successfully Saved") {
+                profileViewModel.resetState()
+            }
         }
         is ResourceState.Error -> {
             val error = (userState as ResourceState.Error<*>).data!!
@@ -117,13 +118,8 @@ fun EditProfileScreen(
         }
         is ResourceState.Empty -> {
             isLoading = false
-            isSuccess = false
             isError = false
         }
-    }
-
-    SuccessDialog(showDialog = isSuccess, message = "Changes Successfully Saved") {
-        profileViewModel.resetState()
     }
 
     Surface(
