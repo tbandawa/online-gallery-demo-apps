@@ -123,8 +123,98 @@ fun SuccessDialog(
     }
 }
 
+@Composable
+fun ErrorDialog(
+    showDialog: Boolean,
+    message: String,
+    onDismiss: () -> Unit
+) {
+    if (showDialog) {
+        Dialog(
+            onDismissRequest = {
+                onDismiss()
+            }
+        ) {
+            Box(
+                Modifier
+                    .pointerInput(Unit) { detectTapGestures { } }
+                    .shadow(8.dp, shape = RoundedCornerShape(5.dp))
+                    .width(300.dp)
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(
+                        MaterialTheme.colorScheme.surface,
+                    )
+                    .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_error),
+                        tint = Color(0xffFF0000),
+                        contentDescription = "Success",
+                        modifier = Modifier
+                            .size(45.dp)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .width(IntrinsicSize.Max)
+                            .padding(bottom = 10.dp),
+                        textAlign = TextAlign.Center,
+                        text = message,
+                        style = TextStyle(
+                            color = Color(0xffFF0000),
+                            fontSize = 16.sp
+                        )
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(
+                                    topStart = 15.dp,
+                                    topEnd = 15.dp,
+                                    bottomEnd = 15.dp,
+                                    bottomStart = 15.dp
+                                )
+                            )
+                            .background(
+                                color = Color(0xffFF0000)
+                            )
+                            .clickable {
+                                onDismiss()
+                            }
+                            .padding(
+                                PaddingValues(
+                                    horizontal = 5.dp,
+                                    vertical = 2.dp
+                                )
+                            ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = "Okay",
+                                fontSize = 14.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Normal,
+                                modifier = Modifier
+                                    .padding(start = 5.dp, end = 5.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun DialogsPreview() {
-    SuccessDialog(showDialog = true, message = "Changes Successfully Saved") {}
+    ErrorDialog(showDialog = true, message = "Changes Successfully Saved") {}
 }

@@ -47,6 +47,7 @@ import coil.imageLoader
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
+import me.tbandawa.android.online.gallery.demo.ui.components.ErrorDialog
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
 import org.koin.androidx.compose.koinViewModel
@@ -101,6 +102,16 @@ fun EditProfilePhotoScreen(
             val error = (profilePhotoState as ResourceState.Error<*>).data!!
             isLoading = false
             isError = true
+
+            var errorMessage = ""
+            for(message in error.messages!!) {
+                errorMessage += "$message\n"
+            }
+
+            ErrorDialog(showDialog = isError, message = errorMessage) {
+                profileViewModel.resetState()
+            }
+
         }
         is ResourceState.Empty -> {
             isLoading = false
