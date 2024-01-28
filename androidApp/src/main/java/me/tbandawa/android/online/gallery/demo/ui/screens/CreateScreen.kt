@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberImagePainter
+import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
@@ -57,7 +58,6 @@ fun CreateScreen(
     val galleryState by galleryViewModel.galleryResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
-    var isError by remember { mutableStateOf(false) }
     val textTitle = rememberSaveable { mutableStateOf("") }
     val textDescription = rememberSaveable { mutableStateOf("") }
 
@@ -70,9 +70,11 @@ fun CreateScreen(
     }
 
     when(galleryState) {
+        is ResourceState.Empty -> {
+            isLoading = false
+        }
         is ResourceState.Loading -> {
             isLoading = true
-            isError = false
         }
         is ResourceState.Success -> {
             isLoading = false
@@ -86,11 +88,6 @@ fun CreateScreen(
         is ResourceState.Error -> {
             val error = (galleryState as ResourceState.Error<*>).data!!
             isLoading = false
-            isError = true
-        }
-        is ResourceState.Empty -> {
-            isLoading = false
-            isError = false
         }
     }
 

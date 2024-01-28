@@ -2,7 +2,9 @@ package me.tbandawa.android.online.gallery.demo.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -240,10 +242,87 @@ fun NavigationToolbar(
     }
 }
 
+@Composable
+fun GalleryToolbar(
+    title: String,
+    time: String,
+    navController: NavController
+) {
+    TopAppBar(
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        modifier= Modifier
+            .background(color = Color.White)
+            .fillMaxWidth(),
+
+        ) {
+
+        //TopAppBar Content
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(1f)
+                .height(40.dp)
+        ) {
+
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+            ) {
+
+                val (navigationIcon, titleText, _) = createRefs()
+
+                //Navigation Icon
+                IconButton(
+                    onClick = {
+                        navController.navigateUp()
+                    },
+                    enabled = true,
+                    modifier = Modifier
+                        .constrainAs(navigationIcon) {
+                            start.linkTo(parent.start)
+                        }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "Back",
+                        tint = Color(0xff024040),
+                        modifier = Modifier
+                            .size(25.dp)
+                    )
+                }
+
+                //Title
+                Column(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max)
+                        .constrainAs(titleText) {
+                            start.linkTo(navigationIcon.end)
+                        }
+                ) {
+                    Text(
+                        text = title,
+                        style = TextStyle(
+                            color = Color(0xff024040),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 16.sp
+                        )
+                    )
+                    Text(
+                        text = time,
+                        style = TextStyle(
+                            color = Color(0xff024040),
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp
+                        )
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun ToolBarsPreview() {
-    //MainToolbar(title = "Galleries")
-    HomeToolBar(title = "Home Toolbar", navController = rememberNavController())
-    //NavigationToolbar(title = "Navigation Toolbar", navController = rememberNavController())
+    GalleryToolbar(title = "Home Toolbar", time = "25 June, 2024",navController = rememberNavController())
 }
