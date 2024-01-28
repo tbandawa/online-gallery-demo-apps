@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberImagePainter
-import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
@@ -67,6 +66,12 @@ fun CreateScreen(
     var selectedUris by remember { mutableStateOf(listOf<Uri>()) }
     val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
         selectedUris += uriList
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            galleryViewModel.resetState()
+        }
     }
 
     when(galleryState) {
