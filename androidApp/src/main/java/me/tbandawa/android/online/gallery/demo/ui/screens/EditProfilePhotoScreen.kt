@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -90,10 +89,9 @@ fun EditProfilePhotoScreen(
         }
         is ResourceState.Success -> {
             val profilePhoto = (profilePhotoState as ResourceState.Success).data
-            photoUri = null
             photoUrl = profilePhoto.image!!
             isLoading = false
-
+            photoUri = null
             SuccessDialog(message = "Changes Successfully Saved") {
                 profileViewModel.resetState()
             }
@@ -186,7 +184,6 @@ fun EditProfilePhotoScreen(
                             onClick = {
                                 context.imageLoader.diskCache?.clear()
                                 context.imageLoader.memoryCache?.clear()
-
                                 profileViewModel.uploadProfilePicture(
                                     photoTitle = getFileNameFromUri(context, photoUri!!)!!,
                                     photoBytes = getBytesFromUri(context, photoUri)!!

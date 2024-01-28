@@ -17,9 +17,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.data.viewmodel.SplashViewModel
 import me.tbandawa.android.online.gallery.demo.ui.auth.AuthScreen
+import me.tbandawa.android.online.gallery.demo.ui.screens.GalleryScreen
 import me.tbandawa.android.online.gallery.demo.ui.screens.HomeScreen
 import me.tbandawa.android.online.gallery.demo.ui.theme.OnlineGalleryDemoTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
@@ -40,6 +42,10 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val authValue = userViewModel.authState.collectAsState().value
 
+            val navigateToGallery: (galleryId: Long) -> Unit = { galleryId ->
+                navController.navigate("gallery/$galleryId")
+            }
+
             OnlineGalleryDemoTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -54,7 +60,14 @@ class MainActivity : ComponentActivity() {
                                 AuthScreen(navController)
                             }
                             composable(route = "home") {
-                                HomeScreen()
+                                HomeScreen(navigateToGallery)
+                            }
+                            composable(route = "gallery/{id}") { backStackEntry ->
+                                val galleryId = backStackEntry.arguments?.getString("id")?.toLong()
+                                GalleryScreen(
+                                    navController = navController,
+                                    galleryId = galleryId!!
+                                )
                             }
                         }
                     }

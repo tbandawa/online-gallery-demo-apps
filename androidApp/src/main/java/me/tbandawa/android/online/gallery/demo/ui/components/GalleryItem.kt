@@ -37,7 +37,8 @@ import me.tbandawa.android.online.gallery.demo.utils.convertDate
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryItem(
-    gallery: Gallery
+    gallery: Gallery,
+    navigateToGallery: (galleryId: Long) -> Unit
 ) {
     val profile = gallery.profile!!
 
@@ -51,7 +52,7 @@ fun GalleryItem(
                 containerColor = Color.White
             ),
             onClick = {
-
+                navigateToGallery(gallery.id)
             }
         ) {
             Column {

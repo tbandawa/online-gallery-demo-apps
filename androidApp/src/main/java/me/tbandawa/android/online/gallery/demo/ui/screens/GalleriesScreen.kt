@@ -31,7 +31,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun GalleriesScreen(
-    navController: NavController
+    navController: NavController,
+    navigateToGallery: (galleryId: Long) -> Unit
 ) {
 
     val pagingGalleryViewModel: PagingGalleryViewModel = koinViewModel()
@@ -59,7 +60,10 @@ fun GalleriesScreen(
                     .padding(start = 16.dp, top = 0.dp, end = 16.dp)
             ) {
                 items(galleries) { gallery ->
-                    GalleryItem(gallery!!)
+                    GalleryItem(
+                        gallery = gallery!!,
+                        navigateToGallery = navigateToGallery
+                    )
                 }
 
                 when (val state = galleries.loadState.refresh) {
@@ -111,5 +115,5 @@ fun GalleriesScreen(
 fun GalleriesScreenPreview() {
     GalleriesScreen(
         navController = rememberNavController()
-    )
+    ){}
 }

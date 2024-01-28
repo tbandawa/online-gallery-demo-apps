@@ -13,7 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.demo.ui.components.BottomNavigationBar
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navigateToGallery: (galleryId: Long) -> Unit
+) {
 
     val navController = rememberNavController()
 
@@ -21,7 +23,8 @@ fun HomeScreen() {
         content = { padding ->
             Box(modifier = Modifier.padding(padding)) {
                 MainNavigation(
-                    navController = navController
+                    navController = navController,
+                    navigateToGallery = navigateToGallery
                 )
             }
         },
@@ -33,14 +36,18 @@ fun HomeScreen() {
 
 @Composable
 fun MainNavigation(
-    navController: NavHostController
+    navController: NavHostController,
+    navigateToGallery: (galleryId: Long) -> Unit
 ) {
     NavHost(
         navController,
         startDestination = "galleries"
     ) {
         composable(route = "galleries") {
-            GalleriesScreen(navController = navController)
+            GalleriesScreen(
+                navController = navController,
+                navigateToGallery = navigateToGallery
+            )
         }
         composable(route = "create") {
             CreateScreen()
@@ -57,9 +64,6 @@ fun MainNavigation(
         composable(route = "profile/photo") {
             EditProfilePhotoScreen(navController = navController)
         }
-        composable(route = "gallery/{id}") { backStackEntry ->
-            val galleryId = backStackEntry.arguments?.getLong("id")
-        }
         composable(route = "profile/{id}") { backStackEntry ->
             val userId = backStackEntry.arguments?.getLong("id")
         }
@@ -69,5 +73,5 @@ fun MainNavigation(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen() {}
 }
