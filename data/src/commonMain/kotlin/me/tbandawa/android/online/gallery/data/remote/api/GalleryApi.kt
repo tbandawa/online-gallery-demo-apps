@@ -134,6 +134,16 @@ class GalleryApi {
         }.body()
     }
 
+    suspend fun getGallery(token: String, galleryId: Long): GalleryResponse {
+        return httpClient.get {
+            url("$BASE_URL/gallery/$galleryId")
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.Application.Json)
+        }.body()
+    }
+
     suspend fun editUser(token: String, userRequest: UserRequest): UserResponse {
         return httpClient.put {
             url("$BASE_URL/user")

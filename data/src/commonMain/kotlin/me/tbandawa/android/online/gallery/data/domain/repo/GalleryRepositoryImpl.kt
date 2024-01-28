@@ -108,6 +108,15 @@ class GalleryRepositoryImpl(
         }
     }
 
+    override suspend fun getGallery(galleryId: Long): Flow<ResourceState<Gallery>> = flow {
+        val user = getUser()
+        emit(ResourceState.Empty)
+        emit(ResourceState.Loading)
+        emit(handleApiCall {
+            galleryMapper.mapToModel(galleryApi.getGallery(user!!.token, galleryId))
+        })
+    }.flowOn(Dispatchers.Default)
+
     override suspend fun uploadProfilePicture(
         photoTitle: String,
         photoBytes: ByteArray

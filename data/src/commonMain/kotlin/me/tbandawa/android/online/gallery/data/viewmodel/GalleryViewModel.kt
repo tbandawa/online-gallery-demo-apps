@@ -26,6 +26,16 @@ class GalleryViewModel(
         }
     }
 
+    fun getGallery(
+        galleryId: Long
+    ) {
+        coroutineScope.launch {
+            galleryRepository.getGallery(galleryId).collect { results ->
+                _galleryResource.value = results
+            }
+        }
+    }
+
     fun resetState() {
         _galleryResource.value = ResourceState.Empty
     }
