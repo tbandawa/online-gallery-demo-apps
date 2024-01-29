@@ -65,7 +65,8 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    navigateToGallery: (galleryId: Long) -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -336,7 +337,10 @@ fun ProfileScreen(
                         }
                     }
                     if (isSuccess) {
-                        ProfileGalleries(galleries = galleryList)
+                        ProfileGalleries(
+                            galleries = galleryList,
+                            navigateToGallery = navigateToGallery
+                        )
                     }
                     if (galleryList.isEmpty() && !isLoading) {
                         Column {
@@ -388,5 +392,5 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen(navController = rememberNavController())
+    ProfileScreen(navController = rememberNavController()){}
 }

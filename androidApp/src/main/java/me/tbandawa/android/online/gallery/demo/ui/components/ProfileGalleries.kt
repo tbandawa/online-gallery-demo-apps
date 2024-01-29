@@ -1,5 +1,6 @@
 package me.tbandawa.android.online.gallery.demo.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,10 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
+import timber.log.Timber
 
 @Composable
 fun ProfileGalleries(
-    galleries: List<Gallery>
+    galleries: List<Gallery>,
+    navigateToGallery: (galleryId: Long) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
@@ -37,6 +40,10 @@ fun ProfileGalleries(
             Column(
                 modifier = Modifier
                     .padding(bottom = 15.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable {
+                        navigateToGallery(gallery.id)
+                    }
             ) {
                 LazyRow {
                     items(gallery.images) { image ->
