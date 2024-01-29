@@ -28,6 +28,7 @@ import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,6 +54,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
+import me.tbandawa.android.online.gallery.data.domain.models.Error
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
@@ -111,7 +113,6 @@ fun ProfileScreen(
                 isSuccess = true
             }
             is ResourceState.Error -> {
-                val error = (profileState as ResourceState.Error<*>).data!!
                 isLoading = false
                 isError = true
             }
@@ -337,7 +338,7 @@ fun ProfileScreen(
                     if (isSuccess) {
                         ProfileGalleries(galleries = galleryList)
                     }
-                    if (galleryList.isEmpty()) {
+                    if (galleryList.isEmpty() && !isLoading) {
                         Column {
                             Spacer(modifier = Modifier.height(90.dp))
                             Text(
@@ -348,6 +349,34 @@ fun ProfileScreen(
                                     fontSize = 16.sp
                                 )
                             )
+                        }
+                    }
+                    if (isError) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(8.dp),
+                                text = "Error"
+                            )
+                            TextButton(
+                                onClick = {
+                                    profileViewModel.getProfile()
+                                },
+                                modifier = Modifier
+                                    .height(35.dp)
+                            ) {
+                                Text(
+                                    text = "Retry",
+                                    style = TextStyle(
+                                        color = Color(0xff024040),
+                                        fontSize = 14.sp
+                                    )
+                                )
+                            }
                         }
                     }
                 }

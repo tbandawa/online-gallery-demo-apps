@@ -13,17 +13,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import kotlinx.coroutines.flow.retry
 import me.tbandawa.android.online.gallery.demo.ui.components.GalleryItem
 import me.tbandawa.android.online.gallery.demo.ui.components.HomeToolBar
 import me.tbandawa.android.online.gallery.demo.ui.viewmodels.PagingGalleryViewModel
@@ -93,7 +97,36 @@ fun GalleriesScreen(
                 }
 
                 when (val state = galleries.loadState.append) {
-                    is LoadState.Error -> { }
+                    is LoadState.Error -> {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(8.dp),
+                                    text = "Error"
+                                )
+                                TextButton(
+                                    onClick = {
+                                        pagingGalleryViewModel.newsData.retry()
+                                    },
+                                    modifier = Modifier
+                                        .height(35.dp)
+                                ) {
+                                    Text(
+                                        text = "Retry",
+                                        style = TextStyle(
+                                            color = Color(0xff024040),
+                                            fontSize = 14.sp
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
                     is LoadState.Loading -> {
                         item {
                             Column(
