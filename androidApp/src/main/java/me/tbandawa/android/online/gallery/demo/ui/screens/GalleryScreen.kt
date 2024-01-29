@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,8 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -98,14 +102,15 @@ fun GalleryScreen(
                         val gallery = (galleryState as ResourceState.Success<Gallery>).data
                         galleryTitle.value = gallery.title
                         galleryDate.value = convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)
-                        if (photoUrl.value.isBlank())
+                        if (photoUrl.value.isBlank()) {
                             photoUrl.value = gallery.images[0].image
+                        }
 
                         ConstraintLayout(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            val (image, row) = createRefs()
+                            val (image, row, info) = createRefs()
                             AsyncImage(
                                 model = photoUrl.value,
                                 contentDescription = "Image",
@@ -116,7 +121,7 @@ fun GalleryScreen(
                                         end.linkTo(parent.end)
                                     }
                                     .fillMaxWidth()
-                                    .fillMaxHeight(.85f)
+                                    .fillMaxHeight(.75f)
                                     .clip(RoundedCornerShape(5.dp))
                             )
                             LazyRow(
@@ -126,11 +131,10 @@ fun GalleryScreen(
                                         start.linkTo(parent.start)
                                         top.linkTo(image.bottom)
                                         end.linkTo(parent.end)
-                                        bottom.linkTo(parent.bottom)
+                                        bottom.linkTo(info.top)
                                     }
                                     .padding(top = 10.dp, bottom = 10.dp)
                                     .fillMaxWidth()
-                                    .fillMaxHeight(.15f)
                             ) {
                                 items(gallery.images) { image ->
                                     AsyncImage(
@@ -139,11 +143,83 @@ fun GalleryScreen(
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
                                             .padding(top = 5.dp)
-                                            .fillMaxHeight()
+                                            .height(100.dp)
                                             .clip(RoundedCornerShape(10.dp))
                                             .clickable {
                                                 photoUrl.value = image.image
                                             }
+                                    )
+                                }
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .constrainAs(info) {
+                                        start.linkTo(parent.start)
+                                        top.linkTo(row.bottom)
+                                        end.linkTo(parent.end)
+                                        bottom.linkTo(parent.bottom)
+                                    }
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(top = 5.dp, bottom = 10.dp)
+                            ) {
+                                Card(
+                                    shape = RoundedCornerShape(5.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Color(0xffdff2d5)
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight()
+                                ) {
+                                    Column {
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(start = 5.dp, top = 5.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            AsyncImage(
+                                                model = gallery.profile?.profilePhoto?.thumbnail,
+                                                contentDescription = "Profile Photo",
+                                                contentScale = ContentScale.Crop,
+                                                modifier = Modifier
+                                                    .size(25.dp)
+                                                    .clip(CircleShape)
+                                            )
+                                            Column {
+                                                Text(
+                                                    text = "${gallery.profile?.firstname} ${gallery.profile?.lastname}",
+                                                    style = TextStyle(
+                                                        color = Color(0xff024040),
+                                                        fontWeight = FontWeight.Bold,
+                                                        fontSize = 12.sp
+                                                    ),
+                                                    modifier = Modifier
+                                                        .padding(start = 5.dp, top = 0.dp)
+                                                )
+                                                Text(
+                                                    text = "${gallery.images.size} photos",
+                                                    style = TextStyle(
+                                                        color = Color(0xff024040),
+                                                        fontWeight = FontWeight.Medium,
+                                                        fontSize = 12.sp
+                                                    ),
+                                                    modifier = Modifier
+                                                        .padding(start = 5.dp, top = 0.dp)
+                                                )
+                                            }
+                                        }
+                                    }
+                                    Text(
+                                        text = gallery.description,
+                                        style = TextStyle(
+                                            color = Color(0xff024040),
+                                            fontWeight = FontWeight.Normal,
+                                            fontSize = 12.sp
+                                        ),
+                                        modifier = Modifier
+                                            .padding(start = 35.dp, bottom = 5.dp)
                                     )
                                 }
                             }
@@ -152,6 +228,37 @@ fun GalleryScreen(
                     is ResourceState.Error -> {
                         val error = (galleryState as ResourceState.Error<*>).data!!
 
+                        var errorMessage = ""
+                        for(message in error.messages!!) {
+                            errorMessage += "$message\n"
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(8.dp),
+                                text = errorMessage
+                            )
+                            TextButton(
+                                onClick = {
+                                    galleryViewModel.getGallery(galleryId)
+                                },
+                                modifier = Modifier
+                                    .height(35.dp)
+                            ) {
+                                Text(
+                                    text = "Retry",
+                                    style = TextStyle(
+                                        color = Color(0xff024040),
+                                        fontSize = 14.sp
+                                    )
+                                )
+                            }
+                        }
                     }
                     is ResourceState.Empty -> { }
                 }
