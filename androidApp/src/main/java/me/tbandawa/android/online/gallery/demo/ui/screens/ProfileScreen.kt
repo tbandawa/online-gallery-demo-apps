@@ -56,6 +56,7 @@ import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
+import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.ProfileGalleries
@@ -73,8 +74,12 @@ fun ProfileScreen(
     ) {
 
         val scope = rememberCoroutineScope()
+        val scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
         val profileViewModel: ProfileViewModel = koinViewModel()
         val profileState by profileViewModel.profileResource.collectAsState()
+
+        val galleryViewModel: GalleryViewModel = koinViewModel()
+        val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
 
         var isLoading by remember { mutableStateOf(false) }
         var isSuccess by remember { mutableStateOf(false) }
@@ -98,14 +103,13 @@ fun ProfileScreen(
             }
         }
 
-        val scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
-
         when (profileState) {
             is ResourceState.Loading -> {
                 isLoading = true
                 isError = false
             }
             is ResourceState.Success -> {
+
                 val profile = (profileState as ResourceState.Success).data
                 galleryCount.intValue = profile.gallery.size
                 galleryList = profile.gallery
@@ -113,13 +117,30 @@ fun ProfileScreen(
                 isSuccess = true
             }
             is ResourceState.Error -> {
+
                 isLoading = false
                 isError = true
             }
             is ResourceState.Empty -> {
+
                 isLoading = false
                 isSuccess = false
                 isError = false
+            }
+        }
+
+        when (deleteState) {
+            is ResourceState.Loading -> {
+
+            }
+            is ResourceState.Success -> {
+                profileViewModel.getProfile()
+            }
+            is ResourceState.Error -> {
+
+            }
+            is ResourceState.Empty -> {
+
             }
         }
 
@@ -340,7 +361,7 @@ fun ProfileScreen(
                             galleries = galleryList,
                             navigateToGallery = navigateToGallery
                         ) { galleryId ->
-
+                            galleryViewModel.deleteGallery(galleryId)
                         }
                     }
                     if (galleryList.isEmpty() && !isLoading) {
