@@ -14,7 +14,7 @@ class PagingGalleryViewModel(
     private val galleryRepository: GalleryRepository
 ): BaseViewModel() {
 
-    val newsData: Flow<PagingData<Gallery>> =
+    val galleriesData: Flow<PagingData<Gallery>> =
         Pager(config = PagingConfig(pageSize = 10, prefetchDistance = 2),
             pagingSourceFactory = { GalleryPagingSource(galleryRepository) }
         ).flow.cachedIn(coroutineScope)

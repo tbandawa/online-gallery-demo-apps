@@ -12,9 +12,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.coroutines.flow.retry
 import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.BottomNavigationBar
+import me.tbandawa.android.online.gallery.demo.ui.viewmodels.PagingGalleryViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -47,6 +50,9 @@ fun MainNavigation(
     navigateToGallery: (galleryId: Long) -> Unit
 ) {
 
+    val pagingGalleryViewModel: PagingGalleryViewModel = koinViewModel()
+    val galleries = pagingGalleryViewModel.galleriesData.collectAsLazyPagingItems()
+
     val galleryViewModel: GalleryViewModel = koinViewModel()
     val galleryState by galleryViewModel.galleryResource.collectAsState()
 
@@ -57,6 +63,10 @@ fun MainNavigation(
         composable(route = "galleries") {
             GalleriesScreen(
                 navController = navController,
+                galleries = galleries,
+                retry = {
+                    pagingGalleryViewModel.galleriesData.retry()
+                },
                 navigateToGallery = navigateToGallery
             )
         }

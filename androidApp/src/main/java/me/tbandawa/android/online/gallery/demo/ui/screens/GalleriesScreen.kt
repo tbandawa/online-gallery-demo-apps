@@ -25,22 +25,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import kotlinx.coroutines.flow.retry
+import kotlinx.coroutines.flow.flowOf
+import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.demo.ui.components.GalleryItem
 import me.tbandawa.android.online.gallery.demo.ui.components.HomeToolBar
-import me.tbandawa.android.online.gallery.demo.ui.viewmodels.PagingGalleryViewModel
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun GalleriesScreen(
     navController: NavController,
+    galleries: LazyPagingItems<Gallery>,
+    retry: () -> Unit,
     navigateToGallery: (galleryId: Long) -> Unit
 ) {
-
-    val pagingGalleryViewModel: PagingGalleryViewModel = koinViewModel()
-    val galleries = pagingGalleryViewModel.newsData.collectAsLazyPagingItems()
 
     Surface(
         modifier = Modifier
@@ -111,7 +111,7 @@ fun GalleriesScreen(
                                 )
                                 TextButton(
                                     onClick = {
-                                        pagingGalleryViewModel.newsData.retry()
+                                        retry()
                                     },
                                     modifier = Modifier
                                         .height(35.dp)
@@ -151,6 +151,13 @@ fun GalleriesScreen(
 @Composable
 fun GalleriesScreenPreview() {
     GalleriesScreen(
-        navController = rememberNavController()
-    ){}
+        navController = rememberNavController(),
+        galleries = flowOf(PagingData.from(emptyList<Gallery>())).collectAsLazyPagingItems(),
+        retry = {
+
+        },
+        navigateToGallery = { galleryId ->
+
+        }
+    )
 }
