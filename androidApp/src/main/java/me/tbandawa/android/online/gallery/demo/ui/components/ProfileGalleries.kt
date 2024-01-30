@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
-import timber.log.Timber
 
 @Composable
 fun ProfileGalleries(

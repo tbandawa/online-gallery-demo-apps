@@ -8,6 +8,7 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
@@ -142,6 +143,17 @@ class GalleryApi {
             }
             contentType(ContentType.Application.Json)
         }.body()
+    }
+
+    suspend fun deleteGallery(token: String, galleryId: Long): Boolean {
+        httpClient.delete {
+            url("$BASE_URL/gallery/$galleryId")
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.Application.Json)
+        }
+        return true
     }
 
     suspend fun editUser(token: String, userRequest: UserRequest): UserResponse {

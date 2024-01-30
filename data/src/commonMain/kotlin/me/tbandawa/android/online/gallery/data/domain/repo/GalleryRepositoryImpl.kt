@@ -117,6 +117,15 @@ class GalleryRepositoryImpl(
         })
     }.flowOn(Dispatchers.Default)
 
+    override suspend fun deleteGallery(galleryId: Long): Flow<ResourceState<Boolean>> = flow {
+        val user = getUser()
+        emit(ResourceState.Empty)
+        emit(ResourceState.Loading)
+        emit(handleApiCall {
+            galleryApi.deleteGallery(user!!.token, galleryId)
+        })
+    }.flowOn(Dispatchers.Default)
+
     override suspend fun uploadProfilePicture(
         photoTitle: String,
         photoBytes: ByteArray
