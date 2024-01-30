@@ -9,17 +9,20 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.SplashViewModel
 import me.tbandawa.android.online.gallery.demo.ui.auth.AuthScreen
 import me.tbandawa.android.online.gallery.demo.ui.screens.GalleryScreen
 import me.tbandawa.android.online.gallery.demo.ui.screens.HomeScreen
 import me.tbandawa.android.online.gallery.demo.ui.theme.OnlineGalleryDemoTheme
+import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -38,6 +41,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+
+            val galleryViewModel: GalleryViewModel = koinViewModel()
+            val galleryState by galleryViewModel.galleryResource.collectAsState()
 
             val navController = rememberNavController()
             val authValue = userViewModel.authState.collectAsState().value
@@ -66,7 +72,14 @@ class MainActivity : ComponentActivity() {
                                 val galleryId = backStackEntry.arguments?.getString("id")?.toLong()
                                 GalleryScreen(
                                     navController = navController,
-                                    galleryId = galleryId!!
+                                    galleryId = galleryId!!,
+                                    galleryState = galleryState,
+                                    getGallery = { galleryId ->
+                                        galleryViewModel.getGallery(galleryId)
+                                    },
+                                    resetState = {
+                                        galleryViewModel.resetState()
+                                    }
                                 )
                             }
                         }

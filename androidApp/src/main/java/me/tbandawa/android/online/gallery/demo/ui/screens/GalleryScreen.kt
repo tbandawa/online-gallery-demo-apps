@@ -24,26 +24,26 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
+import me.tbandawa.android.online.gallery.data.domain.models.Error
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
-import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.GalleryToolbar
 import me.tbandawa.android.online.gallery.demo.utils.MMM_DD_YYYY
 import me.tbandawa.android.online.gallery.demo.utils.YYYY_MM_DD_T
 import me.tbandawa.android.online.gallery.demo.utils.convertDate
-import org.koin.androidx.compose.koinViewModel
 import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GalleryScreen(
     navController: NavController,
-    galleryId: Long
+    galleryId: Long,
+    galleryState: ResourceState<Gallery>,
+    getGallery: (galleryId: Long) -> Unit,
+    resetState: () -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
-    val galleryViewModel: GalleryViewModel = koinViewModel()
-    val galleryState by galleryViewModel.galleryResource.collectAsState()
 
     val galleryTitle = remember { mutableStateOf("") }
     val galleryDate = remember { mutableStateOf("") }
@@ -51,13 +51,13 @@ fun GalleryScreen(
 
     LaunchedEffect(Unit) {
         scope.launch {
-            galleryViewModel.getGallery(galleryId)
+            getGallery(galleryId)
         }
     }
 
     DisposableEffect(Unit) {
         onDispose {
-            galleryViewModel.resetState()
+            resetState()
         }
     }
 
@@ -245,7 +245,7 @@ fun GalleryScreen(
                             )
                             TextButton(
                                 onClick = {
-                                    galleryViewModel.getGallery(galleryId)
+                                    getGallery(galleryId)
                                 },
                                 modifier = Modifier
                                     .height(35.dp)
@@ -270,5 +270,11 @@ fun GalleryScreen(
 @Preview
 @Composable
 fun GalleryScreenPreview() {
-    GalleryScreen(navController = rememberNavController(), galleryId = 1)
+    GalleryScreen(
+        navController = rememberNavController(),
+        galleryId = 1,
+        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred"))),
+        getGallery = {},
+        resetState = {}
+    )
 }

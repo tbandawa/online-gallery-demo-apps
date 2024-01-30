@@ -154,11 +154,7 @@ fun GalleriesScreenPreview() {
     GalleriesScreen(
         navController = rememberNavController(),
         galleries = flowOf(PagingData.from(emptyList<Gallery>())).collectAsLazyPagingItems(),
-        retry = {
-
-        },
-        navigateToGallery = { galleryId ->
-
-        }
+        retry = {},
+        navigateToGallery = {}
     )
 }

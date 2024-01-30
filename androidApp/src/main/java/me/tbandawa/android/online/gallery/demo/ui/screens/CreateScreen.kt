@@ -392,10 +392,8 @@ fun getBytesFromUri(context: Context, uri: Uri?): ByteArray? {
 @Composable
 fun CreateScreenPreview() {
     CreateScreen(
-        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred", "An Error Occurred"))),
-        createGallery = { title, description, images ->
-
-        },
+        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred"))),
+        createGallery = { _, _, _ -> },
         resetState = {}
     )
 }
