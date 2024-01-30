@@ -63,6 +63,7 @@ fun GalleriesScreen(
                     .padding(it)
                     .padding(start = 16.dp, top = 0.dp, end = 16.dp)
             ) {
+
                 items(galleries) { gallery ->
                     GalleryItem(
                         gallery = gallery!!,
@@ -74,7 +75,7 @@ fun GalleriesScreen(
                     )
                 }
 
-                when (val state = galleries.loadState.refresh) {
+                when (galleries.loadState.refresh) {
                     is LoadState.Error -> { }
                     is LoadState.Loading -> {
                         item {
@@ -87,7 +88,7 @@ fun GalleriesScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(8.dp),
-                                    text = "Loading..."
+                                    text = "Loading Galleries..."
                                 )
                                 CircularProgressIndicator(color = Color.Black)
                             }
@@ -96,7 +97,7 @@ fun GalleriesScreen(
                     else -> {}
                 }
 
-                when (val state = galleries.loadState.append) {
+                when (galleries.loadState.append) {
                     is LoadState.Error -> {
                         item {
                             Column(
@@ -135,7 +136,7 @@ fun GalleriesScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center,
                             ) {
-                                Text(text = "Loading Galleries")
+                                Text(text = "Loading...")
                                 CircularProgressIndicator(color = Color.Black)
                             }
                         }
