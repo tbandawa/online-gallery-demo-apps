@@ -34,7 +34,8 @@ import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 @Composable
 fun ProfileGalleries(
     galleries: List<Gallery>,
-    navigateToGallery: (galleryId: Long) -> Unit
+    navigateToGallery: (galleryId: Long) -> Unit,
+    deleteGallery: (galleryId: Long) -> Unit
 ) {
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
@@ -70,7 +71,7 @@ fun ProfileGalleries(
                             .clickable(
                                 enabled = true,
                                 onClick = {
-
+                                    deleteGallery(gallery.id)
                                 }
                             )
                     )

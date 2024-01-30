@@ -54,12 +54,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
-import me.tbandawa.android.online.gallery.data.domain.models.Error
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
-import me.tbandawa.android.online.gallery.demo.ui.components.ProfileGalleries
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
+import me.tbandawa.android.online.gallery.demo.ui.components.ProfileGalleries
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -340,7 +339,9 @@ fun ProfileScreen(
                         ProfileGalleries(
                             galleries = galleryList,
                             navigateToGallery = navigateToGallery
-                        )
+                        ) { galleryId ->
+
+                        }
                     }
                     if (galleryList.isEmpty() && !isLoading) {
                         Column {
