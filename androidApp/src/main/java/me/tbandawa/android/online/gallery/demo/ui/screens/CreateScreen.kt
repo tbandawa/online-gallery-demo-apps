@@ -35,13 +35,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import me.tbandawa.android.online.gallery.R
+import me.tbandawa.android.online.gallery.data.domain.models.Error
+import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
-import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
+import me.tbandawa.android.online.gallery.demo.ui.components.ErrorDialog
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
-import org.koin.androidx.compose.koinViewModel
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.util.*
@@ -49,12 +50,12 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CreateScreen(
-
+    galleryState: ResourceState<Gallery>,
+    createGallery: (String, String, Map<String, ByteArray>) -> Unit,
+    resetState: () -> Unit
 ) {
 
     val context = LocalContext.current
-    val galleryViewModel: GalleryViewModel = koinViewModel()
-    val galleryState by galleryViewModel.galleryResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
     val textTitle = rememberSaveable { mutableStateOf("") }
@@ -70,7 +71,7 @@ fun CreateScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            galleryViewModel.resetState()
+            resetState()
         }
     }
 
@@ -87,12 +88,19 @@ fun CreateScreen(
                 textTitle.value = ""
                 textDescription.value = ""
                 selectedUris = emptyList()
-                galleryViewModel.resetState()
+                resetState()
             }
         }
         is ResourceState.Error -> {
             val error = (galleryState as ResourceState.Error<*>).data!!
             isLoading = false
+            var errorMessage = ""
+            for(message in error.messages!!) {
+                errorMessage += "$message\n"
+            }
+            ErrorDialog(message = errorMessage) {
+               resetState()
+            }
         }
     }
 
@@ -282,7 +290,7 @@ fun CreateScreen(
                                     images[getFileNameFromUri(context, uri)!!] =
                                         getBytesFromUri(context, uri)!!
                                 }
-                                galleryViewModel.createGallery(
+                                createGallery(
                                     textTitle.value,
                                     textDescription.value,
                                     images
@@ -322,7 +330,7 @@ fun ImageFile(
         val (image, closeIcon) = createRefs()
 
         Image(
-            painter = rememberImagePainter(uri),
+            painter = rememberAsyncImagePainter(uri),
             contentDescription = "Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -383,5 +391,11 @@ fun getBytesFromUri(context: Context, uri: Uri?): ByteArray? {
 @Preview
 @Composable
 fun CreateScreenPreview() {
-    CreateScreen()
+    CreateScreen(
+        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred", "An Error Occurred"))),
+        createGallery = { title, description, images ->
+
+        },
+        resetState = {}
+    )
 }

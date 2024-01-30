@@ -66,7 +66,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    navigateToGallery: (galleryId: Long) -> Unit
+    navigateToGallery: (Long) -> Unit
 ) {
     Surface(
         modifier = Modifier
