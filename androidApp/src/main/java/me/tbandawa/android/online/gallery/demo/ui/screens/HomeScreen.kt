@@ -4,13 +4,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
+import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.BottomNavigationBar
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
@@ -41,6 +46,10 @@ fun MainNavigation(
     navController: NavHostController,
     navigateToGallery: (galleryId: Long) -> Unit
 ) {
+
+    val galleryViewModel: GalleryViewModel = koinViewModel()
+    val galleryState by galleryViewModel.galleryResource.collectAsState()
+
     NavHost(
         navController,
         startDestination = "galleries"
@@ -52,7 +61,15 @@ fun MainNavigation(
             )
         }
         composable(route = "create") {
-            CreateScreen()
+            CreateScreen(
+                galleryState = galleryState,
+                createGallery = { title, description, images ->
+                    galleryViewModel.createGallery(title, description, images)
+                },
+                resetState = {
+                    galleryViewModel.resetState()
+                }
+            )
         }
         composable(route = "profile") {
             ProfileScreen(
