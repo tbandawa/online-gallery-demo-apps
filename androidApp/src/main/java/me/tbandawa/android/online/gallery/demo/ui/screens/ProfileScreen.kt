@@ -109,7 +109,6 @@ fun ProfileScreen(
                 isError = false
             }
             is ResourceState.Success -> {
-
                 val profile = (profileState as ResourceState.Success).data
                 galleryCount.intValue = profile.gallery.size
                 galleryList = profile.gallery
