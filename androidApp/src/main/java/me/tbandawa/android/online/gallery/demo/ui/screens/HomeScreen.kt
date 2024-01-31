@@ -56,6 +56,9 @@ fun MainNavigation(
     val galleryViewModel: GalleryViewModel = koinViewModel()
     val galleryState by galleryViewModel.galleryResource.collectAsState()
 
+    val profileViewModel: ProfileViewModel = koinViewModel()
+    val userState by profileViewModel.userResource.collectAsState()
+
     NavHost(
         navController,
         startDestination = "galleries"
@@ -94,7 +97,13 @@ fun MainNavigation(
         }
         composable(route = "profile/edit") {
             EditProfileScreen(
-                navController = navController
+                navController = navController,
+                userState = userState,
+                getUserData = { profileViewModel.getUserData()!!},
+                resetState = { profileViewModel.resetState() },
+                editUser = { firstname, lastname, username, email, password ->
+                    profileViewModel.editUser(firstname, lastname, username, email, password)
+                }
             )
         }
         composable(route = "profile/photo") {

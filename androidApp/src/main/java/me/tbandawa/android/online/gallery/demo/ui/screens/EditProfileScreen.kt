@@ -31,7 +31,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,20 +56,22 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
+import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
+import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
-import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.SuccessDialog
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EditProfileScreen(
-    navController: NavController
+    navController: NavController,
+    userState: ResourceState<User>,
+    getUserData: () -> User,
+    resetState: () -> Unit,
+    editUser: (firstname: String, lastname: String, username: String, email: String, password: String) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
-    val profileViewModel: ProfileViewModel = koinViewModel()
-    val userState by profileViewModel.userResource.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
@@ -91,7 +92,7 @@ fun EditProfileScreen(
 
     LaunchedEffect(Unit) {
         scope.launch {
-            val user = profileViewModel.getUserData()!!
+            val user = getUserData()
             textFirstName.value = user.firstname
             textLastName.value = user.lastname
             textUserName.value = user.username
@@ -107,7 +108,7 @@ fun EditProfileScreen(
         }
         is ResourceState.Success -> {
             SuccessDialog(message = "Changes Successfully Saved") {
-                profileViewModel.resetState()
+                resetState()
             }
         }
         is ResourceState.Error -> {
@@ -392,13 +393,7 @@ fun EditProfileScreen(
                             isLastNameValid = textLastName.value.isNotBlank()
                             isPasswordValid = textPassword.value.isNotBlank()
                             if (isFirstNameValid && isLastNameValid && isEmailValid && isUserNameValid && isPasswordValid) {
-                                profileViewModel.editUser(
-                                    firstname = textFirstName.value,
-                                    lastname = textLastName.value,
-                                    username = textUserName.value,
-                                    email = textEmail.value,
-                                    password = textPassword.value
-                                )
+                                editUser(textFirstName.value, textLastName.value, textUserName.value, textEmail.value, textPassword.value)
                             }
                         },
                         shape = RoundedCornerShape(50),
@@ -442,5 +437,11 @@ fun EditProfileScreen(
 @Preview
 @Composable
 fun EditProfileScreenPreview() {
-    EditProfileScreen(navController = rememberNavController())
+    EditProfileScreen(
+        navController = rememberNavController(),
+        userState = ResourceState.Loading,
+        getUserData = { User("user_token", 0, "First", "Last", "username", "user@email.com", emptyList(), ProfilePhoto("", "")) },
+        resetState = {},
+        editUser = { _, _, _, _, _ -> }
+    )
 }
