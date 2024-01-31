@@ -27,8 +27,6 @@ fun HomeScreen(
 
     val navController = rememberNavController()
 
-
-
     Scaffold(
         content = { padding ->
             Box(modifier = Modifier.padding(padding)) {
@@ -55,14 +53,17 @@ fun MainNavigation(
 
     val galleryViewModel: GalleryViewModel = koinViewModel()
     val galleryState by galleryViewModel.galleryResource.collectAsState()
+    val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
 
     val profileViewModel: ProfileViewModel = koinViewModel()
     val userState by profileViewModel.userResource.collectAsState()
+    val profileState by profileViewModel.profileResource.collectAsState()
 
     NavHost(
         navController,
         startDestination = "galleries"
     ) {
+
         composable(route = "galleries") {
             GalleriesScreen(
                 navController = navController,
@@ -73,6 +74,7 @@ fun MainNavigation(
                 navigateToGallery = navigateToGallery
             )
         }
+
         composable(route = "create") {
             CreateScreen(
                 galleryState = galleryState,
@@ -84,33 +86,45 @@ fun MainNavigation(
                 }
             )
         }
+
         composable(route = "profile") {
             ProfileScreen(
                 navController = navController,
-                navigateToGallery = navigateToGallery
+                navigateToGallery = { navigateToGallery },
+                profileState = profileState,
+                deleteState = deleteState,
+                getUserData = { profileViewModel.getUserData()!! },
+                getProfile = { profileViewModel.getProfile() },
+                deleteGallery = { galleryId ->
+                    galleryViewModel.deleteGallery(galleryId)
+                }
             )
         }
+
         composable(route = "search") {
             SearchScreen(
                 navController = navController
             )
         }
+
         composable(route = "profile/edit") {
             EditProfileScreen(
                 navController = navController,
                 userState = userState,
-                getUserData = { profileViewModel.getUserData()!!},
+                getUserData = { profileViewModel.getUserData()!! },
                 resetState = { profileViewModel.resetState() },
                 editUser = { firstname, lastname, username, email, password ->
                     profileViewModel.editUser(firstname, lastname, username, email, password)
                 }
             )
         }
+
         composable(route = "profile/photo") {
             EditProfilePhotoScreen(
                 navController = navController
             )
         }
+
         composable(route = "profile/{id}") { backStackEntry ->
             val userId = backStackEntry.arguments?.getLong("id")
         }

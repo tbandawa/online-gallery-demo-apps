@@ -169,6 +169,7 @@ fun EditProfileScreen(
                             AsyncImage(
                                 model = photoUrl,
                                 placeholder = painterResource(R.drawable.ic_user),
+                                error = painterResource(R.drawable.ic_user),
                                 contentDescription = "Profile Photo",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier

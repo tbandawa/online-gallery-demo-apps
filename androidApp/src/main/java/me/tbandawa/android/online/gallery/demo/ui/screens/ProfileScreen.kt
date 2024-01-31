@@ -31,7 +31,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,19 +54,25 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
+import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
+import me.tbandawa.android.online.gallery.data.domain.models.Profile
+import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
+import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
-import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
-import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.MainToolbar
 import me.tbandawa.android.online.gallery.demo.ui.components.ProfileGalleries
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    navigateToGallery: (Long) -> Unit
+    navigateToGallery: (Long) -> Unit,
+    profileState: ResourceState<Profile>,
+    deleteState: ResourceState<Boolean>,
+    getUserData: () -> User,
+    getProfile: () -> Unit,
+    deleteGallery: (galleryId: Long) -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -75,11 +81,6 @@ fun ProfileScreen(
 
         val scope = rememberCoroutineScope()
         val scaffoldState = rememberBackdropScaffoldState(initialValue = BackdropValue.Revealed)
-        val profileViewModel: ProfileViewModel = koinViewModel()
-        val profileState by profileViewModel.profileResource.collectAsState()
-
-        val galleryViewModel: GalleryViewModel = koinViewModel()
-        val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
 
         var isLoading by remember { mutableStateOf(false) }
         var isSuccess by remember { mutableStateOf(false) }
@@ -94,12 +95,12 @@ fun ProfileScreen(
 
         LaunchedEffect(Unit) {
             scope.launch {
-                val user = profileViewModel.getUserData()!!
+                val user = getUserData()
                 firstName.value = user.firstname
                 lastName.value = user.lastname
                 email.value = user.email
                 photoUrl.value = user.profilePhoto.thumbnail!!
-                profileViewModel.getProfile()
+                getProfile()
             }
         }
 
@@ -133,7 +134,7 @@ fun ProfileScreen(
 
             }
             is ResourceState.Success -> {
-                profileViewModel.getProfile()
+                getProfile()
             }
             is ResourceState.Error -> {
 
@@ -167,6 +168,8 @@ fun ProfileScreen(
 
                     AsyncImage(
                         model = photoUrl.value,
+                        placeholder = painterResource(R.drawable.ic_user),
+                        error = painterResource(R.drawable.ic_user),
                         contentDescription = "Profile Photo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -360,7 +363,7 @@ fun ProfileScreen(
                             galleries = galleryList,
                             navigateToGallery = navigateToGallery
                         ) { galleryId ->
-                            galleryViewModel.deleteGallery(galleryId)
+                            deleteGallery(galleryId)
                         }
                     }
                     if (galleryList.isEmpty() && !isLoading) {
@@ -389,7 +392,7 @@ fun ProfileScreen(
                             )
                             TextButton(
                                 onClick = {
-                                    profileViewModel.getProfile()
+                                    getProfile()
                                 },
                                 modifier = Modifier
                                     .height(35.dp)
@@ -413,5 +416,13 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen(navController = rememberNavController()){}
+    ProfileScreen(
+        navController = rememberNavController(),
+        navigateToGallery = { },
+        profileState = ResourceState.Loading,
+        deleteState = ResourceState.Loading,
+        getUserData = { User("user_token", 0, "First", "Last", "username", "user@email.com", emptyList(), ProfilePhoto("", "")) },
+        getProfile = { },
+        deleteGallery = { }
+    )
 }

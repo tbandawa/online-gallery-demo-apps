@@ -67,6 +67,7 @@ fun GalleryItem(
                     AsyncImage(
                         model = profile.profilePhoto.thumbnail,
                         placeholder = painterResource(R.drawable.ic_user),
+                        error = painterResource(R.drawable.ic_user),
                         contentDescription = "Profile Photo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
