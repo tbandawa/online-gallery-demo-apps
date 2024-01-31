@@ -155,7 +155,7 @@ fun ErrorDialog(
                 Text(
                     modifier = Modifier
                         .width(IntrinsicSize.Max)
-                        .padding(top = 25.dp, bottom = 10.dp),
+                        .padding(bottom = 10.dp),
                     textAlign = TextAlign.Center,
                     text = message,
                     style = TextStyle(

@@ -99,16 +99,14 @@ fun EditProfilePhotoScreen(
         is ResourceState.Error -> {
             val error = (profilePhotoState as ResourceState.Error<*>).data!!
             isLoading = false
-
             var errorMessage = ""
-            for(message in error.messages!!) {
-                errorMessage += "$message\n"
+            for(index in error.messages!!.indices) {
+                val newLine = if (index == (error.messages!!.size - 1)) "" else "\n"
+                errorMessage += "${error.messages!![index]}$newLine"
             }
-
             ErrorDialog(message = errorMessage) {
                 profileViewModel.resetState()
             }
-
         }
         is ResourceState.Empty -> {
             isLoading = false

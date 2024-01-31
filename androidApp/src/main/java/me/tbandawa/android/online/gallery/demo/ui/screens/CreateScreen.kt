@@ -95,8 +95,9 @@ fun CreateScreen(
             val error = (galleryState as ResourceState.Error<*>).data!!
             isLoading = false
             var errorMessage = ""
-            for(message in error.messages!!) {
-                errorMessage += "$message\n"
+            for(index in error.messages!!.indices) {
+                val newLine = if (index == (error.messages!!.size - 1)) "" else "\n"
+                errorMessage += "${error.messages!![index]}$newLine"
             }
             ErrorDialog(message = errorMessage) {
                resetState()
@@ -392,7 +393,7 @@ fun getBytesFromUri(context: Context, uri: Uri?): ByteArray? {
 @Composable
 fun CreateScreenPreview() {
     CreateScreen(
-        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred"))),
+        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred", "An Error Occurred"))),
         createGallery = { _, _, _ -> },
         resetState = {}
     )
