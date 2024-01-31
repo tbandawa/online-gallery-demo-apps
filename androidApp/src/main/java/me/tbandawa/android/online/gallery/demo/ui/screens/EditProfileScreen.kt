@@ -168,6 +168,7 @@ fun EditProfileScreen(
 
                             AsyncImage(
                                 model = photoUrl,
+                                placeholder = painterResource(R.drawable.ic_user),
                                 contentDescription = "Profile Photo",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
@@ -439,7 +440,7 @@ fun EditProfileScreen(
 fun EditProfileScreenPreview() {
     EditProfileScreen(
         navController = rememberNavController(),
-        userState = ResourceState.Loading,
+        userState = ResourceState.Empty,
         getUserData = { User("user_token", 0, "First", "Last", "username", "user@email.com", emptyList(), ProfilePhoto("", "")) },
         resetState = {},
         editUser = { _, _, _, _, _ -> }

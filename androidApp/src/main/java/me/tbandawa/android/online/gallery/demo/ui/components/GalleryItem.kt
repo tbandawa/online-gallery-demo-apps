@@ -24,11 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.demo.utils.MMM_DD_YYYY
 import me.tbandawa.android.online.gallery.demo.utils.YYYY_MM_DD_T
@@ -64,6 +66,7 @@ fun GalleryItem(
                 ) {
                     AsyncImage(
                         model = profile.profilePhoto.thumbnail,
+                        placeholder = painterResource(R.drawable.ic_user),
                         contentDescription = "Profile Photo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
