@@ -277,11 +277,15 @@ fun CreateScreen(
                         Text(
                             text = "Add Image",
                             Modifier
-                                .padding(start = 10.dp)
+                                .padding(start = 10.dp),
+                            style = TextStyle(
+                                color = Color(0xff024040),
+                                fontSize = 14.sp
+                            )
                         )
                     }
                     Spacer(Modifier.weight(1f))
-                    FilledTonalButton(
+                    Button(
                         onClick = {
                             isTitleValid = textTitle.value.isNotBlank()
                             isDescriptionValid = textDescription.value.isNotBlank()
@@ -298,17 +302,20 @@ fun CreateScreen(
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(25),
-                        enabled = selectedUris.isNotEmpty() || isLoading
+                        shape = RoundedCornerShape(50),
+                        modifier = Modifier
+                            .height(35.dp),
+                        enabled = selectedUris.isNotEmpty() || isLoading,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xff024040)
+                        )
                     ) {
-                        Image(
-                            painterResource(id = R.drawable.ic_upload),
-                            contentDescription ="Upload",
-                            modifier = Modifier.size(20.dp))
                         Text(
-                            text = if (isLoading) "Uploading" else "Upload",
-                            Modifier
-                                .padding(start = 10.dp)
+                            text = if (isLoading) "Uploading..." else "Upload",
+                            style = TextStyle(
+                                color = if (selectedUris.isNotEmpty() || isLoading) Color.White else Color(0xff024040),
+                                fontSize = 14.sp
+                            )
                         )
                     }
                 }
