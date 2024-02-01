@@ -1,7 +1,10 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -12,11 +15,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,17 +41,23 @@ import me.tbandawa.android.online.gallery.demo.utils.YYYY_MM_DD_T
 import me.tbandawa.android.online.gallery.demo.utils.convertDate
 import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GalleryScreen(
     navController: NavController,
     galleryId: Long,
+    showDelete: Boolean,
     galleryState: ResourceState<Gallery>,
+    deleteState: ResourceState<Boolean>,
     getGallery: (galleryId: Long) -> Unit,
+    deleteGallery: (galleryId: Long) -> Unit,
     resetState: () -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
 
     val galleryTitle = remember { mutableStateOf("") }
     val galleryDate = remember { mutableStateOf("") }
@@ -63,6 +75,15 @@ fun GalleryScreen(
         }
     }
 
+    when (deleteState) {
+        is ResourceState.Loading -> { }
+        is ResourceState.Success -> {
+            navController.navigateUp()
+        }
+        is ResourceState.Error -> { }
+        is ResourceState.Empty -> { }
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -72,7 +93,11 @@ fun GalleryScreen(
                 GalleryToolbar(
                     title = galleryTitle.value,
                     time = galleryDate.value,
-                    navController = navController
+                    navController = navController,
+                    showDelete = showDelete,
+                    deleteGallery = {
+                        showBottomSheet = !showBottomSheet
+                    }
                 )
             },
             containerColor = Color.White
@@ -83,7 +108,6 @@ fun GalleryScreen(
                     .padding(it)
                     .padding(start = 16.dp, top = 0.dp, end = 16.dp)
             ) {
-
                 when(galleryState) {
                     is ResourceState.Loading -> {
                         Column(
@@ -265,6 +289,84 @@ fun GalleryScreen(
                     }
                     is ResourceState.Empty -> { }
                 }
+                if (showBottomSheet) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            showBottomSheet = false
+                        },
+                        sheetState = sheetState,
+                        containerColor = Color.White,
+                        dragHandle = null,
+                        shape = RoundedCornerShape(topStartPercent = 5, topEndPercent = 5)
+                    ) {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(5.dp))
+                                .background(
+                                    MaterialTheme.colorScheme.surface,
+                                )
+                                .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .width(IntrinsicSize.Max)
+                                        .padding(top = 35.dp, bottom = 35.dp),
+                                    textAlign = TextAlign.Center,
+                                    text = "Do you want to delete this gallery?",
+                                    style = TextStyle(
+                                        color = Color(0xffFF0000),
+                                        fontSize = 16.sp
+                                    )
+                                )
+                                Row (
+                                    modifier = Modifier
+                                        .padding(start = 16.dp, end = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    TextButton(
+                                        onClick = {
+                                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                                if (!sheetState.isVisible) {
+                                                    showBottomSheet = false
+                                                }
+                                            }
+                                        },
+                                        modifier = Modifier
+                                            .height(35.dp)
+                                    ) {
+                                        Text(
+                                            text = "Cancel",
+                                            Modifier
+                                                .padding(start = 10.dp)
+                                        )
+                                    }
+                                    Spacer(Modifier.weight(1f))
+                                    Button(
+                                        onClick = {
+                                            deleteGallery(galleryId)
+                                        },
+                                        shape = RoundedCornerShape(50),
+                                        modifier = Modifier
+                                            .height(35.dp)
+                                    ) {
+                                        Text(
+                                            text = if (true) "Deleting..." else "Delete"
+                                        )
+                                    }
+                                }
+                                Spacer(
+                                    modifier = Modifier
+                                        .height(65.dp)
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -275,9 +377,12 @@ fun GalleryScreen(
 fun GalleryScreenPreview() {
     GalleryScreen(
         navController = rememberNavController(),
-        galleryId = 1,
+        galleryId = 0,
+        showDelete = false,
         galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred"))),
-        getGallery = {},
-        resetState = {}
+        deleteState = ResourceState.Empty,
+        getGallery = { },
+        deleteGallery = { },
+        resetState = { }
     )
 }

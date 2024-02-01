@@ -39,7 +39,7 @@ fun GalleriesScreen(
     navController: NavController,
     galleries: LazyPagingItems<Gallery>,
     retry: () -> Unit,
-    navigateToGallery: (galleryId: Long) -> Unit
+    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit
 ) {
 
     Surface(
@@ -67,7 +67,9 @@ fun GalleriesScreen(
                 items(galleries) { gallery ->
                     GalleryItem(
                         gallery = gallery!!,
-                        navigateToGallery = navigateToGallery
+                        navigateToGallery = { galleryId ->
+                            navigateToGallery(galleryId, 0, 1)
+                        }
                     )
                     Spacer(
                         modifier = Modifier
@@ -154,7 +156,7 @@ fun GalleriesScreenPreview() {
     GalleriesScreen(
         navController = rememberNavController(),
         galleries = flowOf(PagingData.from(emptyList<Gallery>())).collectAsLazyPagingItems(),
-        retry = {},
-        navigateToGallery = {}
+        retry = { },
+        navigateToGallery = {_, _, _ -> }
     )
 }

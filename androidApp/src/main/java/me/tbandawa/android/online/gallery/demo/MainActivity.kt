@@ -44,12 +44,13 @@ class MainActivity : ComponentActivity() {
 
             val galleryViewModel: GalleryViewModel = koinViewModel()
             val galleryState by galleryViewModel.galleryResource.collectAsState()
+            val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
 
             val navController = rememberNavController()
             val authValue = userViewModel.authState.collectAsState().value
 
-            val navigateToGallery: (galleryId: Long) -> Unit = { galleryId ->
-                navController.navigate("gallery/$galleryId")
+            val navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit = { galleryId, galleryUserId, userId ->
+                navController.navigate("gallery/$galleryId/$galleryUserId/$userId")
             }
 
             OnlineGalleryDemoTheme {
@@ -68,14 +69,21 @@ class MainActivity : ComponentActivity() {
                             composable(route = "home") {
                                 HomeScreen(navigateToGallery)
                             }
-                            composable(route = "gallery/{id}") { backStackEntry ->
-                                val galleryId = backStackEntry.arguments?.getString("id")?.toLong()
+                            composable(route = "gallery/{galleryId}/{galleryUserId}/{userId}") { backStackEntry ->
+                                val id = backStackEntry.arguments?.getString("galleryId")?.toLong()
+                                val galleryUserId = backStackEntry.arguments?.getString("galleryUserId")?.toLong()
+                                val userId = backStackEntry.arguments?.getString("userId")?.toLong()
                                 GalleryScreen(
                                     navController = navController,
-                                    galleryId = galleryId!!,
+                                    galleryId = id!!,
+                                    showDelete = (userId!! == galleryUserId!!),
                                     galleryState = galleryState,
+                                    deleteState = deleteState,
                                     getGallery = { galleryId ->
                                         galleryViewModel.getGallery(galleryId)
+                                    },
+                                    deleteGallery = { galleryId ->
+                                         galleryViewModel.deleteGallery(galleryId)
                                     },
                                     resetState = {
                                         galleryViewModel.resetState()

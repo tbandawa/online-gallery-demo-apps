@@ -1,7 +1,9 @@
 package me.tbandawa.android.online.gallery.data.viewmodel
 
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.data.domain.models.Profile
 import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
@@ -14,6 +16,12 @@ class ProfileViewModel(
     private val galleryRepository: GalleryRepository
 ): BaseViewModel() {
 
+    sealed class UserIntent {
+        object FetchItems : UserIntent()
+    }
+
+    private val userIntents = Channel<UserIntent>(Channel.UNLIMITED)
+
     private val _profileResource = MutableStateFlow<ResourceState<Profile>>(ResourceState.Empty)
     val profileResource: StateFlow<ResourceState<Profile>> get() = _profileResource
 
@@ -22,6 +30,28 @@ class ProfileViewModel(
 
     private val _userResource = MutableStateFlow<ResourceState<User>>(ResourceState.Empty)
     val userResource: StateFlow<ResourceState<User>> get() = _userResource
+
+    init {
+        handleIntents()
+    }
+
+    private fun handleIntents() {
+        coroutineScope.launch {
+            userIntents.consumeAsFlow().collect { intent ->
+                when(intent) {
+                    is UserIntent.FetchItems -> {
+                        getProfile()
+                    }
+                }
+            }
+        }
+    }
+
+    fun onIntentReceived(intent: UserIntent) {
+        coroutineScope.launch {
+            userIntents.send(intent)
+        }
+    }
 
     fun getUserData(): User? = galleryRepository.getUser()
 

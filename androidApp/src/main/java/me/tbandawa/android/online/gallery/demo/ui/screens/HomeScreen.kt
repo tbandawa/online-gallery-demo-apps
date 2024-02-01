@@ -22,7 +22,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    navigateToGallery: (galleryId: Long) -> Unit
+    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit
 ) {
 
     val navController = rememberNavController()
@@ -32,7 +32,9 @@ fun HomeScreen(
             Box(modifier = Modifier.padding(padding)) {
                 MainNavigation(
                     navController = navController,
-                    navigateToGallery = navigateToGallery
+                    navigateToGallery = { galleryId, galleryUserId, userId ->
+                        navigateToGallery(galleryId, galleryUserId, userId)
+                    }
                 )
             }
         },
@@ -45,7 +47,7 @@ fun HomeScreen(
 @Composable
 fun MainNavigation(
     navController: NavHostController,
-    navigateToGallery: (galleryId: Long) -> Unit
+    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit
 ) {
 
     val pagingGalleryViewModel: PagingGalleryViewModel = koinViewModel()
@@ -53,7 +55,7 @@ fun MainNavigation(
 
     val galleryViewModel: GalleryViewModel = koinViewModel()
     val galleryState by galleryViewModel.galleryResource.collectAsState()
-    val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
+    //val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
 
     val profileViewModel: ProfileViewModel = koinViewModel()
     val userState by profileViewModel.userResource.collectAsState()
@@ -71,7 +73,9 @@ fun MainNavigation(
                 retry = {
                     pagingGalleryViewModel.galleriesData.retry()
                 },
-                navigateToGallery = navigateToGallery
+                navigateToGallery = { galleryId, galleryUserId, userId ->
+                    navigateToGallery(galleryId, galleryUserId, userId)
+                }
             )
         }
 
@@ -90,14 +94,12 @@ fun MainNavigation(
         composable(route = "profile") {
             ProfileScreen(
                 navController = navController,
-                navigateToGallery = { navigateToGallery },
+                navigateToGallery = { galleryId, galleryUserId, userId ->
+                    navigateToGallery(galleryId, galleryUserId, userId)
+                },
                 profileState = profileState,
-                deleteState = deleteState,
                 getUserData = { profileViewModel.getUserData()!! },
-                getProfile = { profileViewModel.getProfile() },
-                deleteGallery = { galleryId ->
-                    galleryViewModel.deleteGallery(galleryId)
-                }
+                getProfile = { profileViewModel.getProfile() /*profileViewModel.onIntentReceived(ProfileViewModel.UserIntent.FetchItems)*/ }
             )
         }
 
@@ -134,5 +136,5 @@ fun MainNavigation(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen() {}
+    HomeScreen() {_, _, _ -> }
 }

@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,12 +68,10 @@ import me.tbandawa.android.online.gallery.demo.ui.components.ProfileGalleries
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    navigateToGallery: (Long) -> Unit,
+    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit,
     profileState: ResourceState<Profile>,
-    deleteState: ResourceState<Boolean>,
     getUserData: () -> User,
-    getProfile: () -> Unit,
-    deleteGallery: (galleryId: Long) -> Unit
+    getProfile: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -86,6 +85,7 @@ fun ProfileScreen(
         var isSuccess by remember { mutableStateOf(false) }
         var isError by remember { mutableStateOf(false) }
 
+        val userId = remember { mutableLongStateOf(0L) }
         val photoUrl = remember { mutableStateOf("") }
         val firstName = remember { mutableStateOf("") }
         val lastName = remember { mutableStateOf("") }
@@ -100,6 +100,7 @@ fun ProfileScreen(
                 lastName.value = user.lastname
                 email.value = user.email
                 photoUrl.value = user.profilePhoto.thumbnail!!
+                userId.longValue = user.id
                 getProfile()
             }
         }
@@ -110,37 +111,20 @@ fun ProfileScreen(
                 isError = false
             }
             is ResourceState.Success -> {
-                val profile = (profileState as ResourceState.Success).data
+                val profile = profileState.data
                 galleryCount.intValue = profile.gallery.size
                 galleryList = profile.gallery
                 isLoading = false
                 isSuccess = true
             }
             is ResourceState.Error -> {
-
                 isLoading = false
                 isError = true
             }
             is ResourceState.Empty -> {
-
                 isLoading = false
                 isSuccess = false
                 isError = false
-            }
-        }
-
-        when (deleteState) {
-            is ResourceState.Loading -> {
-
-            }
-            is ResourceState.Success -> {
-                getProfile()
-            }
-            is ResourceState.Error -> {
-
-            }
-            is ResourceState.Empty -> {
-
             }
         }
 
@@ -361,10 +345,11 @@ fun ProfileScreen(
                     if (isSuccess) {
                         ProfileGalleries(
                             galleries = galleryList,
-                            navigateToGallery = navigateToGallery
-                        ) { galleryId ->
-                            deleteGallery(galleryId)
-                        }
+                            userId = userId.longValue,
+                            navigateToGallery = { galleryId, galleryUserId, userId ->
+                                navigateToGallery(galleryId, galleryUserId, userId)
+                            }
+                        )
                     }
                     if (galleryList.isEmpty() && !isLoading) {
                         Column {
@@ -418,11 +403,9 @@ fun ProfileScreen(
 fun ProfileScreenPreview() {
     ProfileScreen(
         navController = rememberNavController(),
-        navigateToGallery = { },
+        navigateToGallery = {_, _, _ ->  },
         profileState = ResourceState.Loading,
-        deleteState = ResourceState.Loading,
         getUserData = { User("user_token", 0, "First", "Last", "username", "user@email.com", emptyList(), ProfilePhoto("", "")) },
-        getProfile = { },
-        deleteGallery = { }
+        getProfile = { }
     )
 }

@@ -246,7 +246,9 @@ fun NavigationToolbar(
 fun GalleryToolbar(
     title: String,
     time: String,
-    navController: NavController
+    navController: NavController,
+    showDelete: Boolean,
+    deleteGallery: () -> Unit
 ) {
     TopAppBar(
         backgroundColor = Color.Transparent,
@@ -269,7 +271,7 @@ fun GalleryToolbar(
                     .fillMaxWidth(1f)
             ) {
 
-                val (navigationIcon, titleText, _) = createRefs()
+                val (navigationIcon, titleText, deleteIcon) = createRefs()
 
                 //Navigation Icon
                 IconButton(
@@ -316,6 +318,28 @@ fun GalleryToolbar(
                         )
                     )
                 }
+
+                // Delete Icon
+                if (showDelete) {
+                    IconButton(
+                        onClick = {
+                            deleteGallery.invoke()
+                        },
+                        enabled = true,
+                        modifier = Modifier
+                            .constrainAs(deleteIcon) {
+                                end.linkTo(parent.end)
+                            }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_delete),
+                            contentDescription = "Back",
+                            tint = Color(0xffff0000),
+                            modifier = Modifier
+                                .size(25.dp)
+                        )
+                    }
+                }
             }
         }
     }
@@ -324,5 +348,11 @@ fun GalleryToolbar(
 @Preview(showBackground = true)
 @Composable
 fun ToolBarsPreview() {
-    GalleryToolbar(title = "Home Toolbar", time = "25 June, 2024",navController = rememberNavController())
+    GalleryToolbar(
+        title = "Home Toolbar",
+        time = "25 June, 2024",
+        navController = rememberNavController(),
+        showDelete = true,
+        deleteGallery = { }
+    )
 }
