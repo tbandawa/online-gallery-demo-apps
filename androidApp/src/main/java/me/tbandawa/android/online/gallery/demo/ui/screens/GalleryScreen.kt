@@ -55,9 +55,9 @@ fun GalleryScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
-    val galleryTitle = remember { mutableStateOf("") }
-    val galleryDate = remember { mutableStateOf("") }
-    val photoUrl = remember { mutableStateOf("") }
+    var galleryTitle by remember { mutableStateOf("") }
+    var galleryDate by remember { mutableStateOf("") }
+    var photoUrl by remember { mutableStateOf("") }
     var isDeleting by remember { mutableStateOf(false) }
     var isDeleted by remember { mutableStateOf(false) }
     var isDeletable by remember { mutableStateOf(showDelete) }
@@ -82,8 +82,8 @@ fun GalleryScreen(
         is ResourceState.Success -> {
             isDeleting = false
             isDeleted = true
-            galleryTitle.value = ""
-            galleryDate.value = ""
+            galleryTitle = ""
+            galleryDate = ""
             isDeletable = false
             showBottomSheet = false
         }
@@ -104,8 +104,8 @@ fun GalleryScreen(
         Scaffold(
             topBar = {
                 GalleryToolbar(
-                    title = galleryTitle.value,
-                    time = galleryDate.value,
+                    title = galleryTitle,
+                    time = galleryDate,
                     navController = navController,
                     showDelete = isDeletable,
                     deleteGallery = {
@@ -138,7 +138,7 @@ fun GalleryScreen(
                         }
                     }
                     is ResourceState.Success -> {
-                        if (isDeleted) {
+                        if (isDeleted) { // Show deleted message
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize(),
@@ -150,12 +150,12 @@ fun GalleryScreen(
                                     text = "Gallery Deleted"
                                 )
                             }
-                        } else {
+                        } else { // Show Gallery
                             val gallery = galleryState.data
-                            galleryTitle.value = gallery.title
-                            galleryDate.value = convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)
-                            if (photoUrl.value.isBlank()) {
-                                photoUrl.value = gallery.images[0].image
+                            galleryTitle = gallery.title
+                            galleryDate = convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)
+                            if (photoUrl.isBlank()) {
+                                photoUrl = gallery.images[0].image
                             }
                             ConstraintLayout(
                                 modifier = Modifier
@@ -163,7 +163,7 @@ fun GalleryScreen(
                             ) {
                                 val (image, row, info) = createRefs()
                                 AsyncImage(
-                                    model = photoUrl.value,
+                                    model = photoUrl,
                                     contentDescription = "Image",
                                     modifier = Modifier
                                         .constrainAs(image) {
@@ -197,7 +197,7 @@ fun GalleryScreen(
                                                 .height(100.dp)
                                                 .clip(RoundedCornerShape(10.dp))
                                                 .clickable {
-                                                    photoUrl.value = image.image
+                                                    photoUrl = image.image
                                                 }
                                         )
                                     }
@@ -292,8 +292,6 @@ fun GalleryScreen(
                             verticalArrangement = Arrangement.Center,
                         ) {
                             Text(
-                                modifier = Modifier
-                                    .padding(8.dp),
                                 text = errorMessage
                             )
                             TextButton(
@@ -315,6 +313,8 @@ fun GalleryScreen(
                     }
                     is ResourceState.Empty -> { }
                 }
+
+                // Show delete confirmation dialog
                 if (showBottomSheet) {
                     ModalBottomSheet(
                         onDismissRequest = {
