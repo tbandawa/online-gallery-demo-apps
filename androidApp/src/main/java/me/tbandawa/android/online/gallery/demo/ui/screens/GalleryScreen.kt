@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -115,75 +116,79 @@ fun GalleryScreen(
             },
             containerColor = Color.White
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
-            ) {
-                when(galleryState) {
-                    is ResourceState.Loading -> {
+
+            when(galleryState) {
+                is ResourceState.Loading -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = "Loading..."
+                        )
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+                is ResourceState.Success -> {
+                    if (isDeleted) { // Show deleted message
                         Column(
                             modifier = Modifier
                                 .fillMaxSize(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
                         ) {
                             Text(
                                 modifier = Modifier
                                     .padding(8.dp),
-                                text = "Loading..."
+                                text = "Gallery Deleted"
                             )
-                            CircularProgressIndicator(color = Color.Black)
                         }
-                    }
-                    is ResourceState.Success -> {
-                        if (isDeleted) { // Show deleted message
+                    } else { // Show Gallery
+                        val gallery = galleryState.data
+                        galleryTitle = gallery.title
+                        galleryDate = convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)
+                        if (photoUrl.isBlank()) {
+                            photoUrl = gallery.images[0].image
+                        }
+                        ConstraintLayout(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(it)
+                                .padding(start = 16.dp, end = 16.dp)
+                        ) {
+
+                            val (image, info) = createRefs()
+
+                            AsyncImage(
+                                model = photoUrl,
+                                contentDescription = "Image",
+                                modifier = Modifier
+                                    .constrainAs(image) {
+                                        start.linkTo(parent.start)
+                                        top.linkTo(parent.top)
+                                        end.linkTo(parent.end)
+                                        bottom.linkTo(info.top)
+                                        height = Dimension.fillToConstraints
+                                    }
+                                    .clip(RoundedCornerShape(5.dp))
+                            )
+
                             Column(
                                 modifier = Modifier
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(8.dp),
-                                    text = "Gallery Deleted"
-                                )
-                            }
-                        } else { // Show Gallery
-                            val gallery = galleryState.data
-                            galleryTitle = gallery.title
-                            galleryDate = convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)
-                            if (photoUrl.isBlank()) {
-                                photoUrl = gallery.images[0].image
-                            }
-                            ConstraintLayout(
-                                modifier = Modifier
+                                    .constrainAs(info) {
+                                        start.linkTo(parent.start)
+                                        end.linkTo(parent.end)
+                                        bottom.linkTo(parent.bottom)
+                                    }
                                     .fillMaxWidth()
+                                    .wrapContentHeight()
                             ) {
-                                val (image, row, info) = createRefs()
-                                AsyncImage(
-                                    model = photoUrl,
-                                    contentDescription = "Image",
-                                    modifier = Modifier
-                                        .constrainAs(image) {
-                                            start.linkTo(parent.start)
-                                            top.linkTo(parent.top)
-                                            end.linkTo(parent.end)
-                                        }
-                                        .fillMaxWidth()
-                                        .fillMaxHeight(.75f)
-                                        .clip(RoundedCornerShape(5.dp))
-                                )
                                 LazyRow(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                                     modifier = Modifier
-                                        .constrainAs(row) {
-                                            start.linkTo(parent.start)
-                                            top.linkTo(image.bottom)
-                                            end.linkTo(parent.end)
-                                            bottom.linkTo(info.top)
-                                        }
                                         .padding(top = 10.dp, bottom = 10.dp)
                                         .fillMaxWidth()
                                 ) {
@@ -191,10 +196,10 @@ fun GalleryScreen(
                                         AsyncImage(
                                             model = image.thumbnail,
                                             contentDescription = "Image",
-                                            contentScale = ContentScale.Crop,
+                                            contentScale = ContentScale.Fit,
                                             modifier = Modifier
                                                 .padding(top = 5.dp)
-                                                .height(100.dp)
+                                                .height(75.dp)
                                                 .clip(RoundedCornerShape(10.dp))
                                                 .clickable {
                                                     photoUrl = image.image
@@ -202,14 +207,9 @@ fun GalleryScreen(
                                         )
                                     }
                                 }
+
                                 Box(
                                     modifier = Modifier
-                                        .constrainAs(info) {
-                                            start.linkTo(parent.start)
-                                            top.linkTo(row.bottom)
-                                            end.linkTo(parent.end)
-                                            bottom.linkTo(parent.bottom)
-                                        }
                                         .fillMaxWidth()
                                         .wrapContentHeight()
                                         .padding(top = 5.dp, bottom = 10.dp)
@@ -278,120 +278,120 @@ fun GalleryScreen(
                             }
                         }
                     }
-                    is ResourceState.Error -> {
-                        val error = (galleryState as ResourceState.Error<*>).data!!
+                }
+                is ResourceState.Error -> {
+                    val error = (galleryState as ResourceState.Error<*>).data!!
 
-                        var errorMessage = ""
-                        for(message in error.messages!!) {
-                            errorMessage += "$message\n"
-                        }
+                    var errorMessage = ""
+                    for(message in error.messages!!) {
+                        errorMessage += "$message\n"
+                    }
 
-                        Column(
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            text = errorMessage
+                        )
+                        TextButton(
+                            onClick = {
+                                getGallery(galleryId)
+                            },
                             modifier = Modifier
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
+                                .height(35.dp)
                         ) {
                             Text(
-                                text = errorMessage
-                            )
-                            TextButton(
-                                onClick = {
-                                    getGallery(galleryId)
-                                },
-                                modifier = Modifier
-                                    .height(35.dp)
-                            ) {
-                                Text(
-                                    text = "Retry",
-                                    style = TextStyle(
-                                        color = Color(0xff024040),
-                                        fontSize = 14.sp
-                                    )
+                                text = "Retry",
+                                style = TextStyle(
+                                    color = Color(0xff024040),
+                                    fontSize = 14.sp
                                 )
-                            }
+                            )
                         }
                     }
-                    is ResourceState.Empty -> { }
                 }
+                is ResourceState.Empty -> { }
+            }
 
-                // Show delete confirmation dialog
-                if (showBottomSheet) {
-                    ModalBottomSheet(
-                        onDismissRequest = {
-                            showBottomSheet = false
-                        },
-                        sheetState = sheetState,
-                        containerColor = Color.White,
-                        dragHandle = null,
-                        shape = RoundedCornerShape(topStartPercent = 5, topEndPercent = 5)
+            // Show delete confirmation dialog
+            if (showBottomSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    sheetState = sheetState,
+                    containerColor = Color.White,
+                    dragHandle = null,
+                    shape = RoundedCornerShape(topStartPercent = 5, topEndPercent = 5)
+                ) {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(5.dp))
+                            .background(
+                                MaterialTheme.colorScheme.surface,
+                            )
+                            .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(
-                            Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(5.dp))
-                                .background(
-                                    MaterialTheme.colorScheme.surface,
-                                )
-                                .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
-                            contentAlignment = Alignment.Center
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            Text(
+                                modifier = Modifier
+                                    .width(IntrinsicSize.Max)
+                                    .padding(top = 35.dp, bottom = 35.dp),
+                                textAlign = TextAlign.Center,
+                                text = "Do you want to delete this gallery?",
+                                style = TextStyle(
+                                    color = Color(0xffFF0000),
+                                    fontSize = 16.sp
+                                )
+                            )
+                            Row (
+                                modifier = Modifier
+                                    .padding(start = 16.dp, end = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(
-                                    modifier = Modifier
-                                        .width(IntrinsicSize.Max)
-                                        .padding(top = 35.dp, bottom = 35.dp),
-                                    textAlign = TextAlign.Center,
-                                    text = "Do you want to delete this gallery?",
-                                    style = TextStyle(
-                                        color = Color(0xffFF0000),
-                                        fontSize = 16.sp
-                                    )
-                                )
-                                Row (
-                                    modifier = Modifier
-                                        .padding(start = 16.dp, end = 16.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    TextButton(
-                                        onClick = {
-                                            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                                if (!sheetState.isVisible) {
-                                                    showBottomSheet = false
-                                                }
+                                TextButton(
+                                    onClick = {
+                                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                            if (!sheetState.isVisible) {
+                                                showBottomSheet = false
                                             }
-                                        },
-                                        modifier = Modifier
-                                            .height(35.dp),
-                                        enabled = !isDeleting
-                                    ) {
-                                        Text(
-                                            text = "Cancel",
-                                            Modifier
-                                                .padding(start = 10.dp)
-                                        )
-                                    }
-                                    Spacer(Modifier.weight(1f))
-                                    Button(
-                                        onClick = {
-                                            deleteGallery(galleryId)
-                                        },
-                                        shape = RoundedCornerShape(50),
-                                        modifier = Modifier
-                                            .height(35.dp),
-                                        enabled = !isDeleting
-                                    ) {
-                                        Text(
-                                            text = if (isDeleting) "Deleting..." else "Delete"
-                                        )
-                                    }
-                                }
-                                Spacer(
+                                        }
+                                    },
                                     modifier = Modifier
-                                        .height(65.dp)
-                                )
+                                        .height(35.dp),
+                                    enabled = !isDeleting
+                                ) {
+                                    Text(
+                                        text = "Cancel",
+                                        Modifier
+                                            .padding(start = 10.dp)
+                                    )
+                                }
+                                Spacer(Modifier.weight(1f))
+                                Button(
+                                    onClick = {
+                                        deleteGallery(galleryId)
+                                    },
+                                    shape = RoundedCornerShape(50),
+                                    modifier = Modifier
+                                        .height(35.dp),
+                                    enabled = !isDeleting
+                                ) {
+                                    Text(
+                                        text = if (isDeleting) "Deleting..." else "Delete"
+                                    )
+                                }
                             }
+                            Spacer(
+                                modifier = Modifier
+                                    .height(65.dp)
+                            )
                         }
                     }
                 }
