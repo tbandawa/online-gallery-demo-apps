@@ -331,9 +331,8 @@ fun ProfileScreen(
                 ) {
                     if (isLoading) {
                         Column {
-                            Spacer(modifier = Modifier.height(90.dp))
                             Text(
-                                text = "Loading",
+                                text = "Loading Galleries",
                                 style = TextStyle(
                                     color = Color(0xff024040),
                                     fontWeight = FontWeight.Medium,
@@ -353,7 +352,6 @@ fun ProfileScreen(
                     }
                     if (galleryList.isEmpty() && !isLoading) {
                         Column {
-                            Spacer(modifier = Modifier.height(90.dp))
                             Text(
                                 text = "No Galleries",
                                 style = TextStyle(
