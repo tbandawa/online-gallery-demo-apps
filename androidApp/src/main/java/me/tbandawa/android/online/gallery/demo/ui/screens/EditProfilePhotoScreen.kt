@@ -88,10 +88,7 @@ fun EditProfilePhotoScreen(
             isLoading = true
         }
         is ResourceState.Success -> {
-            val profilePhoto = (profilePhotoState as ResourceState.Success).data
-            photoUrl = profilePhoto.image!!
             isLoading = false
-            photoUri = null
             SuccessDialog(message = "Changes Successfully Saved") {
                 profileViewModel.resetState()
             }

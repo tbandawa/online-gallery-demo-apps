@@ -15,6 +15,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +32,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.demo.ui.components.GalleryItem
 import me.tbandawa.android.online.gallery.demo.ui.components.HomeToolBar
@@ -41,6 +44,13 @@ fun GalleriesScreen(
     retry: () -> Unit,
     navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit
 ) {
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            galleries.refresh()
+        }
+    }
 
     Surface(
         modifier = Modifier
