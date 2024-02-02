@@ -55,7 +55,6 @@ fun MainNavigation(
 
     val galleryViewModel: GalleryViewModel = koinViewModel()
     val galleryState by galleryViewModel.galleryResource.collectAsState()
-    //val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
 
     val profileViewModel: ProfileViewModel = koinViewModel()
     val userState by profileViewModel.userResource.collectAsState()

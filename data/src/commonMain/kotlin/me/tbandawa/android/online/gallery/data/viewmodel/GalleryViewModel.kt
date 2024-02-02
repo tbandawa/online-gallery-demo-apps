@@ -51,5 +51,6 @@ class GalleryViewModel(
 
     fun resetState() {
         _galleryResource.value = ResourceState.Empty
+        _galleryDeleteResource.value = ResourceState.Empty
     }
 }

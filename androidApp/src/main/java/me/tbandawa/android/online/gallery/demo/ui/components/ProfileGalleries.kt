@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
+import timber.log.Timber
 
 @Composable
 fun ProfileGalleries(
@@ -45,6 +46,7 @@ fun ProfileGalleries(
                     .padding(bottom = 15.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .clickable {
+                        Timber.d("navigate to gallery id => ${gallery.id}, user id => ${gallery.userId}, user id => ${userId}")
                         navigateToGallery(gallery.id, gallery.userId, userId)
                     }
             ) {

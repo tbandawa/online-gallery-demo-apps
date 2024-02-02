@@ -77,7 +77,7 @@ fun BottomNavigationBar(
                     ),
                     "Galleries",
                     modifier = Modifier
-                        .size(55.dp)
+                        .size(35.dp)
                 )
             },
             selected = currentRoute == "create",

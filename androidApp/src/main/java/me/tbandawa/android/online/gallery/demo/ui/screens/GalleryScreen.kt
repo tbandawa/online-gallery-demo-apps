@@ -1,10 +1,8 @@
 package me.tbandawa.android.online.gallery.demo.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -15,9 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -62,6 +58,9 @@ fun GalleryScreen(
     val galleryTitle = remember { mutableStateOf("") }
     val galleryDate = remember { mutableStateOf("") }
     val photoUrl = remember { mutableStateOf("") }
+    var isDeleting by remember { mutableStateOf(false) }
+    var isDeleted by remember { mutableStateOf(false) }
+    var isDeletable by remember { mutableStateOf(showDelete) }
 
     LaunchedEffect(Unit) {
         scope.launch {
@@ -76,12 +75,26 @@ fun GalleryScreen(
     }
 
     when (deleteState) {
-        is ResourceState.Loading -> { }
-        is ResourceState.Success -> {
-            navController.navigateUp()
+        is ResourceState.Loading -> {
+            isDeleting = true
+            isDeleted = false
         }
-        is ResourceState.Error -> { }
-        is ResourceState.Empty -> { }
+        is ResourceState.Success -> {
+            isDeleting = false
+            isDeleted = true
+            galleryTitle.value = ""
+            galleryDate.value = ""
+            isDeletable = false
+            showBottomSheet = false
+        }
+        is ResourceState.Error -> {
+            isDeleting = false
+            isDeleted = false
+        }
+        is ResourceState.Empty -> {
+            isDeleting = false
+            isDeleted = false
+        }
     }
 
     Surface(
@@ -94,7 +107,7 @@ fun GalleryScreen(
                     title = galleryTitle.value,
                     time = galleryDate.value,
                     navController = navController,
-                    showDelete = showDelete,
+                    showDelete = isDeletable,
                     deleteGallery = {
                         showBottomSheet = !showBottomSheet
                     }
@@ -125,129 +138,142 @@ fun GalleryScreen(
                         }
                     }
                     is ResourceState.Success -> {
-                        val gallery = (galleryState as ResourceState.Success<Gallery>).data
-                        galleryTitle.value = gallery.title
-                        galleryDate.value = convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)
-                        if (photoUrl.value.isBlank()) {
-                            photoUrl.value = gallery.images[0].image
-                        }
-
-                        ConstraintLayout(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            val (image, row, info) = createRefs()
-                            AsyncImage(
-                                model = photoUrl.value,
-                                contentDescription = "Image",
+                        if (isDeleted) {
+                            Column(
                                 modifier = Modifier
-                                    .constrainAs(image) {
-                                        start.linkTo(parent.start)
-                                        top.linkTo(parent.top)
-                                        end.linkTo(parent.end)
-                                    }
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(.75f)
-                                    .clip(RoundedCornerShape(5.dp))
-                            )
-                            LazyRow(
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier
-                                    .constrainAs(row) {
-                                        start.linkTo(parent.start)
-                                        top.linkTo(image.bottom)
-                                        end.linkTo(parent.end)
-                                        bottom.linkTo(info.top)
-                                    }
-                                    .padding(top = 10.dp, bottom = 10.dp)
-                                    .fillMaxWidth()
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
                             ) {
-                                items(gallery.images) { image ->
-                                    AsyncImage(
-                                        model = image.thumbnail,
-                                        contentDescription = "Image",
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .padding(top = 5.dp)
-                                            .height(100.dp)
-                                            .clip(RoundedCornerShape(10.dp))
-                                            .clickable {
-                                                photoUrl.value = image.image
-                                            }
-                                    )
-                                }
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .constrainAs(info) {
-                                        start.linkTo(parent.start)
-                                        top.linkTo(row.bottom)
-                                        end.linkTo(parent.end)
-                                        bottom.linkTo(parent.bottom)
-                                    }
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                    .padding(top = 5.dp, bottom = 10.dp)
-                            ) {
-                                Card(
-                                    shape = RoundedCornerShape(5.dp),
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = Color(0xffdff2d5)
-                                    ),
+                                Text(
                                     modifier = Modifier
+                                        .padding(8.dp),
+                                    text = "Gallery Deleted"
+                                )
+                            }
+                        } else {
+                            val gallery = galleryState.data
+                            galleryTitle.value = gallery.title
+                            galleryDate.value = convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)
+                            if (photoUrl.value.isBlank()) {
+                                photoUrl.value = gallery.images[0].image
+                            }
+                            ConstraintLayout(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                val (image, row, info) = createRefs()
+                                AsyncImage(
+                                    model = photoUrl.value,
+                                    contentDescription = "Image",
+                                    modifier = Modifier
+                                        .constrainAs(image) {
+                                            start.linkTo(parent.start)
+                                            top.linkTo(parent.top)
+                                            end.linkTo(parent.end)
+                                        }
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(.75f)
+                                        .clip(RoundedCornerShape(5.dp))
+                                )
+                                LazyRow(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier
+                                        .constrainAs(row) {
+                                            start.linkTo(parent.start)
+                                            top.linkTo(image.bottom)
+                                            end.linkTo(parent.end)
+                                            bottom.linkTo(info.top)
+                                        }
+                                        .padding(top = 10.dp, bottom = 10.dp)
+                                        .fillMaxWidth()
+                                ) {
+                                    items(gallery.images) { image ->
+                                        AsyncImage(
+                                            model = image.thumbnail,
+                                            contentDescription = "Image",
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier
+                                                .padding(top = 5.dp)
+                                                .height(100.dp)
+                                                .clip(RoundedCornerShape(10.dp))
+                                                .clickable {
+                                                    photoUrl.value = image.image
+                                                }
+                                        )
+                                    }
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .constrainAs(info) {
+                                            start.linkTo(parent.start)
+                                            top.linkTo(row.bottom)
+                                            end.linkTo(parent.end)
+                                            bottom.linkTo(parent.bottom)
+                                        }
                                         .fillMaxWidth()
                                         .wrapContentHeight()
+                                        .padding(top = 5.dp, bottom = 10.dp)
                                 ) {
-                                    Column {
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(start = 5.dp, top = 5.dp),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            AsyncImage(
-                                                model = gallery.profile?.profilePhoto?.thumbnail,
-                                                placeholder = painterResource(R.drawable.ic_user),
-                                                contentDescription = "Profile Photo",
-                                                contentScale = ContentScale.Crop,
-                                                modifier = Modifier
-                                                    .size(25.dp)
-                                                    .clip(CircleShape)
-                                            )
-                                            Column {
-                                                Text(
-                                                    text = "${gallery.profile?.firstname} ${gallery.profile?.lastname}",
-                                                    style = TextStyle(
-                                                        color = Color(0xff024040),
-                                                        fontWeight = FontWeight.Bold,
-                                                        fontSize = 12.sp
-                                                    ),
-                                                    modifier = Modifier
-                                                        .padding(start = 5.dp, top = 0.dp)
-                                                )
-                                                Text(
-                                                    text = "${gallery.images.size} photos",
-                                                    style = TextStyle(
-                                                        color = Color(0xff024040),
-                                                        fontWeight = FontWeight.Medium,
-                                                        fontSize = 12.sp
-                                                    ),
-                                                    modifier = Modifier
-                                                        .padding(start = 5.dp, top = 0.dp)
-                                                )
-                                            }
-                                        }
-                                    }
-                                    Text(
-                                        text = gallery.description,
-                                        style = TextStyle(
-                                            color = Color(0xff024040),
-                                            fontWeight = FontWeight.Normal,
-                                            fontSize = 12.sp
+                                    Card(
+                                        shape = RoundedCornerShape(5.dp),
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color(0xffdff2d5)
                                         ),
                                         modifier = Modifier
-                                            .padding(start = 35.dp, bottom = 5.dp)
-                                    )
+                                            .fillMaxWidth()
+                                            .wrapContentHeight()
+                                    ) {
+                                        Column {
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(start = 5.dp, top = 5.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                AsyncImage(
+                                                    model = gallery.profile?.profilePhoto?.thumbnail,
+                                                    placeholder = painterResource(R.drawable.ic_user),
+                                                    contentDescription = "Profile Photo",
+                                                    contentScale = ContentScale.Crop,
+                                                    modifier = Modifier
+                                                        .size(25.dp)
+                                                        .clip(CircleShape)
+                                                )
+                                                Column {
+                                                    Text(
+                                                        text = "${gallery.profile?.firstname} ${gallery.profile?.lastname}",
+                                                        style = TextStyle(
+                                                            color = Color(0xff024040),
+                                                            fontWeight = FontWeight.Bold,
+                                                            fontSize = 12.sp
+                                                        ),
+                                                        modifier = Modifier
+                                                            .padding(start = 5.dp, top = 0.dp)
+                                                    )
+                                                    Text(
+                                                        text = "${gallery.images.size} photos",
+                                                        style = TextStyle(
+                                                            color = Color(0xff024040),
+                                                            fontWeight = FontWeight.Medium,
+                                                            fontSize = 12.sp
+                                                        ),
+                                                        modifier = Modifier
+                                                            .padding(start = 5.dp, top = 0.dp)
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        Text(
+                                            text = gallery.description,
+                                            style = TextStyle(
+                                                color = Color(0xff024040),
+                                                fontWeight = FontWeight.Normal,
+                                                fontSize = 12.sp
+                                            ),
+                                            modifier = Modifier
+                                                .padding(start = 35.dp, bottom = 5.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -337,7 +363,8 @@ fun GalleryScreen(
                                             }
                                         },
                                         modifier = Modifier
-                                            .height(35.dp)
+                                            .height(35.dp),
+                                        enabled = !isDeleting
                                     ) {
                                         Text(
                                             text = "Cancel",
@@ -352,10 +379,11 @@ fun GalleryScreen(
                                         },
                                         shape = RoundedCornerShape(50),
                                         modifier = Modifier
-                                            .height(35.dp)
+                                            .height(35.dp),
+                                        enabled = !isDeleting
                                     ) {
                                         Text(
-                                            text = if (true) "Deleting..." else "Delete"
+                                            text = if (isDeleting) "Deleting..." else "Delete"
                                         )
                                     }
                                 }
