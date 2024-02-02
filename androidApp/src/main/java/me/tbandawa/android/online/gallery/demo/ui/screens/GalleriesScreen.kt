@@ -48,7 +48,7 @@ fun GalleriesScreen(
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
-            galleries.refresh()
+            galleries.retry()
         }
     }
 
