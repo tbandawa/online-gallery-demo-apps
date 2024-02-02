@@ -203,7 +203,7 @@ fun CreateScreen(
                         )
                     )
 
-                    Spacer(modifier = Modifier.height(25.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = "Images",
                         style = TextStyle(
@@ -231,12 +231,13 @@ fun CreateScreen(
                             bottom.linkTo(control.top)
                             height = Dimension.fillToConstraints
                         }
+                        .padding(bottom = 16.dp)
                 ) {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(3),
                         contentPadding = PaddingValues(12.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                         userScrollEnabled = true
                     ) {
                         items(selectedUris) { uri ->
@@ -259,7 +260,7 @@ fun CreateScreen(
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
                         }
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        .padding(start = 16.dp, end = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(
@@ -355,7 +356,7 @@ fun ImageFile(
             painter = painterResource(id = R.drawable.ic_close),
             contentDescription = null,
             modifier = Modifier
-                .padding(top = 5.dp, end = 10.dp)
+                .padding(top = 5.dp, end = 5.dp)
                 .constrainAs(closeIcon) {
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
