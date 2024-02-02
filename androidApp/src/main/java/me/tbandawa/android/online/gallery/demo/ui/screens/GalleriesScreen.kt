@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,7 +47,7 @@ fun GalleriesScreen(
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
-            galleries.retry()
+            galleries.refresh()
         }
     }
 
@@ -66,96 +65,109 @@ fun GalleriesScreen(
                 )
             },
             containerColor = Color.White
-        ) {
+        ) { it ->
 
-            LazyColumn(
-                modifier = Modifier
-                    .padding(it)
-                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
-            ) {
-
-                items(galleries) { gallery ->
-                    GalleryItem(
-                        gallery = gallery!!,
-                        navigateToGallery = { galleryId ->
-                            navigateToGallery(galleryId, 0, 1)
-                        }
-                    )
-                    Spacer(
+            if (galleries.itemCount == 0) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Text(
                         modifier = Modifier
-                            .height(15.dp)
+                            .padding(8.dp),
+                        text = "No Galleries"
                     )
                 }
-
-                when (galleries.loadState.refresh) {
-                    is LoadState.Error -> { }
-                    is LoadState.Loading -> {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillParentMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(8.dp),
-                                    text = "Loading Galleries..."
-                                )
-                                CircularProgressIndicator(color = Color.Black)
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(it)
+                        .padding(start = 16.dp, top = 0.dp, end = 16.dp)
+                ) {
+                    items(galleries) { gallery ->
+                        GalleryItem(
+                            gallery = gallery!!,
+                            navigateToGallery = { galleryId ->
+                                navigateToGallery(galleryId, 0, 1)
                             }
-                        }
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .height(15.dp)
+                        )
                     }
-                    else -> {}
-                }
-
-                when (galleries.loadState.append) {
-                    is LoadState.Error -> {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(8.dp),
-                                    text = "Error"
-                                )
-                                TextButton(
-                                    onClick = {
-                                        retry()
-                                    },
-                                    modifier = Modifier
-                                        .height(35.dp)
-                                ) {
-                                    Text(
-                                        text = "Retry",
-                                        style = TextStyle(
-                                            color = Color(0xff024040),
-                                            fontSize = 14.sp
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    is LoadState.Loading -> {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                            ) {
-                                Text(text = "Loading...")
-                                CircularProgressIndicator(color = Color.Black)
-                            }
-                        }
-                    }
-                    else -> {}
                 }
             }
+
+            when (galleries.loadState.refresh) {
+                is LoadState.Error -> { }
+                is LoadState.Loading -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(it),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = "Loading Galleries..."
+                        )
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+                else -> {}
+            }
+
+            when (galleries.loadState.append) {
+                is LoadState.Error -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(it),
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = "Error"
+                        )
+                        TextButton(
+                            onClick = {
+                                retry()
+                            },
+                            modifier = Modifier
+                                .height(35.dp)
+                        ) {
+                            Text(
+                                text = "Retry",
+                                style = TextStyle(
+                                    color = Color(0xff024040),
+                                    fontSize = 14.sp
+                                )
+                            )
+                        }
+                    }
+                }
+                is LoadState.Loading -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(it),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(text = "Loading...")
+                        CircularProgressIndicator(color = Color.Black)
+                    }
+                }
+                else -> {}
+            }
+
         }
     }
 }
