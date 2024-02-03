@@ -80,7 +80,7 @@ fun GalleryItem(
                             style = TextStyle(
                                 color = Color(0xff024040),
                                 fontWeight = FontWeight.Medium,
-                                fontSize = 10.sp
+                                fontSize = 14.sp
                             ),
                             modifier = Modifier
                                 .padding(start = 5.dp, top = 0.dp)

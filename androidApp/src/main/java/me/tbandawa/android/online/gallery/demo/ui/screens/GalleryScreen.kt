@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonColors
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -369,8 +370,10 @@ fun GalleryScreen(
                                 ) {
                                     Text(
                                         text = "Cancel",
-                                        Modifier
-                                            .padding(start = 10.dp)
+                                        style = TextStyle(
+                                            color = Color.Red,
+                                            fontSize = 16.sp
+                                        )
                                     )
                                 }
                                 Spacer(Modifier.weight(1f))
@@ -381,10 +384,17 @@ fun GalleryScreen(
                                     shape = RoundedCornerShape(50),
                                     modifier = Modifier
                                         .height(35.dp),
-                                    enabled = !isDeleting
+                                    enabled = !isDeleting,
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color.Red
+                                    )
                                 ) {
                                     Text(
-                                        text = if (isDeleting) "Deleting..." else "Delete"
+                                        text = if (isDeleting) "Deleting..." else "Delete",
+                                        style = TextStyle(
+                                            color = Color.White,
+                                            fontSize = 16.sp
+                                        )
                                     )
                                 }
                             }
@@ -406,7 +416,7 @@ fun GalleryScreenPreview() {
     GalleryScreen(
         navController = rememberNavController(),
         galleryId = 0,
-        showDelete = false,
+        showDelete = true,
         galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred"))),
         deleteState = ResourceState.Empty,
         getGallery = { },

@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
+import me.tbandawa.android.online.gallery.demo.utils.MMM_DD_YYYY
+import me.tbandawa.android.online.gallery.demo.utils.YYYY_MM_DD_T
+import me.tbandawa.android.online.gallery.demo.utils.convertDate
 import timber.log.Timber
 
 @Composable
@@ -50,14 +53,28 @@ fun ProfileGalleries(
                         navigateToGallery(gallery.id, gallery.userId, userId)
                     }
             ) {
-                Text(
-                    text = gallery.title,
-                    style = TextStyle(
-                        color = Color(0xff024040),
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp
+                Column {
+                    Text(
+                        text = gallery.title,
+                        style = TextStyle(
+                            color = Color(0xff024040),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp
+                        ),
+                        modifier = Modifier
+                            .padding(start = 5.dp, top = 0.dp)
                     )
-                )
+                    Text(
+                        text = "${gallery.images.size} photos - ${convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)}",
+                        style = TextStyle(
+                            color = Color(0xff024040),
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 10.sp
+                        ),
+                        modifier = Modifier
+                            .padding(start = 5.dp, top = 0.dp)
+                    )
+                }
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth(),
