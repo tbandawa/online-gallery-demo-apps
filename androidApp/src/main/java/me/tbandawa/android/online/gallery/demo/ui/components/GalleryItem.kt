@@ -71,7 +71,7 @@ fun GalleryItem(
                         contentDescription = "Profile Photo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .size(35.dp)
+                            .size(30.dp)
                             .clip(CircleShape)
                     )
                     Column {
@@ -80,13 +80,13 @@ fun GalleryItem(
                             style = TextStyle(
                                 color = Color(0xff024040),
                                 fontWeight = FontWeight.Medium,
-                                fontSize = 12.sp
+                                fontSize = 10.sp
                             ),
                             modifier = Modifier
                                 .padding(start = 5.dp, top = 0.dp)
                         )
                         Text(
-                            text = "${gallery.images.size} photos added by ${gallery.profile!!.firstname} - ${convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)}",
+                            text = "${gallery.images.size} photos - ${convertDate(YYYY_MM_DD_T, MMM_DD_YYYY, gallery.created)}",
                             style = TextStyle(
                                 color = Color(0xff024040),
                                 fontWeight = FontWeight.Normal,
