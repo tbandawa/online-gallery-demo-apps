@@ -6,7 +6,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
@@ -129,7 +129,7 @@ fun EditProfilePhotoScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
-                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp)
             ) {
 
                 val (photoLayout, controlLayout) = createRefs()
@@ -142,8 +142,9 @@ fun EditProfilePhotoScreen(
                             start.linkTo(parent.start)
                             top.linkTo(parent.top)
                             end.linkTo(parent.end)
+                            bottom.linkTo(controlLayout.top)
+                            height = Dimension.fillToConstraints
                         }
-                        .fillMaxWidth()
                         .clip(RoundedCornerShape(5.dp))
                 )
 
@@ -154,7 +155,7 @@ fun EditProfilePhotoScreen(
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
                         }
-                        .padding(top = 5.dp),
+                        .padding(top = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(

@@ -183,8 +183,8 @@ fun GalleryScreen(
                                         end.linkTo(parent.end)
                                         bottom.linkTo(parent.bottom)
                                     }
-                                    .fillMaxWidth()
                                     .wrapContentHeight()
+                                    .padding(top = 5.dp)
                             ) {
                                 LazyRow(
                                     horizontalArrangement = Arrangement.spacedBy(8.dp),

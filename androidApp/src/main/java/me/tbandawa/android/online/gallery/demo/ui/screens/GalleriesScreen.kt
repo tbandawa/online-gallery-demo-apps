@@ -65,7 +65,7 @@ fun GalleriesScreen(
                 )
             },
             containerColor = Color.White
-        ) { it ->
+        ) {
 
             if (galleries.itemCount == 0) {
                 Column(
