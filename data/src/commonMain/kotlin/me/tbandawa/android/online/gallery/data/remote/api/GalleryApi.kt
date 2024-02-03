@@ -11,28 +11,23 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.delete
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.utils.EmptyContent.headers
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.http.append
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.utils.io.core.buildPacket
-import io.ktor.utils.io.core.writeFully
 import kotlinx.serialization.json.Json
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
 import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
 import me.tbandawa.android.online.gallery.data.remote.responses.GalleriesResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.GalleryResponse
+import me.tbandawa.android.online.gallery.data.remote.responses.LogOutResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.ProfilePhotoResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.ProfileResponse
 import me.tbandawa.android.online.gallery.data.remote.responses.UserResponse
@@ -165,5 +160,15 @@ class GalleryApi {
             contentType(ContentType.Application.Json)
             setBody(userRequest)
         }.body<UserResponse>()
+    }
+
+    suspend fun signOutUser(token: String): LogOutResponse {
+        return httpClient.get {
+            url("$BASE_URL/logout")
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.Application.Json)
+        }.body()
     }
 }

@@ -157,4 +157,16 @@ class GalleryRepositoryImpl(
             }
         })
     }.flowOn(Dispatchers.Default)
+
+    override suspend fun signOutUser(): Flow<ResourceState<String>> = flow {
+        val user = getUser()
+        emit(ResourceState.Loading)
+        emit(handleApiCall {
+            galleryApi.signOutUser(user!!.token).token
+        }.also { results ->
+            if (results is ResourceState.Success) {
+                database.clearUser()
+            }
+        })
+    }.flowOn(Dispatchers.Default)
 }

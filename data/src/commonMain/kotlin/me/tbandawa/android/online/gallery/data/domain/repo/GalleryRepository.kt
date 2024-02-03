@@ -21,4 +21,6 @@ interface GalleryRepository {
     suspend fun deleteGallery(galleryId: Long): Flow<ResourceState<Boolean>>
     suspend fun uploadProfilePicture(photoTitle: String, photoBytes: ByteArray): Flow<ResourceState<ProfilePhoto>>
     suspend fun editUser(userRequest: UserRequest): Flow<ResourceState<User>>
+
+    suspend fun signOutUser(): Flow<ResourceState<String>>
 }
