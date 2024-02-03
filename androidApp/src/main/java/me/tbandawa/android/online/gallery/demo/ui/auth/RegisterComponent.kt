@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,18 +58,51 @@ fun RegisterComponent(
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var showPassword by remember { mutableStateOf(false) }
+    var errorTitle by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
-    var textFirstName = remember { mutableStateOf("") }
-    var textLastName = remember { mutableStateOf("") }
-    var textUserName = remember { mutableStateOf("") }
-    var textEmail = remember { mutableStateOf("") }
-    var textPassword = remember { mutableStateOf("") }
+    var textFirstName = rememberSaveable { mutableStateOf("") }
+    var textLastName = rememberSaveable { mutableStateOf("") }
+    var textUserName = rememberSaveable { mutableStateOf("") }
+    var textEmail = rememberSaveable { mutableStateOf("") }
+    var textPassword = rememberSaveable { mutableStateOf("") }
 
     var isFirstNameValid by remember { mutableStateOf(true) }
     var isLastNameValid by remember { mutableStateOf(true) }
     var isUserNameValid by remember { mutableStateOf(true) }
     var isEmailValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
+
+    when(userState) {
+        is ResourceState.Loading -> {
+            isLoading = true
+            isError = false
+        }
+        is ResourceState.Success -> {
+            navController.navigate("home") {
+                launchSingleTop = true
+                popUpTo("auth") {
+                    inclusive = true
+                }
+            }
+            authViewModel.resetState()
+        }
+        is ResourceState.Error -> {
+            val error = (userState as ResourceState.Error<*>).data!!
+            isLoading = false
+            isError = true
+            errorTitle = error.error!!
+            errorMessage = ""
+            for(index in error.messages!!.indices) {
+                val newLine = if (index == (error.messages!!.size - 1)) "" else "\n"
+                errorMessage += "${error.messages!![index]}$newLine"
+            }
+        }
+        is ResourceState.Empty -> {
+            isLoading = false
+            isError = false
+        }
+    }
 
     Surface(
         modifier = Modifier
@@ -90,42 +124,13 @@ fun RegisterComponent(
                 modifier = Modifier.padding(start = 2.dp, end = 2.dp)
             )
 
-            when(userState) {
-                is ResourceState.Loading -> {
-                    isLoading = true
-                    isError = false
-                }
-                is ResourceState.Success -> {
-                    navController.navigate("home"){
-                        launchSingleTop = true
-                        popUpTo("auth") {
-                            inclusive = true
-                        }
-                    }
-                }
-                is ResourceState.Error -> {
-                    val error = (userState as ResourceState.Error<*>).data!!
-                    isLoading = false
-                    isError = true
-
-                    var errorMessage = ""
-                    for(message in error.messages!!) {
-                        errorMessage += "$message\n"
-                    }
-
-                    MessageBox(
-                        type = MessageType.ERROR,
-                        title = error.error!!,
-                        message = errorMessage,
-                        visibility = isError
-                    ) {
-                        authViewModel.resetState()
-                    }
-                }
-                is ResourceState.Empty -> {
-                    isLoading = false
-                    isError = false
-                }
+            MessageBox(
+                type = MessageType.ERROR,
+                title = errorTitle,
+                message = errorMessage,
+                visibility = isError
+            ) {
+                authViewModel.resetState()
             }
 
             Spacer(modifier = Modifier.height(25.dp))

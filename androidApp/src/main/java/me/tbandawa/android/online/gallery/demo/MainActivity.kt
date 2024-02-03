@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,7 +23,6 @@ import me.tbandawa.android.online.gallery.demo.ui.screens.HomeScreen
 import me.tbandawa.android.online.gallery.demo.ui.theme.OnlineGalleryDemoTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
 
@@ -53,6 +51,15 @@ class MainActivity : ComponentActivity() {
                 navController.navigate("gallery/$galleryId/$galleryUserId/$userId")
             }
 
+            val navigateToAuth: () -> Unit = {
+                navController.navigate("auth") {
+                    launchSingleTop = true
+                    popUpTo("profile") {
+                        inclusive = true
+                    }
+                }
+            }
+
             OnlineGalleryDemoTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -63,12 +70,20 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startDestination = if (authValue.value == 2) "auth" else "home"
                         ) {
+
                             composable(route = "auth") {
-                                AuthScreen(navController)
+                                AuthScreen(
+                                    navController = navController
+                                )
                             }
+
                             composable(route = "home") {
-                                HomeScreen(navigateToGallery)
+                                HomeScreen(
+                                    navigateToGallery = navigateToGallery,
+                                    navigateToAuth = navigateToAuth
+                                )
                             }
+
                             composable(route = "gallery/{galleryId}/{galleryUserId}/{userId}") { backStackEntry ->
                                 val id = backStackEntry.arguments?.getString("galleryId")?.toLong()
                                 val galleryUserId = backStackEntry.arguments?.getString("galleryUserId")?.toLong()
@@ -90,17 +105,13 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
+
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun GreetingView(text: String) {
-    Text(text = text)
 }
 
 @Preview

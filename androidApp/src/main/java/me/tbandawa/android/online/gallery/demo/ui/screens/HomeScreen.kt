@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.flow.retry
+import me.tbandawa.android.online.gallery.data.viewmodel.AuthViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
 import me.tbandawa.android.online.gallery.demo.ui.components.BottomNavigationBar
@@ -22,7 +23,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
-    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit
+    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit,
+    navigateToAuth: () -> Unit
 ) {
 
     val navController = rememberNavController()
@@ -34,7 +36,8 @@ fun HomeScreen(
                     navController = navController,
                     navigateToGallery = { galleryId, galleryUserId, userId ->
                         navigateToGallery(galleryId, galleryUserId, userId)
-                    }
+                    },
+                    navigateToAuth = navigateToAuth
                 )
             }
         },
@@ -47,7 +50,8 @@ fun HomeScreen(
 @Composable
 fun MainNavigation(
     navController: NavHostController,
-    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit
+    navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit,
+    navigateToAuth: () -> Unit
 ) {
 
     val pagingGalleryViewModel: PagingGalleryViewModel = koinViewModel()
@@ -59,6 +63,9 @@ fun MainNavigation(
     val profileViewModel: ProfileViewModel = koinViewModel()
     val userState by profileViewModel.userResource.collectAsState()
     val profileState by profileViewModel.profileResource.collectAsState()
+
+    val authViewModel: AuthViewModel = koinViewModel()
+    val logOutState by authViewModel.logOutResource.collectAsState()
 
     NavHost(
         navController,
@@ -96,9 +103,14 @@ fun MainNavigation(
                 navigateToGallery = { galleryId, galleryUserId, userId ->
                     navigateToGallery(galleryId, galleryUserId, userId)
                 },
+                navigateToAuth = navigateToAuth,
                 profileState = profileState,
-                getUserData = { profileViewModel.getUserData()!! },
-                getProfile = { profileViewModel.getProfile() /*profileViewModel.onIntentReceived(ProfileViewModel.UserIntent.FetchItems)*/ }
+                signOutState = logOutState,
+                getUserData = { profileViewModel.getUserData() },
+                getProfile = { profileViewModel.getProfile() },
+                singOutUser = {
+                    authViewModel.signOutUser()
+                }
             )
         }
 
@@ -135,5 +147,8 @@ fun MainNavigation(
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen() {_, _, _ -> }
+    HomeScreen(
+        navigateToGallery = {_, _, _ -> },
+        navigateToAuth = { }
+    )
 }

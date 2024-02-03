@@ -69,9 +69,12 @@ import me.tbandawa.android.online.gallery.demo.ui.components.ProfileGalleries
 fun ProfileScreen(
     navController: NavController,
     navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit,
+    navigateToAuth: () -> Unit,
     profileState: ResourceState<Profile>,
-    getUserData: () -> User,
-    getProfile: () -> Unit
+    signOutState: ResourceState<String>,
+    getUserData: () -> User?,
+    getProfile: () -> Unit,
+    singOutUser: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -96,12 +99,16 @@ fun ProfileScreen(
         LaunchedEffect(Unit) {
             scope.launch {
                 val user = getUserData()
-                firstName.value = user.firstname
-                lastName.value = user.lastname
-                email.value = user.email
-                photoUrl.value = user.profilePhoto.thumbnail!!
-                userId.longValue = user.id
-                getProfile()
+                if (user != null) {
+                    firstName.value = user.firstname
+                    lastName.value = user.lastname
+                    email.value = user.email
+                    photoUrl.value = user.profilePhoto.thumbnail!!
+                    userId.longValue = user.id
+                    getProfile()
+                } else {
+                    navigateToAuth()
+                }
             }
         }
 
@@ -126,6 +133,15 @@ fun ProfileScreen(
                 isSuccess = false
                 isError = false
             }
+        }
+
+        when (signOutState) {
+            is ResourceState.Loading -> { }
+            is ResourceState.Success -> {
+                 navigateToAuth()
+            }
+            is ResourceState.Error -> { }
+            is ResourceState.Empty -> { }
         }
 
         BackdropScaffold(
@@ -277,7 +293,7 @@ fun ProfileScreen(
                                                 )
                                             )
                                             .clickable {
-
+                                                singOutUser()
                                             }
                                             .padding(
                                                 PaddingValues(
@@ -399,11 +415,15 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun ProfileScreenPreview() {
+    val user = User("user_token", 0, "First", "Last", "username", "user@email.com", emptyList(), ProfilePhoto("", ""))
     ProfileScreen(
         navController = rememberNavController(),
         navigateToGallery = {_, _, _ ->  },
-        profileState = ResourceState.Loading,
-        getUserData = { User("user_token", 0, "First", "Last", "username", "user@email.com", emptyList(), ProfilePhoto("", "")) },
-        getProfile = { }
+        navigateToAuth = { },
+        profileState = ResourceState.Empty,
+        signOutState = ResourceState.Empty,
+        getUserData = { user },
+        getProfile = { },
+        singOutUser = { }
     )
 }
