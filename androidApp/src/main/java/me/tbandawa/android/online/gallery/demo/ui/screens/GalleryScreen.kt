@@ -334,7 +334,7 @@ fun GalleryScreen(
                             .background(
                                 MaterialTheme.colorScheme.surface,
                             )
-                            .padding(PaddingValues(horizontal = 5.dp, vertical = 10.dp)),
+                            .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -343,17 +343,27 @@ fun GalleryScreen(
                             Text(
                                 modifier = Modifier
                                     .width(IntrinsicSize.Max)
-                                    .padding(top = 35.dp, bottom = 35.dp),
+                                    .padding(top = 10.dp, bottom = 5.dp),
+                                textAlign = TextAlign.Center,
+                                text = "Gallery Delete",
+                                style = TextStyle(
+                                    color = Color(0xff024040),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 15.sp
+                                )
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .width(IntrinsicSize.Max)
+                                    .padding(top = 5.dp, bottom = 25.dp),
                                 textAlign = TextAlign.Center,
                                 text = "Do you want to delete this gallery?",
                                 style = TextStyle(
-                                    color = Color(0xffFF0000),
-                                    fontSize = 16.sp
+                                    color = Color(0xff024040),
+                                    fontSize = 14.sp
                                 )
                             )
                             Row (
-                                modifier = Modifier
-                                    .padding(start = 16.dp, end = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 TextButton(
@@ -364,36 +374,39 @@ fun GalleryScreen(
                                             }
                                         }
                                     },
+                                    shape = RoundedCornerShape(20),
                                     modifier = Modifier
-                                        .height(35.dp),
+                                        .height(35.dp)
+                                        .weight(0.45f),
                                     enabled = !isDeleting
                                 ) {
                                     Text(
                                         text = "Cancel",
                                         style = TextStyle(
-                                            color = Color.Red,
-                                            fontSize = 16.sp
+                                            color = Color(0xff024040),
+                                            fontSize = 14.sp
                                         )
                                     )
                                 }
-                                Spacer(Modifier.weight(1f))
+                                Spacer(Modifier.weight(0.1f))
                                 Button(
                                     onClick = {
                                         deleteGallery(galleryId)
                                     },
-                                    shape = RoundedCornerShape(50),
+                                    shape = RoundedCornerShape(20),
                                     modifier = Modifier
-                                        .height(35.dp),
+                                        .height(35.dp)
+                                        .weight(0.45f),
                                     enabled = !isDeleting,
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = Color.Red
+                                        containerColor = Color(0xff45f54242)
                                     )
                                 ) {
                                     Text(
                                         text = if (isDeleting) "Deleting..." else "Delete",
                                         style = TextStyle(
-                                            color = Color.White,
-                                            fontSize = 16.sp
+                                            color = Color.Red,
+                                            fontSize = 14.sp
                                         )
                                     )
                                 }
