@@ -342,7 +342,7 @@ fun RegisterComponent(
                         )
                     }
                 },
-                shape = RoundedCornerShape(50),
+                shape = RoundedCornerShape(20),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 20.dp),

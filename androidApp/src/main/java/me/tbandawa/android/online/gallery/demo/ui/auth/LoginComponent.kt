@@ -227,7 +227,7 @@ fun LoginComponent(
                         authViewModel.signInUser(username = textUserName.value, password = textPassword.value)
                     }
                 },
-                shape = RoundedCornerShape(50),
+                shape = RoundedCornerShape(20),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 25.dp),
