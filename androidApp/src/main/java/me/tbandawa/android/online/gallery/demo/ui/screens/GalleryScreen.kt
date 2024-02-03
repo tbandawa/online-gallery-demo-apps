@@ -400,7 +400,7 @@ fun GalleryScreen(
                             }
                             Spacer(
                                 modifier = Modifier
-                                    .height(65.dp)
+                                    .height(55.dp)
                             )
                         }
                     }
