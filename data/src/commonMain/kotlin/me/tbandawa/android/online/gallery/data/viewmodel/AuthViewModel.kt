@@ -16,6 +16,9 @@ class AuthViewModel(
     private val _userResource = MutableStateFlow<ResourceState<User>>(ResourceState.Empty)
     val userResource: StateFlow<ResourceState<User>> get() = _userResource
 
+    private val _logOutResource = MutableStateFlow<ResourceState<String>>(ResourceState.Empty)
+    val logOutResource: StateFlow<ResourceState<String>> get() = _logOutResource
+
     fun signInUser(username: String, password: String) {
         coroutineScope.launch {
             galleryRepository.signInUser(SignInRequest(username, password)).collect { results ->
@@ -40,7 +43,16 @@ class AuthViewModel(
         }
     }
 
+    fun signOutUser() {
+        coroutineScope.launch {
+            galleryRepository.signOutUser().collect { results ->
+                _logOutResource.value = results
+            }
+        }
+    }
+
     fun resetState() {
         _userResource.value = ResourceState.Empty
+        _logOutResource.value = ResourceState.Empty
     }
 }
