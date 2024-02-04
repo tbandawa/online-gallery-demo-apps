@@ -129,6 +129,9 @@ fun LoginComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
+                textStyle = TextStyle(
+                    fontSize = 14.sp
+                ),
                 value = textUserName.value,
                 singleLine = true,
                 enabled = !isLoading,
@@ -136,7 +139,7 @@ fun LoginComponent(
                     textUserName.value = input
                     isUserNameValid = input.isNotBlank()
                 },
-                placeholder = { Text(text = "User Name") },
+                placeholder = { Text(text = "Username") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -162,6 +165,9 @@ fun LoginComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
+                textStyle = TextStyle(
+                    fontSize = 14.sp
+                ),
                 value = textPassword.value,
                 singleLine = true,
                 enabled = !isLoading,

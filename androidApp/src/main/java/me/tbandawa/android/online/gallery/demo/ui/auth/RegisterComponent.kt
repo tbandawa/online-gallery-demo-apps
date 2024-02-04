@@ -135,6 +135,9 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
+                textStyle = TextStyle(
+                    fontSize = 14.sp
+                ),
                 value = textFirstName.value,
                 singleLine = true,
                 enabled = !isLoading,
@@ -168,6 +171,9 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
+                textStyle = TextStyle(
+                    fontSize = 14.sp
+                ),
                 value = textLastName.value,
                 singleLine = true,
                 enabled = !isLoading,
@@ -201,6 +207,9 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
+                textStyle = TextStyle(
+                    fontSize = 14.sp
+                ),
                 value = textUserName.value,
                 singleLine = true,
                 enabled = !isLoading,
@@ -234,6 +243,9 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
+                textStyle = TextStyle(
+                    fontSize = 14.sp
+                ),
                 value = textEmail.value,
                 singleLine = true,
                 enabled = !isLoading,
@@ -268,6 +280,9 @@ fun RegisterComponent(
 
             Spacer(modifier = Modifier.height(25.dp))
             TextField(
+                textStyle = TextStyle(
+                    fontSize = 14.sp
+                ),
                 value = textPassword.value,
                 singleLine = true,
                 enabled = !isLoading,
