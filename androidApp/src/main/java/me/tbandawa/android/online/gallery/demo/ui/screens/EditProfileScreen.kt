@@ -141,7 +141,7 @@ fun EditProfileScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .padding(16.dp)
             ) {
 
                 val (inputLayout, saveButton) = createRefs()
@@ -496,9 +496,7 @@ fun EditProfileScreen(
                         )
                     }
                 }
-
             }
-
         }
     }
 }

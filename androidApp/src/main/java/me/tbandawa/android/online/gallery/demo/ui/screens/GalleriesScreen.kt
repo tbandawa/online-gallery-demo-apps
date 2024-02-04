@@ -67,7 +67,7 @@ fun GalleriesScreen(
             containerColor = Color.White
         ) {
 
-            if (galleries.itemCount == 0) {
+            if (galleries.itemCount == 0 && galleries.loadState.refresh != LoadState.Loading) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

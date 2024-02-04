@@ -161,9 +161,9 @@ fun ProfileScreen(
             backLayerContent = {
                 Column(
                     modifier = Modifier
-                        .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 5.dp)
                         .wrapContentHeight()
                         .fillMaxWidth()
+                        .padding(16.dp)
                 ) {
 
                     AsyncImage(

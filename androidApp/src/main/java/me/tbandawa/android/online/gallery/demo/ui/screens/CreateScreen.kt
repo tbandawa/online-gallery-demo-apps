@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,7 +38,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import me.tbandawa.android.online.gallery.R
-import me.tbandawa.android.online.gallery.data.domain.models.Error
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.demo.ui.components.ErrorDialog
@@ -123,7 +123,7 @@ fun CreateScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
-                    .padding(start = 16.dp, top = 0.dp, end = 16.dp)
+                    .padding(16.dp)
             ) {
 
                 val (info, grid, control) = createRefs()
@@ -136,7 +136,12 @@ fun CreateScreen(
                             end.linkTo(parent.end)
                         }
                 ) {
-                    TextField(
+
+                    BasicTextField(
+                        textStyle = TextStyle(
+                            fontSize = 14.sp,
+                            color = if (isTitleValid) Color(0xff024040) else Color(0xfff55050)
+                        ),
                         value = textTitle.value,
                         singleLine = true,
                         enabled = !isLoading,
@@ -144,32 +149,40 @@ fun CreateScreen(
                             textTitle.value = input
                             isTitleValid = input.isNotBlank()
                         },
-                        placeholder = { Text(text = "Title") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                            .background(
-                                color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .border(
-                                width = 2.dp,
-                                color = if (isTitleValid) Color.Transparent else Color.Red,
-                                shape = RoundedCornerShape(10.dp)
-                            ),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = TextFieldDefaults.colors(
-                            focusedTextColor = Color(0xff024040),
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            unfocusedPlaceholderColor = if (isTitleValid) Color(0x90024040) else Color(0xfff55050),
-                            disabledLeadingIconColor = Color(0xff024040)
-                        )
+                        decorationBox = { innerTextField ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        color = Color(0xffF0F5F1),
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .border(
+                                        width = 1.dp,
+                                        color = if (isTitleValid) Color.Transparent else Color.Red,
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .padding(horizontal = 10.dp, vertical = 10.dp)
+                            ) {
+                                if (textTitle.value.isEmpty()) {
+                                    Text(
+                                        text = "Title",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        color = if (isTitleValid) Color(0x90024040) else Color(0xfff55050)
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))
-                    TextField(
+                    BasicTextField(
+                        textStyle = TextStyle(
+                            fontSize = 14.sp,
+                            color = if (isDescriptionValid) Color(0xff024040) else Color(0xfff55050)
+                        ),
                         value = textDescription.value,
                         singleLine = false,
                         maxLines = 4,
@@ -179,28 +192,32 @@ fun CreateScreen(
                             textDescription.value = input
                             isDescriptionValid = input.isNotBlank()
                         },
-                        placeholder = { Text(text = "Description") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .background(
-                                color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .border(
-                                width = 2.dp,
-                                color = if (isDescriptionValid) Color.Transparent else Color.Red,
-                                shape = RoundedCornerShape(10.dp)
-                            ),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = TextFieldDefaults.colors(
-                            focusedTextColor = Color(0xff024040),
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            unfocusedPlaceholderColor = if (isDescriptionValid) Color(0x90024040) else Color(0xfff55050),
-                            disabledLeadingIconColor = Color(0xff024040)
-                        )
+                        decorationBox = { innerTextField ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        color = Color(0xffF0F5F1),
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .border(
+                                        width = 1.dp,
+                                        color = if (isDescriptionValid) Color.Transparent else Color.Red,
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .padding(horizontal = 10.dp, vertical = 10.dp)
+                            ) {
+                                if (textDescription.value.isEmpty()) {
+                                    Text(
+                                        text = "Description",
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Normal,
+                                        color = if (isDescriptionValid) Color(0x90024040) else Color(0xfff55050)
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -209,7 +226,7 @@ fun CreateScreen(
                         style = TextStyle(
                             color = Color(0xff024040),
                             fontWeight = FontWeight.Medium,
-                            fontSize = 16.sp
+                            fontSize = 14.sp
                         )
                     )
                     Spacer(
@@ -259,22 +276,24 @@ fun CreateScreen(
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             bottom.linkTo(parent.bottom)
-                        }
-                        .padding(start = 16.dp, end = 16.dp),
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(
                         onClick = {
                             galleryLauncher.launch("image/*")
                         },
+                        shape = RoundedCornerShape(20),
                         modifier = Modifier
-                            .height(35.dp),
+                            .height(38.dp),
                         enabled = !isLoading
                     ) {
                         Image(
                             painterResource(id = R.drawable.ic_add),
                             contentDescription ="Add Image",
-                            modifier = Modifier.size(20.dp))
+                            modifier = Modifier
+                                .size(20.dp)
+                        )
                         Text(
                             text = "Add Image",
                             Modifier
@@ -303,9 +322,9 @@ fun CreateScreen(
                                 )
                             }
                         },
-                        shape = RoundedCornerShape(50),
+                        shape = RoundedCornerShape(20),
                         modifier = Modifier
-                            .height(35.dp),
+                            .height(38.dp),
                         enabled = selectedUris.isNotEmpty() || isLoading,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xff024040)
@@ -401,7 +420,7 @@ fun getBytesFromUri(context: Context, uri: Uri?): ByteArray? {
 @Composable
 fun CreateScreenPreview() {
     CreateScreen(
-        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred", "An Error Occurred"))),
+        galleryState = ResourceState.Empty,
         createGallery = { _, _, _ -> },
         resetState = {}
     )
