@@ -145,7 +145,14 @@ fun RegisterComponent(
                     textFirstName.value = input
                     isFirstNameValid = input.isNotBlank()
                 },
-                placeholder = { Text(text = "First Name") },
+                placeholder = {
+                    Text(
+                        text = "First Name",
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -181,7 +188,14 @@ fun RegisterComponent(
                     textLastName.value = input
                     isLastNameValid = input.isNotBlank()
                 },
-                placeholder = { Text(text = "Last Name") },
+                placeholder = {
+                    Text(
+                        text = "Last Name",
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -217,7 +231,14 @@ fun RegisterComponent(
                     textUserName.value = input
                     isUserNameValid = input.isNotBlank()
                 },
-                placeholder = { Text(text = "User Name") },
+                placeholder = {
+                    Text(
+                        text = "User Name",
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -253,7 +274,14 @@ fun RegisterComponent(
                     textEmail.value = input
                     isEmailValid = isValidEmail(input)
                 },
-                placeholder = { Text(text = "Email") },
+                placeholder = {
+                    Text(
+                        text = "Email",
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -290,7 +318,14 @@ fun RegisterComponent(
                     textPassword.value = input
                     isPasswordValid = input.isNotBlank()
                 },
-                placeholder = { Text(text = "Password") },
+                placeholder = {
+                    Text(
+                        text = "Password",
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -360,7 +395,7 @@ fun RegisterComponent(
                 shape = RoundedCornerShape(20),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp),
+                    .height(40.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xff024040)
                 )

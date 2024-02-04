@@ -129,7 +129,7 @@ fun EditProfilePhotoScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
-                    .padding(start = 16.dp, end = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
 
                 val (photoLayout, controlLayout) = createRefs()
@@ -163,7 +163,7 @@ fun EditProfilePhotoScreen(
                             galleryLauncher.launch("image/*")
                         },
                         modifier = Modifier
-                            .height(35.dp),
+                            .height(40.dp),
                         enabled = !isLoading
                     ) {
                         Text(
@@ -185,10 +185,10 @@ fun EditProfilePhotoScreen(
                                     photoBytes = getBytesFromUri(context, photoUri)!!
                                 )
                             },
-                            shape = RoundedCornerShape(50),
+                            shape = RoundedCornerShape(20),
                             modifier = Modifier
                                 .padding(top = 0.dp, bottom = 0.dp)
-                                .height(35.dp),
+                                .height(40.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color(0xff024040)
                             )

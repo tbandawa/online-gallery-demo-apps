@@ -139,7 +139,14 @@ fun LoginComponent(
                     textUserName.value = input
                     isUserNameValid = input.isNotBlank()
                 },
-                placeholder = { Text(text = "Username") },
+                placeholder = {
+                    Text(
+                        text = "Username",
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -175,7 +182,14 @@ fun LoginComponent(
                     textPassword.value = input
                     isPasswordValid = input.isNotBlank()
                 },
-                placeholder = { Text(text = "Password") },
+                placeholder = {
+                    Text(
+                        text = "Password",
+                        style = TextStyle(
+                            fontSize = 14.sp
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -236,7 +250,7 @@ fun LoginComponent(
                 shape = RoundedCornerShape(20),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 25.dp),
+                    .height(40.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xff024040)
                 )
