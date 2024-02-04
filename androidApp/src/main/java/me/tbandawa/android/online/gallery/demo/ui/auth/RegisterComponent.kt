@@ -2,6 +2,7 @@ package me.tbandawa.android.online.gallery.demo.ui.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -38,6 +40,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import me.tbandawa.android.online.gallery.R
@@ -106,7 +110,7 @@ fun RegisterComponent(
 
     Surface(
         modifier = Modifier
-            .padding(bottom = 25.dp, start = 15.dp, end = 15.dp)
+            .padding(16.dp)
     ) {
         Column(
             modifier = Modifier
@@ -133,10 +137,11 @@ fun RegisterComponent(
                 authViewModel.resetState()
             }
 
-            Spacer(modifier = Modifier.height(25.dp))
-            TextField(
+            Spacer(modifier = Modifier.height(35.dp))
+            BasicTextField(
                 textStyle = TextStyle(
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = if (isFirstNameValid) Color(0xff024040) else Color(0xfff55050)
                 ),
                 value = textFirstName.value,
                 singleLine = true,
@@ -145,41 +150,39 @@ fun RegisterComponent(
                     textFirstName.value = input
                     isFirstNameValid = input.isNotBlank()
                 },
-                placeholder = {
-                    Text(
-                        text = "First Name",
-                        style = TextStyle(
-                            fontSize = 14.sp
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(
-                        color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = if (isFirstNameValid) Color.Transparent else Color.Red,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color(0xff024040),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = if (isFirstNameValid) Color(0x90024040) else Color(0xfff55050),
-                    disabledLeadingIconColor = Color(0xff024040)
-                )
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color(0xffF0F5F1),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = if (isFirstNameValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 10.dp, vertical = 10.dp)
+                    ) {
+                        if (textFirstName.value.isEmpty()) {
+                            Text(
+                                text = "Firstname",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = if (isFirstNameValid) Color(0x90024040) else Color(0xfff55050)
+                            )
+                        }
+                        innerTextField()
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(25.dp))
-            TextField(
+            BasicTextField(
                 textStyle = TextStyle(
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = if (isLastNameValid) Color(0xff024040) else Color(0xfff55050)
                 ),
                 value = textLastName.value,
                 singleLine = true,
@@ -188,128 +191,121 @@ fun RegisterComponent(
                     textLastName.value = input
                     isLastNameValid = input.isNotBlank()
                 },
-                placeholder = {
-                    Text(
-                        text = "Last Name",
-                        style = TextStyle(
-                            fontSize = 14.sp
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(
-                        color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = if (isLastNameValid) Color.Transparent else Color.Red,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color(0xff024040),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = if (isLastNameValid) Color(0x90024040) else Color(0xfff55050),
-                    disabledLeadingIconColor = Color(0xff024040)
-                )
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color(0xffF0F5F1),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = if (isLastNameValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 10.dp, vertical = 10.dp)
+                    ) {
+                        if (textLastName.value.isEmpty()) {
+                            Text(
+                                text = "Lastname",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = if (isLastNameValid) Color(0x90024040) else Color(0xfff55050)
+                            )
+                        }
+                        innerTextField()
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(25.dp))
-            TextField(
+            BasicTextField(
                 textStyle = TextStyle(
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = if (isUserNameValid) Color(0xff024040) else Color(0xfff55050)
                 ),
                 value = textUserName.value,
                 singleLine = true,
-                enabled = !isLoading,
+                enabled = false,
                 onValueChange = { input ->
                     textUserName.value = input
                     isUserNameValid = input.isNotBlank()
                 },
-                placeholder = {
-                    Text(
-                        text = "User Name",
-                        style = TextStyle(
-                            fontSize = 14.sp
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(
-                        color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = if (isUserNameValid) Color.Transparent else Color.Red,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color(0xff024040),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = if (isUserNameValid) Color(0x90024040) else Color(0xfff55050),
-                    disabledLeadingIconColor = Color(0xff024040)
-                )
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color(0xffF0F5F1),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = if (isUserNameValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 10.dp, vertical = 10.dp)
+                    ) {
+                        if (textUserName.value.isEmpty()) {
+                            Text(
+                                text = "Username",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = if (isUserNameValid) Color(0x90024040) else Color(0xfff55050)
+                            )
+                        }
+                        innerTextField()
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(25.dp))
-            TextField(
+            BasicTextField(
                 textStyle = TextStyle(
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = if (isEmailValid) Color(0xff024040) else Color(0xfff55050)
                 ),
                 value = textEmail.value,
                 singleLine = true,
-                enabled = !isLoading,
+                enabled = false,
                 onValueChange = { input ->
                     textEmail.value = input
-                    isEmailValid = isValidEmail(input)
+                    isEmailValid = input.isNotBlank()
                 },
-                placeholder = {
-                    Text(
-                        text = "Email",
-                        style = TextStyle(
-                            fontSize = 14.sp
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(
-                        color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = if (isEmailValid) Color.Transparent else Color.Red,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color(0xff024040),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = if (isEmailValid) Color(0x90024040) else Color(0xfff55050),
-                    disabledLeadingIconColor = Color(0xff024040)
-                ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color(0xffF0F5F1),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .border(
+                                width = 1.dp,
+                                color = if (isEmailValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(10.dp)
+                    ) {
+                        if (textEmail.value.isEmpty()) {
+                            Text(
+                                text = "Email",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = if (isEmailValid) Color(0x90024040) else Color(0xfff55050)
+                            )
+                        }
+                        innerTextField()
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(25.dp))
-            TextField(
+            BasicTextField(
                 textStyle = TextStyle(
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = if (isPasswordValid) Color(0xff024040) else Color(0xfff55050)
                 ),
                 value = textPassword.value,
                 singleLine = true,
@@ -318,57 +314,75 @@ fun RegisterComponent(
                     textPassword.value = input
                     isPasswordValid = input.isNotBlank()
                 },
-                placeholder = {
-                    Text(
-                        text = "Password",
-                        style = TextStyle(
-                            fontSize = 14.sp
-                        )
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-                    .background(
-                        color = Color(0xffF0F5F1),
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .border(
-                        width = 2.dp,
-                        color = if (isPasswordValid) Color.Transparent else Color.Red,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color(0xff024040),
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    unfocusedPlaceholderColor = if (isPasswordValid) Color(0x90024040) else Color(0xfff55050),
-                    disabledLeadingIconColor = Color(0xff024040)
-                ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 visualTransformation = if (showPassword) {
                     VisualTransformation.None
                 } else {
                     PasswordVisualTransformation()
                 },
-                trailingIcon = {
-                    if (showPassword) {
-                        IconButton(onClick = { showPassword = false }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_visibility_on),
-                                tint = Color(0xff024040),
-                                contentDescription = "Show Password"
+                decorationBox = { innerTextField ->
+                    ConstraintLayout(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = Color(0xffF0F5F1),
+                                shape = RoundedCornerShape(8.dp)
                             )
+                            .border(
+                                width = 1.dp,
+                                color = if (isPasswordValid) Color.Transparent else Color.Red,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .padding(horizontal = 10.dp, vertical = 7.dp)
+                    ) {
+                        val (text, icon) = createRefs()
+                        Box(
+                            modifier = Modifier
+                                .constrainAs(text) {
+                                    start.linkTo(parent.start)
+                                    top.linkTo(parent.top)
+                                    end.linkTo(icon.start)
+                                    bottom.linkTo(parent.bottom)
+                                    width = Dimension.fillToConstraints
+                                }
+                        ) {
+                            if (textPassword.value.isEmpty()) {
+                                Text(
+                                    text = "Password",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    color = if (isPasswordValid) Color(0x90024040) else Color(0xfff55050)
+                                )
+                            }
+                            innerTextField()
                         }
-                    } else {
-                        IconButton(onClick = { showPassword = true }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_visibility_off),
-                                tint = Color(0xff024040),
-                                contentDescription = "Hide Password"
-                            )
+                        Box(
+                            modifier = Modifier
+                                .constrainAs(icon) {
+                                    start.linkTo(text.end)
+                                    top.linkTo(parent.top)
+                                    end.linkTo(parent.end)
+                                    bottom.linkTo(parent.bottom)
+                                }
+                                .size(25.dp)
+                        ) {
+                            if (showPassword) {
+                                IconButton(onClick = { showPassword = false }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_visibility_on),
+                                        tint = Color(0xff024040),
+                                        contentDescription = "Show Password"
+                                    )
+                                }
+                            } else {
+                                IconButton(onClick = { showPassword = true }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_visibility_off),
+                                        tint = Color(0xff024040),
+                                        contentDescription = "Hide Password"
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -395,7 +409,7 @@ fun RegisterComponent(
                 shape = RoundedCornerShape(20),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp),
+                    .height(38.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xff024040)
                 )
@@ -412,7 +426,7 @@ fun RegisterComponent(
                         style = TextStyle(
                             color = Color.White,
                             fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp
+                            fontSize = 14.sp
                         )
                     )
                 }

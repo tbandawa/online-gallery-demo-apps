@@ -102,9 +102,9 @@ fun AuthScreen(
     }
 }
 
-enum class Tab(value: String) {
-    LOGIN("Log in"),
-    REGISTER("Register")
+enum class Tab {
+    LOGIN,
+    REGISTER
 }
 
 @Composable
@@ -116,7 +116,7 @@ fun AuthTab(
     Column(
         modifier = Modifier
             .height(height = 34.dp)
-            .width(83.dp)
+            .width(90.dp)
             .clickable(onClick = onSelect)
     ) {
         Text(
@@ -126,7 +126,7 @@ fun AuthTab(
             modifier = Modifier
                 .padding(5.dp),
             style = TextStyle(
-                fontWeight = FontWeight.Normal,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                 fontSize = 16.sp
             )
         )
