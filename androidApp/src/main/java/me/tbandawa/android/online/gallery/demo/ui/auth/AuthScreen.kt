@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,7 +45,10 @@ fun AuthScreen(
         activity?.finish()
     }
 
-    Surface(
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 3.dp
+        ),
         modifier = Modifier
             .background(Color.White)
             .padding(top = 25.dp, bottom = 25.dp, start = 25.dp, end = 25.dp),
@@ -52,7 +57,7 @@ fun AuthScreen(
         Surface {
             var selectedTab by remember { mutableStateOf(Tab.LOGIN) }
             Scaffold(
-                containerColor = Color.Gray,
+                containerColor = Color.Transparent,
                 topBar = {
                     Column {
                         ConstraintLayout(
@@ -71,7 +76,7 @@ fun AuthScreen(
                                     }
                                     .padding(top = 5.dp)
                             ) {
-                                Tab.values().forEach { tab ->
+                                Tab.entries.forEach { tab ->
                                     AuthTab(
                                         tab.name,
                                         selected = selectedTab == tab,
@@ -124,9 +129,9 @@ fun AuthTab(
             textAlign = TextAlign.Center,
             color = if (selected) Color(0xff024040) else Color(0xffb5b8bd),
             modifier = Modifier
-                .padding(5.dp),
+                .padding(top = 5.dp, end = 5.dp, bottom = 5.dp),
             style = TextStyle(
-                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
                 fontSize = 16.sp
             )
         )

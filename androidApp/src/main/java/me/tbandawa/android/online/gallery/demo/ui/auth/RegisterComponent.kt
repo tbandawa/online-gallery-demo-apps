@@ -110,12 +110,11 @@ fun RegisterComponent(
 
     Surface(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(bottom = 25.dp, start = 15.dp, end = 15.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Gray)
         ) {
             Spacer(modifier = Modifier.height(55.dp))
             Text(
@@ -137,7 +136,7 @@ fun RegisterComponent(
                 authViewModel.resetState()
             }
 
-            Spacer(modifier = Modifier.height(35.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             BasicTextField(
                 textStyle = TextStyle(
                     fontSize = 14.sp,

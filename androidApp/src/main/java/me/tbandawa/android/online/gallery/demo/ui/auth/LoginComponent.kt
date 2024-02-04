@@ -20,8 +20,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -65,8 +63,8 @@ fun LoginComponent(
     var errorTitle by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
 
-    var textUserName = rememberSaveable { mutableStateOf("") }
-    var textPassword = rememberSaveable { mutableStateOf("") }
+    val textUserName = rememberSaveable { mutableStateOf("") }
+    val textPassword = rememberSaveable { mutableStateOf("") }
 
     var isUserNameValid by remember { mutableStateOf(true) }
     var isPasswordValid by remember { mutableStateOf(true) }
@@ -109,7 +107,6 @@ fun LoginComponent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.Gray)
         ) {
             Spacer(modifier = Modifier.height(55.dp))
             Text(
