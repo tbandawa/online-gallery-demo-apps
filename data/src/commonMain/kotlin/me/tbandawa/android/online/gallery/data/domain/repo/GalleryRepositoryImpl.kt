@@ -117,6 +117,17 @@ class GalleryRepositoryImpl(
         })
     }.flowOn(Dispatchers.Default)
 
+    override suspend fun searchGallery(query: String): Flow<ResourceState<List<Gallery>>> = flow {
+        val user = getUser()
+        emit(ResourceState.Empty)
+        emit(ResourceState.Loading)
+        emit(handleApiCall {
+            galleryApi.searchGallery(user!!.token, query).map {
+                galleryMapper.mapToModel(it)
+            }
+        })
+    }.flowOn(Dispatchers.Default)
+
     override suspend fun deleteGallery(galleryId: Long): Flow<ResourceState<Boolean>> = flow {
         val user = getUser()
         emit(ResourceState.Empty)

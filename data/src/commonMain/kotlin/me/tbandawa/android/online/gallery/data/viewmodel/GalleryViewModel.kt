@@ -14,6 +14,9 @@ class GalleryViewModel(
     private val _galleryResource = MutableStateFlow<ResourceState<Gallery>>(ResourceState.Empty)
     val galleryResource: StateFlow<ResourceState<Gallery>> get() = _galleryResource
 
+    private val _galleriesResource = MutableStateFlow<ResourceState<List<Gallery>>>(ResourceState.Empty)
+    val galleriesResource: StateFlow<ResourceState<List<Gallery>>> get() = _galleriesResource
+
     private val _galleryDeleteResource = MutableStateFlow<ResourceState<Boolean>>(ResourceState.Empty)
     val galleryDeleteResource: StateFlow<ResourceState<Boolean>> get() = _galleryDeleteResource
 
@@ -35,6 +38,16 @@ class GalleryViewModel(
         coroutineScope.launch {
             galleryRepository.getGallery(galleryId).collect { results ->
                 _galleryResource.value = results
+            }
+        }
+    }
+
+    fun searchGallery(
+        query: String
+    ) {
+        coroutineScope.launch {
+            galleryRepository.searchGallery(query).collect { results ->
+                _galleriesResource.value = results
             }
         }
     }

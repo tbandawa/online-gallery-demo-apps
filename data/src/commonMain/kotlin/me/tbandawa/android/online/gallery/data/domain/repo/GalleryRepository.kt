@@ -8,6 +8,7 @@ import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
 import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.remote.requests.SignInRequest
 import me.tbandawa.android.online.gallery.data.remote.requests.UserRequest
+import me.tbandawa.android.online.gallery.data.remote.responses.GalleryResponse
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 
 interface GalleryRepository {
@@ -18,6 +19,7 @@ interface GalleryRepository {
     suspend fun createGallery(title: String, description: String, images: Map<String, ByteArray>): Flow<ResourceState<Gallery>>
     suspend fun getGalleries(page: Int): ResourceState<Galleries>
     suspend fun getGallery(galleryId: Long): Flow<ResourceState<Gallery>>
+    suspend fun searchGallery(query: String): Flow<ResourceState<List<Gallery>>>
     suspend fun deleteGallery(galleryId: Long): Flow<ResourceState<Boolean>>
     suspend fun uploadProfilePicture(photoTitle: String, photoBytes: ByteArray): Flow<ResourceState<ProfilePhoto>>
     suspend fun editUser(userRequest: UserRequest): Flow<ResourceState<User>>

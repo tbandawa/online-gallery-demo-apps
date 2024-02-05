@@ -140,6 +140,16 @@ class GalleryApi {
         }.body()
     }
 
+    suspend fun searchGallery(token: String, query: String): List<GalleryResponse> {
+        return httpClient.get {
+            url("$BASE_URL/search/$query")
+            headers {
+                append("Authorization", "Bearer $token")
+            }
+            contentType(ContentType.Application.Json)
+        }.body()
+    }
+
     suspend fun deleteGallery(token: String, galleryId: Long): Boolean {
         httpClient.delete {
             url("$BASE_URL/gallery/$galleryId")
