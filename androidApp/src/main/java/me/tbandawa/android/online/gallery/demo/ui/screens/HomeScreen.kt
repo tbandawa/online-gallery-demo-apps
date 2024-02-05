@@ -59,6 +59,7 @@ fun MainNavigation(
 
     val galleryViewModel: GalleryViewModel = koinViewModel()
     val galleryState by galleryViewModel.galleryResource.collectAsState()
+    val galleriesState by galleryViewModel.galleriesResource.collectAsState()
 
     val profileViewModel: ProfileViewModel = koinViewModel()
     val userState by profileViewModel.userResource.collectAsState()
@@ -116,7 +117,14 @@ fun MainNavigation(
 
         composable(route = "search") {
             SearchScreen(
-                navController = navController
+                navController = navController,
+                navigateToGallery = { galleryId, galleryUserId, userId ->
+                    navigateToGallery(galleryId, galleryUserId, userId)
+                },
+                searchGalleries = { query ->
+                    galleryViewModel.searchGallery(query)
+                },
+                galleriesState = galleriesState
             )
         }
 
