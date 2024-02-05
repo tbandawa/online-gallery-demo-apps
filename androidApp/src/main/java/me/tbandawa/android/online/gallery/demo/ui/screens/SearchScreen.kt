@@ -14,10 +14,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -30,13 +32,14 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import me.tbandawa.android.online.gallery.R
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
 import me.tbandawa.android.online.gallery.demo.ui.components.GalleryItem
 import me.tbandawa.android.online.gallery.demo.ui.components.NavigationToolbar
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SearchScreen(
@@ -49,7 +52,6 @@ fun SearchScreen(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
         val keyboardController = LocalSoftwareKeyboardController.current
         var textSearch by remember { mutableStateOf(TextFieldValue("")) }
         var galleries = remember { listOf<Gallery>() }
@@ -60,6 +62,7 @@ fun SearchScreen(
 
         when (galleriesState) {
             is ResourceState.Loading -> {
+                isSuccess = false
                 isLoading = true
                 isError = false
             }
@@ -67,8 +70,10 @@ fun SearchScreen(
                 galleries = galleriesState.data
                 isLoading = false
                 isSuccess = true
+                isError = false
             }
             is ResourceState.Error -> {
+                isSuccess = false
                 isLoading = false
                 isError = true
             }
@@ -176,18 +181,96 @@ fun SearchScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Column {
+                    if (isLoading) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Loading Results...",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0x90024040)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            CircularProgressIndicator(color = Color(0x90024040))
+                        }
+                    }
                     if (isSuccess) {
-                        LazyColumn {
-                            items(galleries) { gallery ->
-                                GalleryItem(
-                                    gallery = gallery,
-                                    navigateToGallery = { galleryId ->
-                                        navigateToGallery(galleryId, 0, 1)
-                                    }
-                                )
-                                Spacer(
+                        if (galleries.isEmpty() && !isLoading) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.img_search),
+                                    contentDescription = "searchIcon",
                                     modifier = Modifier
-                                        .height(15.dp)
+                                        .size(85.dp)
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = "No results found",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Normal,
+                                    color = Color(0x90024040)
+                                )
+                            }
+                        } else {
+                            LazyColumn {
+                                items(galleries) { gallery ->
+                                    GalleryItem(
+                                        gallery = gallery,
+                                        navigateToGallery = { galleryId ->
+                                            navigateToGallery(galleryId, 0, 1)
+                                        }
+                                    )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .height(15.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    if (isError) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.img_error),
+                                tint = Color(0x90f55050),
+                                contentDescription = "searchIcon",
+                                modifier = Modifier
+                                    .size(85.dp)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Something went wrong",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0x90f55050)
+                            )
+                            TextButton(
+                                onClick = {
+                                    searchGalleries(textSearch.text)
+                                },
+                                modifier = Modifier
+                                    .height(35.dp)
+                            ) {
+                                Text(
+                                    text = "Retry",
+                                    style = TextStyle(
+                                        color = Color(0xff024040),
+                                        fontSize = 14.sp
+                                    )
                                 )
                             }
                         }
@@ -205,6 +288,6 @@ fun SearchScreenPreview() {
         navController = rememberNavController(),
         navigateToGallery = { _, _, _ -> },
         searchGalleries = { _ -> },
-        galleriesState = ResourceState.Empty
+        galleriesState = ResourceState.Loading
     )
 }
