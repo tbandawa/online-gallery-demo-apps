@@ -350,9 +350,9 @@ fun ProfileScreen(
                             Text(
                                 text = "Loading Galleries",
                                 style = TextStyle(
-                                    color = Color(0xff024040),
+                                    color = Color(0x90024040),
                                     fontWeight = FontWeight.Medium,
-                                    fontSize = 16.sp
+                                    fontSize = 14.sp
                                 )
                             )
                         }
@@ -371,9 +371,9 @@ fun ProfileScreen(
                             Text(
                                 text = "No Galleries",
                                 style = TextStyle(
-                                    color = Color(0xff024040),
+                                    color = Color(0x90024040),
                                     fontWeight = FontWeight.Medium,
-                                    fontSize = 16.sp
+                                    fontSize = 14.sp
                                 )
                             )
                         }
@@ -385,9 +385,10 @@ fun ProfileScreen(
                             verticalArrangement = Arrangement.Center,
                         ) {
                             Text(
-                                modifier = Modifier
-                                    .padding(8.dp),
-                                text = "Error"
+                                text = "Something went wrong",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0x90f55050)
                             )
                             TextButton(
                                 onClick = {
