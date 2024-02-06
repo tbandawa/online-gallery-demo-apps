@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonColors
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,10 +29,12 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.R
-import me.tbandawa.android.online.gallery.data.domain.models.Error
 import me.tbandawa.android.online.gallery.data.domain.models.Gallery
 import me.tbandawa.android.online.gallery.data.remote.state.ResourceState
+import me.tbandawa.android.online.gallery.demo.ui.components.DeleteState
+import me.tbandawa.android.online.gallery.demo.ui.components.ErrorState
 import me.tbandawa.android.online.gallery.demo.ui.components.GalleryToolbar
+import me.tbandawa.android.online.gallery.demo.ui.components.LoadingState
 import me.tbandawa.android.online.gallery.demo.utils.MMM_DD_YYYY
 import me.tbandawa.android.online.gallery.demo.utils.YYYY_MM_DD_T
 import me.tbandawa.android.online.gallery.demo.utils.convertDate
@@ -123,44 +124,11 @@ fun GalleryScreen(
 
             when(galleryState) {
                 is ResourceState.Loading -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Loading Results...",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color(0x90024040)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        CircularProgressIndicator(color = Color(0x90024040))
-                    }
+                    LoadingState(message = "Loading Results...")
                 }
                 is ResourceState.Success -> {
                     if (isDeleted) { // Show deleted message
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.img_delete),
-                                contentDescription = "Delete",
-                                modifier = Modifier
-                                    .size(85.dp)
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "Gallery Deleted",
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal,
-                                color = Color(0x90024040)
-                            )
-                        }
+                        DeleteState()
                     } else { // Show Gallery
                         val gallery = galleryState.data
                         galleryTitle = gallery.title
@@ -295,41 +263,8 @@ fun GalleryScreen(
                     }
                 }
                 is ResourceState.Error -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.img_error),
-                            tint = Color(0x90f55050),
-                            contentDescription = "Error",
-                            modifier = Modifier
-                                .size(85.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Something went wrong",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color(0x90f55050)
-                        )
-                        TextButton(
-                            onClick = {
-                                getGallery(galleryId)
-                            },
-                            modifier = Modifier
-                                .height(35.dp)
-                        ) {
-                            Text(
-                                text = "Retry",
-                                style = TextStyle(
-                                    color = Color(0xff024040),
-                                    fontSize = 14.sp
-                                )
-                            )
-                        }
+                    ErrorState(message = "Something went wrong") {
+                        getGallery(galleryId)
                     }
                 }
                 is ResourceState.Empty -> { }
@@ -449,8 +384,8 @@ fun GalleryScreenPreview() {
         navController = rememberNavController(),
         galleryId = 0,
         showDelete = true,
-        galleryState = ResourceState.Empty,
-        deleteState = ResourceState.Success(true),
+        galleryState = ResourceState.Loading,
+        deleteState = ResourceState.Empty,
         getGallery = { },
         deleteGallery = { },
         resetState = { }
