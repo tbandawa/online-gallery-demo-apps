@@ -124,7 +124,7 @@ fun GalleryScreen(
 
             when(galleryState) {
                 is ResourceState.Loading -> {
-                    LoadingState(message = "Loading Results...")
+                    LoadingState(message = "Loading Gallery...")
                 }
                 is ResourceState.Success -> {
                     if (isDeleted) { // Show deleted message

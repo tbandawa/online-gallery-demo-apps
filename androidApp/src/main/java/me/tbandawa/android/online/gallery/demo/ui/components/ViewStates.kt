@@ -111,10 +111,36 @@ fun DeleteState() {
     }
 }
 
+@Composable
+fun NoResultsState() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.img_search),
+            tint = Color(0x90024040),
+            contentDescription = "Search",
+            modifier = Modifier
+                .size(85.dp)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "No results found",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color(0x90024040)
+        )
+    }
+}
+
 @Preview
 @Composable
 fun PreviewStates() {
     LoadingState(message = "Loading Results...")
     ErrorState(message = "Something went wrong", retry = { })
     DeleteState()
+    NoResultsState()
 }
