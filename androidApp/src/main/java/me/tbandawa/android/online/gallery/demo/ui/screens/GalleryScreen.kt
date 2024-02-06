@@ -64,6 +64,9 @@ fun GalleryScreen(
     var isDeleted by remember { mutableStateOf(false) }
     var isDeletable by remember { mutableStateOf(showDelete) }
 
+    var errorTitle by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
+
     LaunchedEffect(Unit) {
         scope.launch {
             getGallery(galleryId)
@@ -123,15 +126,17 @@ fun GalleryScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            modifier = Modifier
-                                .padding(8.dp),
-                            text = "Loading..."
+                            text = "Loading Results...",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0x90024040)
                         )
-                        CircularProgressIndicator(color = Color.Black)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        CircularProgressIndicator(color = Color(0x90024040))
                     }
                 }
                 is ResourceState.Success -> {
@@ -140,11 +145,20 @@ fun GalleryScreen(
                             modifier = Modifier
                                 .fillMaxSize(),
                             verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
+                            Icon(
+                                painter = painterResource(id = R.drawable.img_delete),
+                                contentDescription = "Delete",
                                 modifier = Modifier
-                                    .padding(8.dp),
-                                text = "Gallery Deleted"
+                                    .size(85.dp)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "Gallery Deleted",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(0x90024040)
                             )
                         }
                     } else { // Show Gallery
@@ -281,20 +295,25 @@ fun GalleryScreen(
                     }
                 }
                 is ResourceState.Error -> {
-                    val error = (galleryState as ResourceState.Error<*>).data!!
-
-                    var errorMessage = ""
-                    for(message in error.messages!!) {
-                        errorMessage += "$message\n"
-                    }
-
                     Column(
                         modifier = Modifier
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.img_error),
+                            tint = Color(0x90f55050),
+                            contentDescription = "Error",
+                            modifier = Modifier
+                                .size(85.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = errorMessage
+                            text = "Something went wrong",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0x90f55050)
                         )
                         TextButton(
                             onClick = {
@@ -430,8 +449,8 @@ fun GalleryScreenPreview() {
         navController = rememberNavController(),
         galleryId = 0,
         showDelete = true,
-        galleryState = ResourceState.Error(Error("timeStamp", 400, "Error", arrayListOf("An Error Occurred"))),
-        deleteState = ResourceState.Empty,
+        galleryState = ResourceState.Empty,
+        deleteState = ResourceState.Success(true),
         getGallery = { },
         deleteGallery = { },
         resetState = { }

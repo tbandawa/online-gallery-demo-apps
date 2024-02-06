@@ -208,7 +208,7 @@ fun SearchScreen(
                             ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.img_search),
-                                    contentDescription = "searchIcon",
+                                    contentDescription = "Search",
                                     modifier = Modifier
                                         .size(85.dp)
                                 )
@@ -247,7 +247,7 @@ fun SearchScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.img_error),
                                 tint = Color(0x90f55050),
-                                contentDescription = "searchIcon",
+                                contentDescription = "Error",
                                 modifier = Modifier
                                     .size(85.dp)
                             )
