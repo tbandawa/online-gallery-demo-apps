@@ -232,7 +232,7 @@ fun GalleryScreen(
                                     Card(
                                         shape = RoundedCornerShape(5.dp),
                                         colors = CardDefaults.cardColors(
-                                            containerColor = Color(0xffdff2d5)
+                                            containerColor = Color.White
                                         ),
                                         modifier = Modifier
                                             .fillMaxWidth()
