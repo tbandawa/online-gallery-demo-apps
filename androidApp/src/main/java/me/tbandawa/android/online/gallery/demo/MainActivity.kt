@@ -29,15 +29,14 @@ class MainActivity : ComponentActivity() {
     private val userViewModel: SplashViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
-        installSplashScreen().setKeepOnScreenCondition {
-            userViewModel.getProfile()
-            userViewModel.authState.value.complete
-        }
-
         super.onCreate(savedInstanceState)
 
+        userViewModel.getProfile()
+
+        installSplashScreen().setKeepOnScreenCondition {
+            userViewModel.authState.value.complete
+        }
+        
         setContent {
 
             val galleryViewModel: GalleryViewModel = koinViewModel()
