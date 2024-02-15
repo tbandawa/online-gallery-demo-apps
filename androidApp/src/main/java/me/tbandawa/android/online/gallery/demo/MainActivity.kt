@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().setKeepOnScreenCondition {
             userViewModel.authState.value.complete
         }
-        
+
         setContent {
 
             val galleryViewModel: GalleryViewModel = koinViewModel()
