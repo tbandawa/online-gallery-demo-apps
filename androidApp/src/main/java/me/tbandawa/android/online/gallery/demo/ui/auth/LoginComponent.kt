@@ -144,17 +144,18 @@ fun LoginComponent(
                 decorationBox = { innerTextField ->
                     Box(
                         modifier = Modifier
+                            .height(32.dp)
                             .fillMaxWidth()
                             .background(
                                 color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(4.dp)
                             )
                             .border(
                                 width = 1.dp,
                                 color = if (isUserNameValid) Color.Transparent else Color.Red,
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(4.dp)
                             )
-                            .padding(horizontal = 10.dp, vertical = 10.dp)
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
                     ) {
                         if (textUserName.value.isEmpty()) {
                             Text(
@@ -191,21 +192,23 @@ fun LoginComponent(
                 decorationBox = { innerTextField ->
                     ConstraintLayout(
                         modifier = Modifier
+                            .height(32.dp)
                             .fillMaxWidth()
                             .background(
                                 color = Color(0xffF0F5F1),
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(4.dp)
                             )
                             .border(
                                 width = 1.dp,
                                 color = if (isPasswordValid) Color.Transparent else Color.Red,
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(4.dp)
                             )
                             .padding(horizontal = 10.dp, vertical = 7.dp)
                     ) {
                         val (text, icon) = createRefs()
                         Box(
                             modifier = Modifier
+                                .height(32.dp)
                                 .constrainAs(text) {
                                     start.linkTo(parent.start)
                                     top.linkTo(parent.top)
