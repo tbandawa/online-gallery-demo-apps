@@ -226,7 +226,7 @@ fun RegisterComponent(
                 ),
                 value = textUserName.value,
                 singleLine = true,
-                enabled = false,
+                enabled = !isLoading,
                 onValueChange = { input ->
                     textUserName.value = input
                     isUserNameValid = input.isNotBlank()
@@ -267,7 +267,7 @@ fun RegisterComponent(
                 ),
                 value = textEmail.value,
                 singleLine = true,
-                enabled = false,
+                enabled = !isLoading,
                 onValueChange = { input ->
                     textEmail.value = input
                     isEmailValid = input.isNotBlank()
