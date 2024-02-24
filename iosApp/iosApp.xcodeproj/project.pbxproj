@@ -11,6 +11,9 @@
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
+		83D3851E2B8A2378001EDC8B /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3851D2B8A2378001EDC8B /* AuthView.swift */; };
+		83D385202B8A2396001EDC8B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3851F2B8A2396001EDC8B /* LoginView.swift */; };
+		83D385222B8A23A3001EDC8B /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D385212B8A23A3001EDC8B /* RegisterView.swift */; };
 		FB6704F7A64297AD485C67EC /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D51130C549E7AD3078BD3569 /* Pods_iosApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +26,9 @@
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76ADF27DFF37ACD7E8D9A018 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
+		83D3851D2B8A2378001EDC8B /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		83D3851F2B8A2396001EDC8B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		83D385212B8A23A3001EDC8B /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		D51130C549E7AD3078BD3569 /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -88,8 +94,75 @@
 		83D385142B8A0E53001EDC8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				83D3851C2B8A2312001EDC8B /* EditProfilePhoto */,
+				83D3851B2B8A2301001EDC8B /* EditProfile */,
+				83D3851A2B8A222B001EDC8B /* Profile */,
+				83D385192B8A221C001EDC8B /* Create */,
+				83D385182B8A2209001EDC8B /* Search */,
+				83D385172B8A21C6001EDC8B /* Gallery */,
+				83D385162B8A21B5001EDC8B /* Galleries */,
+				83D385152B8A1E72001EDC8B /* Auth */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		83D385152B8A1E72001EDC8B /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				83D3851D2B8A2378001EDC8B /* AuthView.swift */,
+				83D3851F2B8A2396001EDC8B /* LoginView.swift */,
+				83D385212B8A23A3001EDC8B /* RegisterView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		83D385162B8A21B5001EDC8B /* Galleries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Galleries;
+			sourceTree = "<group>";
+		};
+		83D385172B8A21C6001EDC8B /* Gallery */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Gallery;
+			sourceTree = "<group>";
+		};
+		83D385182B8A2209001EDC8B /* Search */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		83D385192B8A221C001EDC8B /* Create */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
+		83D3851A2B8A222B001EDC8B /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		83D3851B2B8A2301001EDC8B /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = EditProfile;
+			sourceTree = "<group>";
+		};
+		83D3851C2B8A2312001EDC8B /* EditProfilePhoto */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = EditProfilePhoto;
 			sourceTree = "<group>";
 		};
 		ADDEF2A44E66733393E1523E /* Frameworks */ = {
@@ -207,7 +280,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				83D385222B8A23A3001EDC8B /* RegisterView.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
+				83D385202B8A2396001EDC8B /* LoginView.swift in Sources */,
+				83D3851E2B8A2378001EDC8B /* AuthView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
