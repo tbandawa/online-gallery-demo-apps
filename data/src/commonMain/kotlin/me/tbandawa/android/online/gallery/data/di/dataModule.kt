@@ -15,6 +15,7 @@ import me.tbandawa.android.online.gallery.data.viewmodel.SplashViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.AuthViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.GalleryViewModel
 import me.tbandawa.android.online.gallery.data.viewmodel.ProfileViewModel
+import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.bind
@@ -80,4 +81,14 @@ fun initKoin(appDeclaration: KoinAppDeclaration) = startKoin {
         viewModelModule
     )
 }
+
+@Suppress("unused")
+object KotlinDependencies : KoinComponent {
+    fun getSplashViewModel() = getKoin().get<SplashViewModel>()
+    fun getAuthViewModel() = getKoin().get<AuthViewModel>()
+    fun getProfileViewModel() = getKoin().get<ProfileViewModel>()
+    fun getGalleryViewModel() = getKoin().get<GalleryViewModel>()
+}
+
+fun initKoin() = initKoin {}
 

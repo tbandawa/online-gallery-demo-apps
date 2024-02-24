@@ -2,10 +2,9 @@ import SwiftUI
 import data
 
 struct ContentView: View {
-	let greet = Greeting().greet()
 
 	var body: some View {
-		Text(greet)
+		Text("hello")
 	}
 }
 

@@ -67,6 +67,8 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				83D385142B8A0E53001EDC8B /* Views */,
+				83D385132B8A0E48001EDC8B /* LifeCycle */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
 				7555FF8C242A565B00829871 /* Info.plist */,
@@ -74,6 +76,20 @@
 				058557D7273AAEEB004C7B11 /* Preview Content */,
 			);
 			path = iosApp;
+			sourceTree = "<group>";
+		};
+		83D385132B8A0E48001EDC8B /* LifeCycle */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LifeCycle;
+			sourceTree = "<group>";
+		};
+		83D385142B8A0E53001EDC8B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		ADDEF2A44E66733393E1523E /* Frameworks */ = {
