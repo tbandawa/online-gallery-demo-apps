@@ -36,6 +36,8 @@ struct LoginView: View {
             Spacer()
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 25)
             TextField("Username", text: $username)
+                .autocorrectionDisabled()
+                .autocapitalization(/*@START_MENU_TOKEN@*/.none/*@END_MENU_TOKEN@*/)
                 .padding(10)
                 .frame(height: 45)
                 .background(Color("textfieldColor"))
