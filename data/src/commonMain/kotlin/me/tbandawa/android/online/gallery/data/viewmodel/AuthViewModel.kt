@@ -2,6 +2,8 @@ package me.tbandawa.android.online.gallery.data.viewmodel
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.data.domain.models.User
 import me.tbandawa.android.online.gallery.data.domain.repo.GalleryRepository
@@ -54,5 +56,12 @@ class AuthViewModel(
     fun resetState() {
         _userResource.value = ResourceState.Empty
         _logOutResource.value = ResourceState.Empty
+    }
+
+    @Suppress("unused")
+    fun observeUserResource(provideUserState: ((ResourceState<User>) -> Unit)) {
+        _userResource.onEach {
+            provideUserState.invoke(it)
+        }.launchIn(coroutineScope)
     }
 }

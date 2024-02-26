@@ -8,9 +8,12 @@ struct iOSApp: App {
         DataModuleKt.doInitKoin()
     }
     
+    @StateObject var authState = AuthState()
+    
 	var body: some Scene {
 		WindowGroup {
 			ContentView()
+                .environmentObject(authState)
 		}
 	}
 }
