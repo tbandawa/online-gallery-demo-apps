@@ -106,15 +106,15 @@ struct LoginView: View {
             } label: {
                 if ProcessInfo.isPreview {
                     Text("Login")
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: 30)
                 } else {
                     if authState.isLoading {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, maxHeight: 30)
                     } else {
                         Text("Login")
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, maxHeight: 30)
                     }
                 }
             }

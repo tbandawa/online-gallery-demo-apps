@@ -153,15 +153,15 @@ struct RegisterView: View {
             } label: {
                 if ProcessInfo.isPreview {
                     Text("Register")
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: 30)
                 } else {
                     if authState.isLoading {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, maxHeight: 30)
                     } else {
                         Text("Register")
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, maxHeight: 30)
                     }
                 }
             }
