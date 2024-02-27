@@ -14,6 +14,7 @@
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		8352C4582B8BB843003A7C79 /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C4572B8BB843003A7C79 /* AuthState.swift */; };
 		8352C45B2B8CC343003A7C79 /* ProcessInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C45A2B8CC343003A7C79 /* ProcessInfo.swift */; };
+		8352C45D2B8D17E2003A7C79 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C45C2B8D17E2003A7C79 /* ErrorMessage.swift */; };
 		83D3851E2B8A2378001EDC8B /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3851D2B8A2378001EDC8B /* AuthView.swift */; };
 		83D385202B8A2396001EDC8B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3851F2B8A2396001EDC8B /* LoginView.swift */; };
 		83D385222B8A23A3001EDC8B /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D385212B8A23A3001EDC8B /* RegisterView.swift */; };
@@ -32,6 +33,7 @@
 		76ADF27DFF37ACD7E8D9A018 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
 		8352C4572B8BB843003A7C79 /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
 		8352C45A2B8CC343003A7C79 /* ProcessInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessInfo.swift; sourceTree = "<group>"; };
+		8352C45C2B8D17E2003A7C79 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		83D3851D2B8A2378001EDC8B /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		83D3851F2B8A2396001EDC8B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		83D385212B8A23A3001EDC8B /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 		83D385232B8A2F3A001EDC8B /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				8352C45C2B8D17E2003A7C79 /* ErrorMessage.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				8352C4582B8BB843003A7C79 /* AuthState.swift in Sources */,
 				83D385222B8A23A3001EDC8B /* RegisterView.swift in Sources */,
 				8352C45B2B8CC343003A7C79 /* ProcessInfo.swift in Sources */,
+				8352C45D2B8D17E2003A7C79 /* ErrorMessage.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				83D385202B8A2396001EDC8B /* LoginView.swift in Sources */,
 				83D3851E2B8A2378001EDC8B /* AuthView.swift in Sources */,

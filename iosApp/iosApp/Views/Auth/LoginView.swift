@@ -15,7 +15,7 @@ struct LoginView: View {
     @State var username: String = ""
     @State var password: String = ""
     @State var isShowingPassword: Bool = false
-    @State var isLoading: Bool = false
+    @State var isError: Bool = false
     @FocusState var isFieldFocus: FieldToFocus?
     
     enum FieldToFocus {
@@ -99,10 +99,13 @@ struct LoginView: View {
             Spacer()
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 25)
             Button {
-                authState.signInUser(
+                /*authState.signInUser(
                     username: username,
                     password: password
-                )
+                )*/
+                withAnimation {
+                    isError.toggle()
+                }
             } label: {
                 if ProcessInfo.isPreview {
                     Text("Login")
