@@ -42,6 +42,7 @@ struct AuthView: View {
         .padding(16)
         .background(Color.white)
         .cornerRadius(0)
+        
     }
 }
 
