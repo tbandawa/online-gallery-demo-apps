@@ -26,15 +26,15 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val userViewModel: SplashViewModel by viewModel()
+    private val splashViewModel: SplashViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        userViewModel.getProfile()
+        splashViewModel.getProfile()
 
         installSplashScreen().setKeepOnScreenCondition {
-            userViewModel.authState.value.complete
+            splashViewModel.authState.value.complete
         }
 
         setContent {
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
             val deleteState by galleryViewModel.galleryDeleteResource.collectAsState()
 
             val navController = rememberNavController()
-            val authValue = userViewModel.authState.collectAsState().value
+            val authValue = splashViewModel.authState.collectAsState().value
 
             val navigateToGallery: (galleryId: Long, galleryUserId: Long, userId: Long) -> Unit = { galleryId, galleryUserId, userId ->
                 navController.navigate("gallery/$galleryId/$galleryUserId/$userId")

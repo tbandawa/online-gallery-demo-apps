@@ -10,7 +10,7 @@ import SwiftUI
 
 struct LoginView: View {
     
-    @EnvironmentObject var authState: AuthState
+    @EnvironmentObject var authanticationState: AuthanticationState
     
     @State var username: String = ""
     @State var password: String = ""
@@ -34,12 +34,12 @@ struct LoginView: View {
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
             if ProcessInfo.isPreview == false {
-                if let error = authState.error {
+                if let error = authanticationState.error {
                     ErrorMessage(
                         title: error.error!,
                         messages: error.messages!,
                         dismissMessage: {
-                            authState.resetState()
+                            authanticationState.resetState()
                         }
                     )
                 }
@@ -111,7 +111,7 @@ struct LoginView: View {
             Spacer()
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 25)
             Button {
-                authState.signInUser(
+                authanticationState.signInUser(
                     username: username,
                     password: password
                 )
@@ -120,7 +120,7 @@ struct LoginView: View {
                     Text("Login")
                         .frame(maxWidth: .infinity, maxHeight: 30)
                 } else {
-                    if authState.isLoading {
+                    if authanticationState.isLoading {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .frame(maxWidth: .infinity, maxHeight: 30)

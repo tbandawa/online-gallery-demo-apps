@@ -10,17 +10,21 @@ import Foundation
 import UIKit
 import data
 
-class AuthState: ObservableObject {
+class AuthanticationState: ObservableObject {
     
     @Published var isLoading: Bool = false
+    //@Published var authState: AuthState = AuthState(value: 0, complete: true)
+    @Published var authState: AuthState? = nil
     @Published var user: User? = nil
     @Published var error: Error? = nil
     
-    private var viewModel: AuthViewModel
+    private var authViewModel: AuthViewModel
+    private var splashViewModel: SplashViewModel
     
     init() {
-        viewModel = KotlinDependencies.shared.getAuthViewModel()
-        viewModel.observeUserResource { result in
+        authViewModel = KotlinDependencies.shared.getAuthViewModel()
+        splashViewModel = KotlinDependencies.shared.getSplashViewModel()
+        authViewModel.observeUserResource { result in
             switch result {
                 case let user as ResourceStateSuccess<User>?:
                     self.isLoading = false
@@ -34,30 +38,34 @@ class AuthState: ObservableObject {
                     let _ = print()
             }
         }
+        splashViewModel.observeAuthState { result in
+            self.authState = result
+        }
+        splashViewModel.getProfile()
     }
     
     func signInUser(username: String, password: String) {
         self.isLoading = true
         self.user = nil
         self.error = nil
-        viewModel.signInUser(username: username, password: password)
+        authViewModel.signInUser(username: username, password: password)
     }
     
     func signUpUser(firstname: String, lastname: String, username: String, email :String, password: String) {
         self.isLoading = true
         self.user = nil
         self.error = nil
-        viewModel.signUpUser(firstname: firstname, lastname: lastname, username: username, email: email, password: password)
+        authViewModel.signUpUser(firstname: firstname, lastname: lastname, username: username, email: email, password: password)
     }
     
     func resetState() {
         self.isLoading = false
         self.user = nil
         self.error = nil
-        viewModel.resetState()
+        authViewModel.resetState()
     }
     
     deinit {
-        viewModel.dispose()
+        authViewModel.dispose()
     }
 }

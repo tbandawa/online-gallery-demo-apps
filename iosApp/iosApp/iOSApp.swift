@@ -8,12 +8,12 @@ struct iOSApp: App {
         DataModuleKt.doInitKoin()
     }
     
-    @StateObject var authState = AuthState()
+    @StateObject var authanticationState = AuthanticationState()
     
 	var body: some Scene {
 		WindowGroup {
 			ContentView()
-                .environmentObject(authState)
+                .environmentObject(authanticationState)
 		}
 	}
 }

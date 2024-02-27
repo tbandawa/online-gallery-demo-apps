@@ -12,7 +12,8 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		3329E20BDEFBA84CCFF01E2A /* Pods_Online_Gallery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22ED33A1028C00AB80F3A1DB /* Pods_Online_Gallery.framework */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
-		8352C4582B8BB843003A7C79 /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C4572B8BB843003A7C79 /* AuthState.swift */; };
+		833A10482B8E450A000B6385 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A10472B8E450A000B6385 /* HomeView.swift */; };
+		8352C4582B8BB843003A7C79 /* AuthanticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C4572B8BB843003A7C79 /* AuthanticationState.swift */; };
 		8352C45B2B8CC343003A7C79 /* ProcessInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C45A2B8CC343003A7C79 /* ProcessInfo.swift */; };
 		8352C45D2B8D17E2003A7C79 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C45C2B8D17E2003A7C79 /* ErrorMessage.swift */; };
 		83D3851E2B8A2378001EDC8B /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3851D2B8A2378001EDC8B /* AuthView.swift */; };
@@ -32,7 +33,8 @@
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76ADF27DFF37ACD7E8D9A018 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
-		8352C4572B8BB843003A7C79 /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
+		833A10472B8E450A000B6385 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		8352C4572B8BB843003A7C79 /* AuthanticationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthanticationState.swift; sourceTree = "<group>"; };
 		8352C45A2B8CC343003A7C79 /* ProcessInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessInfo.swift; sourceTree = "<group>"; };
 		8352C45C2B8D17E2003A7C79 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		83D3851D2B8A2378001EDC8B /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
@@ -95,6 +97,14 @@
 			path = iosApp;
 			sourceTree = "<group>";
 		};
+		833A10462B8E44FA000B6385 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				833A10472B8E450A000B6385 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
 		8352C4592B8CC20E003A7C79 /* Utitls */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,7 +116,7 @@
 		83D385132B8A0E48001EDC8B /* LifeCycle */ = {
 			isa = PBXGroup;
 			children = (
-				8352C4572B8BB843003A7C79 /* AuthState.swift */,
+				8352C4572B8BB843003A7C79 /* AuthanticationState.swift */,
 			);
 			path = LifeCycle;
 			sourceTree = "<group>";
@@ -114,6 +124,7 @@
 		83D385142B8A0E53001EDC8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				833A10462B8E44FA000B6385 /* Home */,
 				83D7BFDB2B8DDB7900517AEF /* Splash */,
 				83D385232B8A2F3A001EDC8B /* Components */,
 				83D3851C2B8A2312001EDC8B /* EditProfilePhoto */,
@@ -320,8 +331,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				833A10482B8E450A000B6385 /* HomeView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
-				8352C4582B8BB843003A7C79 /* AuthState.swift in Sources */,
+				8352C4582B8BB843003A7C79 /* AuthanticationState.swift in Sources */,
 				83D385222B8A23A3001EDC8B /* RegisterView.swift in Sources */,
 				8352C45B2B8CC343003A7C79 /* ProcessInfo.swift in Sources */,
 				8352C45D2B8D17E2003A7C79 /* ErrorMessage.swift in Sources */,

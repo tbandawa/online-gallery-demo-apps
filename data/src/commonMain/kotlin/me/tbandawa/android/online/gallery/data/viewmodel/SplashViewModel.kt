@@ -2,6 +2,8 @@ package me.tbandawa.android.online.gallery.data.viewmodel
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.tbandawa.android.online.gallery.data.domain.models.AuthState
 import me.tbandawa.android.online.gallery.data.domain.repo.GalleryRepository
@@ -36,5 +38,12 @@ class SplashViewModel(
                 _authState.value = AuthState(2, false)
             }
         }
+    }
+
+    @Suppress("unused")
+    fun observeAuthState(provideUserState: ((AuthState) -> Unit)) {
+        _authState.onEach {
+            provideUserState.invoke(it)
+        }.launchIn(coroutineScope)
     }
 }
