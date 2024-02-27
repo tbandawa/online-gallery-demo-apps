@@ -35,6 +35,18 @@ struct RegisterView: View {
                 )
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
+            if ProcessInfo.isPreview == false {
+                if let error = authState.error {
+                    ErrorMessage(
+                        title: error.error!,
+                        messages: error.messages!,
+                        dismissMessage: {
+                            authState.resetState()
+                        }
+                    )
+                }
+            }
+            
             Spacer()
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 25)
             TextField("Firstname", text: $firstname)

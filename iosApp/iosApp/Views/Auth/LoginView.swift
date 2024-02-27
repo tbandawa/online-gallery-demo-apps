@@ -33,6 +33,18 @@ struct LoginView: View {
                 )
                 .frame(maxWidth: .infinity, alignment: .topLeading)
             
+            if ProcessInfo.isPreview == false {
+                if let error = authState.error {
+                    ErrorMessage(
+                        title: error.error!,
+                        messages: error.messages!,
+                        dismissMessage: {
+                            authState.resetState()
+                        }
+                    )
+                }
+            }
+            
             Spacer()
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 25)
             TextField("Username", text: $username)
@@ -99,13 +111,10 @@ struct LoginView: View {
             Spacer()
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 25)
             Button {
-                /*authState.signInUser(
+                authState.signInUser(
                     username: username,
                     password: password
-                )*/
-                withAnimation {
-                    isError.toggle()
-                }
+                )
             } label: {
                 if ProcessInfo.isPreview {
                     Text("Login")

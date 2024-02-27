@@ -48,9 +48,10 @@ struct ErrorMessage: View {
                         )
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 10)
-                    Spacer()
-                        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 10)
                 }
+                
+                Spacer()
+                    .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: 10)
                 
             }
             .frame(maxWidth: .infinity)
@@ -59,8 +60,8 @@ struct ErrorMessage: View {
             .shadow(color: Color.gray, radius: 4, x: 0.5, y: 1.5)
         }
         .frame(maxWidth: .infinity)
-        .padding(16)
-        .background(Color.white)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
         .cornerRadius(0)
     }
 }

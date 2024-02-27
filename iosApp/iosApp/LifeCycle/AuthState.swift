@@ -25,8 +25,10 @@ class AuthState: ObservableObject {
                 case let user as ResourceStateSuccess<User>?:
                     self.isLoading = false
                     self.user = user?.data
+                    self.error = nil
                 case let error as ResourceStateError<Error>?:
                     self.isLoading = false
+                    self.user = nil
                     self.error = error?.data
                 default:
                     let _ = print()
@@ -49,6 +51,9 @@ class AuthState: ObservableObject {
     }
     
     func resetState() {
+        self.isLoading = false
+        self.user = nil
+        self.error = nil
         viewModel.resetState()
     }
     
