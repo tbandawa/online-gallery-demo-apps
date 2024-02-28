@@ -10,7 +10,29 @@ import SwiftUI
 
 struct GalleriesView: View {
     var body: some View {
-        Text("Hello, Galleries!")
+        NavigationView {
+            VStack {
+                NavigationLink {
+                    GalleryView()
+                } label: {
+                    Text("Hello, Galleries!")
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Galleries")
+                        .font(.largeTitle.bold())
+                        .accessibilityAddTraits(.isHeader)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        print("search")
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                    }
+                }
+             }
+        }
     }
 }
 

@@ -10,7 +10,18 @@ import SwiftUI
 
 struct ProfileView: View {
     var body: some View {
-        Text("Hello, Profile!")
+        NavigationView {
+            VStack {
+                Text("Hello, Profile!")
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Profile")
+                        .font(.largeTitle.bold())
+                        .accessibilityAddTraits(.isHeader)
+                }
+             }
+        }
     }
 }
 

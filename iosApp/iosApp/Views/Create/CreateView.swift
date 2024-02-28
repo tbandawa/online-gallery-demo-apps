@@ -10,7 +10,18 @@ import SwiftUI
 
 struct CreateView: View {
     var body: some View {
-        Text("Hello, Create!")
+        NavigationView {
+            VStack {
+                Text("Hello, Create!")
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("New Gallery")
+                        .font(.largeTitle.bold())
+                        .accessibilityAddTraits(.isHeader)
+                }
+             }
+        }
     }
 }
 
