@@ -9,8 +9,28 @@
 import SwiftUI
 
 struct HomeView: View {
+    
     var body: some View {
-        Text("Hello, Home!")
+        TabView {
+
+            GalleriesView()
+                .tabItem {
+                    Image(systemName: "square.grid.2x2.fill")
+                }
+            
+            CreateView()
+                .tabItem {
+                    Image(systemName: "camera.circle.fill")
+                }
+                
+            
+            ProfileView()
+                .tabItem {
+                    Image(systemName: "person.fill")
+                }
+            
+        }
+        .tint(Color("tabColor"))
     }
 }
 

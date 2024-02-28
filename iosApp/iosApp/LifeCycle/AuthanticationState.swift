@@ -24,7 +24,7 @@ class AuthanticationState: ObservableObject {
         splashViewModel = KotlinDependencies.shared.getSplashViewModel()
         authViewModel.observeUserResource { result in
             switch result {
-                case let user as ResourceStateSuccess<User>?:
+                case _ as ResourceStateSuccess<User>?:
                     self.isLoading = false
                     self.authState = AuthState(value: 1, complete: true)
                     self.error = nil

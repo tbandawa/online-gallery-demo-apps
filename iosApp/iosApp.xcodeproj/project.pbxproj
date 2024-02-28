@@ -16,6 +16,9 @@
 		8352C4582B8BB843003A7C79 /* AuthanticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C4572B8BB843003A7C79 /* AuthanticationState.swift */; };
 		8352C45B2B8CC343003A7C79 /* ProcessInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C45A2B8CC343003A7C79 /* ProcessInfo.swift */; };
 		8352C45D2B8D17E2003A7C79 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8352C45C2B8D17E2003A7C79 /* ErrorMessage.swift */; };
+		83820A782B8F42E80054D69E /* GalleriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83820A772B8F42E80054D69E /* GalleriesView.swift */; };
+		83820A7A2B8F44650054D69E /* CreateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83820A792B8F44650054D69E /* CreateView.swift */; };
+		83820A7C2B8F447C0054D69E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83820A7B2B8F447C0054D69E /* ProfileView.swift */; };
 		83D3851E2B8A2378001EDC8B /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3851D2B8A2378001EDC8B /* AuthView.swift */; };
 		83D385202B8A2396001EDC8B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3851F2B8A2396001EDC8B /* LoginView.swift */; };
 		83D385222B8A23A3001EDC8B /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D385212B8A23A3001EDC8B /* RegisterView.swift */; };
@@ -37,6 +40,9 @@
 		8352C4572B8BB843003A7C79 /* AuthanticationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthanticationState.swift; sourceTree = "<group>"; };
 		8352C45A2B8CC343003A7C79 /* ProcessInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessInfo.swift; sourceTree = "<group>"; };
 		8352C45C2B8D17E2003A7C79 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
+		83820A772B8F42E80054D69E /* GalleriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleriesView.swift; sourceTree = "<group>"; };
+		83820A792B8F44650054D69E /* CreateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateView.swift; sourceTree = "<group>"; };
+		83820A7B2B8F447C0054D69E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		83D3851D2B8A2378001EDC8B /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
 		83D3851F2B8A2396001EDC8B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		83D385212B8A23A3001EDC8B /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
@@ -152,6 +158,7 @@
 		83D385162B8A21B5001EDC8B /* Galleries */ = {
 			isa = PBXGroup;
 			children = (
+				83820A772B8F42E80054D69E /* GalleriesView.swift */,
 			);
 			path = Galleries;
 			sourceTree = "<group>";
@@ -173,6 +180,7 @@
 		83D385192B8A221C001EDC8B /* Create */ = {
 			isa = PBXGroup;
 			children = (
+				83820A792B8F44650054D69E /* CreateView.swift */,
 			);
 			path = Create;
 			sourceTree = "<group>";
@@ -180,6 +188,7 @@
 		83D3851A2B8A222B001EDC8B /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				83820A7B2B8F447C0054D69E /* ProfileView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -331,8 +340,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83820A7A2B8F44650054D69E /* CreateView.swift in Sources */,
 				833A10482B8E450A000B6385 /* HomeView.swift in Sources */,
+				83820A782B8F42E80054D69E /* GalleriesView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				83820A7C2B8F447C0054D69E /* ProfileView.swift in Sources */,
 				8352C4582B8BB843003A7C79 /* AuthanticationState.swift in Sources */,
 				83D385222B8A23A3001EDC8B /* RegisterView.swift in Sources */,
 				8352C45B2B8CC343003A7C79 /* ProcessInfo.swift in Sources */,

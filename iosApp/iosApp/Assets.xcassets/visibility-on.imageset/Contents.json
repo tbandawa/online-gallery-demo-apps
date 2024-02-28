@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "visibility-on.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "visibility-on.svg",
       "idiom" : "universal",
       "scale" : "2x"
     },
