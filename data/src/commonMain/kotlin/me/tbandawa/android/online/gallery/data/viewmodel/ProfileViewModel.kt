@@ -2,7 +2,10 @@ package me.tbandawa.android.online.gallery.data.viewmodel
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import me.tbandawa.android.online.gallery.data.domain.models.AuthState
 import me.tbandawa.android.online.gallery.data.domain.models.Profile
 import me.tbandawa.android.online.gallery.data.domain.models.ProfilePhoto
 import me.tbandawa.android.online.gallery.data.domain.models.User
@@ -67,6 +70,13 @@ class ProfileViewModel(
                 _userResource.value = results
             }
         }
+    }
+
+    @Suppress("unused")
+    fun observeProfileState(provideUserState: ((ResourceState<Profile>) -> Unit)) {
+        _profileResource.onEach {
+            provideUserState.invoke(it)
+        }.launchIn(coroutineScope)
     }
 
     fun resetState() {
