@@ -112,13 +112,6 @@ struct ProfileView: View {
                         .accessibilityAddTraits(.isHeader)
                 }
             }
-            .sheet(isPresented: $showGalleries) {
-                Text("This app was brought to you by Hacking with Swift")
-                    .presentationDetents([.large, .large, .fraction(0.95), .height(420)])
-                    .presentationDragIndicator(.visible)
-                    .presentationBackgroundInteraction(.enabled)
-                    .interactiveDismissDisabled(true)
-            }
         }
     }
 }
