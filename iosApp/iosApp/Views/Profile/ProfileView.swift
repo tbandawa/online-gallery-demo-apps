@@ -9,6 +9,9 @@
 import SwiftUI
 
 struct ProfileView: View {
+    
+    @State private var showGalleries = true
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -59,7 +62,7 @@ struct ProfileView: View {
                     .padding()
                     
                     Button(action: {
-                        print("Edit clicked!")
+                        
                     }) {
                         HStack {
                             Image(systemName: "pencil")
@@ -75,7 +78,7 @@ struct ProfileView: View {
                         .cornerRadius(0)
                     }
                     Button(action: {
-                        print("Logout clicked!")
+                        
                     }) {
                         HStack {
                             Image(systemName: "rectangle.portrait.and.arrow.forward")
@@ -108,6 +111,13 @@ struct ProfileView: View {
                         .font(.largeTitle.bold())
                         .accessibilityAddTraits(.isHeader)
                 }
+            }
+            .sheet(isPresented: $showGalleries) {
+                Text("This app was brought to you by Hacking with Swift")
+                    .presentationDetents([.large, .large, .fraction(0.95), .height(420)])
+                    .presentationDragIndicator(.visible)
+                    .presentationBackgroundInteraction(.enabled)
+                    .interactiveDismissDisabled(true)
             }
         }
     }
