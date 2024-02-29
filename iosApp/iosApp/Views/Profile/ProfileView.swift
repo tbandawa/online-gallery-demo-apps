@@ -104,6 +104,7 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Profile")
+                        .foregroundColor(Color("toolBarTitle"))
                         .font(.largeTitle.bold())
                         .accessibilityAddTraits(.isHeader)
                 }

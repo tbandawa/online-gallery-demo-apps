@@ -21,6 +21,7 @@ struct GalleriesView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("Galleries")
+                        .foregroundColor(Color("toolBarTitle"))
                         .font(.largeTitle.bold())
                         .accessibilityAddTraits(.isHeader)
                 }

@@ -17,6 +17,7 @@ struct CreateView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("New Gallery")
+                        .foregroundColor(Color("toolBarTitle"))
                         .font(.largeTitle.bold())
                         .accessibilityAddTraits(.isHeader)
                 }
